@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Training-Tracker - Codeforces Virtual Contest Practice Platform",
+    title: "CF - Training Tracker - Codeforces Virtual Contest Practice Platform",
     description:
       "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills.",
     url: "https://cp-training-tracker.vercel.app",

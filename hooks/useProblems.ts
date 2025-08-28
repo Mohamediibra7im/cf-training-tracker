@@ -28,7 +28,7 @@ const useProblems = (user: User | null | undefined) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 3600000,
-    }
+    },
   );
 
   // Fetch solved problems only if we have a user
@@ -51,7 +51,7 @@ const useProblems = (user: User | null | undefined) => {
     {
       revalidateOnFocus: false,
       dedupingInterval: 300000,
-    }
+    },
   );
 
   const refreshSolvedProblems = useCallback(async () => {
@@ -71,7 +71,7 @@ const useProblems = (user: User | null | undefined) => {
           }
           return res.data;
         },
-        { revalidate: true }
+        { revalidate: true },
       );
 
       setIsLoading(false);
@@ -88,7 +88,7 @@ const useProblems = (user: User | null | undefined) => {
       tags: ProblemTag[],
       lb: number,
       ub: number,
-      customRatings: { P1: number; P2: number; P3: number; P4: number }
+      customRatings: { P1: number; P2: number; P3: number; P4: number },
     ) => {
       if (!user || !allProblems || !solvedProblems) {
         return;
@@ -104,19 +104,19 @@ const useProblems = (user: User | null | undefined) => {
       ];
 
       const solvedProblemIds = new Set(
-        solvedProblems.map((p) => `${p.contestId}_${p.index}`)
+        solvedProblems.map((p) => `${p.contestId}_${p.index}`),
       );
 
       const unsolvedProblems = allProblems.filter(
         (problem) =>
-          !solvedProblemIds.has(`${problem.contestId}_${problem.index}`)
+          !solvedProblemIds.has(`${problem.contestId}_${problem.index}`),
       );
 
       const problemPools = ratings.map((rating) => ({
         rating,
         solved: solvedProblems.filter((problem) => problem.rating === rating),
         unsolved: unsolvedProblems.filter(
-          (problem) => problem.rating === rating
+          (problem) => problem.rating === rating,
         ),
       }));
 
@@ -129,10 +129,10 @@ const useProblems = (user: User | null | undefined) => {
           newPool = {
             ...pool,
             solved: pool.solved.filter((problem) =>
-              tags.some((tag: ProblemTag) => problem.tags.includes(tag.value))
+              tags.some((tag: ProblemTag) => problem.tags.includes(tag.value)),
             ),
             unsolved: pool.unsolved.filter((problem) =>
-              tags.some((tag: ProblemTag) => problem.tags.includes(tag.value))
+              tags.some((tag: ProblemTag) => problem.tags.includes(tag.value)),
             ),
           };
         }
@@ -202,7 +202,7 @@ const useProblems = (user: User | null | undefined) => {
       setIsLoading(false);
       return newProblems;
     },
-    [user, allProblems, solvedProblems]
+    [user, allProblems, solvedProblems],
   );
 
   return {

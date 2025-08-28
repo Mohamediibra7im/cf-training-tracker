@@ -51,7 +51,7 @@ export default function TrainingPage() {
   useEffect(() => {
     localStorage.setItem(
       "training-tracker-customRatings",
-      JSON.stringify(customRatings)
+      JSON.stringify(customRatings),
     );
   }, [customRatings]);
 
@@ -61,7 +61,7 @@ export default function TrainingPage() {
 
   const handleRatingChange = (
     problem: keyof typeof customRatings,
-    value: string
+    value: string,
   ) => {
     if (value === "") {
       setCustomRatings((prev: typeof customRatings) => ({
@@ -86,13 +86,18 @@ export default function TrainingPage() {
     }
   };
 
-  const handleLevelChange = (ratings: { P1: number; P2: number; P3: number; P4: number }) => {
+  const handleLevelChange = (ratings: {
+    P1: number;
+    P2: number;
+    P3: number;
+    P4: number;
+  }) => {
     setCustomRatings(ratings);
   };
 
   const handleStep = (
     problem: keyof typeof customRatings,
-    direction: "up" | "down"
+    direction: "up" | "down",
   ) => {
     const currentRating = customRatings[problem];
     let newRating =
@@ -182,7 +187,9 @@ export default function TrainingPage() {
 
             {/* Manual Problem Ratings Section */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Manual Problem Ratings (Optional)</h3>
+              <h3 className="text-xl font-semibold">
+                Manual Problem Ratings (Optional)
+              </h3>
               <p className="text-sm text-muted-foreground">
                 You can manually adjust individual problem ratings if needed.
               </p>
@@ -200,7 +207,7 @@ export default function TrainingPage() {
                           onClick={() =>
                             handleStep(
                               problem as keyof typeof customRatings,
-                              "down"
+                              "down",
                             )
                           }
                         >
@@ -213,17 +220,17 @@ export default function TrainingPage() {
                           onChange={(e) =>
                             handleRatingChange(
                               problem as keyof typeof customRatings,
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           onBlur={() =>
                             handleRatingBlur(
-                              problem as keyof typeof customRatings
+                              problem as keyof typeof customRatings,
                             )
                           }
                           className={`hide-spinners w-full h-12 text-lg font-semibold text-center rounded-none z-10 ${isInvalid
-                            ? "border-red-500 focus-visible:ring-red-500"
-                            : ""
+                              ? "border-red-500 focus-visible:ring-red-500"
+                              : ""
                             }`}
                         />
                         <Button
@@ -233,7 +240,7 @@ export default function TrainingPage() {
                           onClick={() =>
                             handleStep(
                               problem as keyof typeof customRatings,
-                              "up"
+                              "up",
                             )
                           }
                         >

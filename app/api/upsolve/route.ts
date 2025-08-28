@@ -40,13 +40,13 @@ export async function GET(request: NextRequest) {
     const upsolvedProblems = await UpsolvedProblem.find({
       user: user._id,
     }).sort({ createdAt: 1, _id: 1 }); // Sort by creation time and then by _id for consistent ordering
-    
+
     return NextResponse.json(upsolvedProblems);
   } catch (err) {
     console.error("Error fetching upsolved problems:", err);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const problems: TrainingProblem[] = await request.json();
-    
+
     const problemsToInsert = problems.map((p) => ({ ...p, user: user._id }));
 
     // Use insertMany with ordered: false to continue on duplicate key errors
@@ -67,20 +67,20 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Upsolved problems added" },
-      { status: 201 }
+      { status: 201 },
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Ignore duplicate key errors, which are expected
-    if (err.code === 11000) {
+    if (err && typeof err === "object" && "code" in err && err.code === 11000) {
       return NextResponse.json(
         { message: "Upsolved problems added (some may have been duplicates)" },
-        { status: 201 }
+        { status: 201 },
       );
     }
     console.error("Error creating upsolved problems:", err);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -96,7 +96,7 @@ export async function PUT(request: NextRequest) {
     if (!Array.isArray(problemsToUpdate) || problemsToUpdate.length === 0) {
       return NextResponse.json(
         { message: "Invalid request body" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -115,13 +115,13 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Upsolved problems updated" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     console.error("Error updating upsolved problems:", err);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest) {
     if (!contestId || !index) {
       return NextResponse.json(
         { message: "Missing contestId or index" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -146,13 +146,13 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Problem deleted from upsolve list" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     console.error("Error deleting upsolved problem:", err);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

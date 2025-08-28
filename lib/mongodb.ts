@@ -13,14 +13,14 @@ declare global {
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = {conn: null, promise: null};
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
 const MONGODB_URI = process.env.MONGO_URL!;
 
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGO_URL environment variable inside .env"
+    "Please define the MONGO_URL environment variable inside .env",
   );
 }
 

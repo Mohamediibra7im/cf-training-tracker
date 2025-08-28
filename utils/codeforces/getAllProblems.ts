@@ -19,7 +19,7 @@ const getAllProblems = async (): Promise<Response<CodeforcesProblem[]>> => {
       .filter((problem: CodeforcesProblem) => problem.contestId >= 700)
       .filter(
         (problem: CodeforcesProblem) =>
-          !filteredContestIds.includes(problem.contestId)
+          !filteredContestIds.includes(problem.contestId),
       );
     return SuccessResponse(problems);
   } catch (error) {

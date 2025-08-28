@@ -10,7 +10,13 @@ import { Menu } from "lucide-react";
 import ClientOnly from "@/components/ClientOnly";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useUser from "@/hooks/useUser";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 const links = [
   { href: "/", label: "Home" },
   { href: "/training", label: "Training" },
@@ -30,7 +36,12 @@ const NavBar = () => {
         <div className="flex items-center">
           <div className="mr-8">
             <Link href="/" className="flex items-center space-x-2">
-              <Image src="/favicon.ico" alt="Training-Tracker" width={32} height={32} />
+              <Image
+                src="/favicon.ico"
+                alt="Training-Tracker"
+                width={32}
+                height={32}
+              />
               <span className="block font-bold text-lg">Training Tracker</span>
             </Link>
           </div>
@@ -39,10 +50,11 @@ const NavBar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative transition-all duration-300 hover:text-primary ${pathname === link.href
-                  ? "text-primary font-semibold"
-                  : "text-foreground/70 hover:text-foreground"
-                  }`}
+                className={`relative transition-all duration-300 hover:text-primary ${
+                  pathname === link.href
+                    ? "text-primary font-semibold"
+                    : "text-foreground/70 hover:text-foreground"
+                }`}
               >
                 {link.label}
                 {pathname === link.href && (
@@ -103,7 +115,9 @@ const NavBar = () => {
                           height={32}
                           className="w-10 h-10 md:w-12 md:h-12"
                         />
-                        <span className="font-bold text-xl">Training Tracker</span>
+                        <span className="font-bold text-xl">
+                          Training Tracker
+                        </span>
                       </Link>
                     </div>
                   </SheetTitle>
@@ -114,10 +128,11 @@ const NavBar = () => {
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`text-xl transition-all duration-300 hover:text-primary ${pathname === link.href
-                        ? "text-primary font-semibold"
-                        : "text-foreground/70 hover:text-foreground"
-                        }`}
+                      className={`text-xl transition-all duration-300 hover:text-primary ${
+                        pathname === link.href
+                          ? "text-primary font-semibold"
+                          : "text-foreground/70 hover:text-foreground"
+                      }`}
                     >
                       {link.label}
                     </Link>

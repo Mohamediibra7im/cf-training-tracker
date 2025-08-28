@@ -36,7 +36,7 @@ const useUpsolvedProblems = () => {
 
   const { data, isLoading, error, mutate } = useSWR<TrainingProblem[]>(
     isClient && user ? "/api/upsolve" : null,
-    fetcher
+    fetcher,
   );
 
   useEffect(() => {
@@ -58,8 +58,8 @@ const useUpsolvedProblems = () => {
       .filter((p) => !p.solvedTime) // only check unsolved problems
       .filter((p) =>
         solvedProblems.some(
-          (sp) => sp.contestId === p.contestId && sp.index === p.index
-        )
+          (sp) => sp.contestId === p.contestId && sp.index === p.index,
+        ),
       )
       .map((p) => ({ ...p, solvedTime: Date.now() }));
 
@@ -70,10 +70,10 @@ const useUpsolvedProblems = () => {
       upsolvedProblems.map(
         (p) =>
           newlySolved.find(
-            (ns) => ns.contestId === p.contestId && ns.index === p.index
-          ) || p
+            (ns) => ns.contestId === p.contestId && ns.index === p.index,
+          ) || p,
       ),
-      false
+      false,
     );
 
     const token = localStorage.getItem("token");
@@ -127,7 +127,7 @@ const useUpsolvedProblems = () => {
         mutate(); // Rollback
       }
     },
-    [isClient, mutate]
+    [isClient, mutate],
   );
 
   const deleteUpsolvedProblem = useCallback(
@@ -139,9 +139,9 @@ const useUpsolvedProblems = () => {
         (currentData = []) =>
           currentData.filter(
             (p) =>
-              p.contestId !== problem.contestId || p.index !== problem.index
+              p.contestId !== problem.contestId || p.index !== problem.index,
           ),
-        false
+        false,
       );
 
       const token = localStorage.getItem("token");
@@ -163,7 +163,7 @@ const useUpsolvedProblems = () => {
         mutate(); // Rollback
       }
     },
-    [isClient, mutate]
+    [isClient, mutate],
   );
 
   const onRefreshUpsolvedProblems = useCallback(() => {

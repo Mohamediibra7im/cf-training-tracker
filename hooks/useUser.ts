@@ -18,7 +18,7 @@ const useUser = () => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
+    },
   );
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const useUser = () => {
         return ErrorResponse("Failed to connect to the server.");
       }
     },
-    []
+    [],
   );
 
   const login = useCallback(
@@ -85,7 +85,7 @@ const useUser = () => {
         return ErrorResponse("Failed to connect to the server.");
       }
     },
-    [isClient, mutate]
+    [isClient, mutate],
   );
 
   const logout = () => {
@@ -98,7 +98,7 @@ const useUser = () => {
 
   const resetPin = async (
     oldPin: string,
-    newPin: string
+    newPin: string,
   ): Promise<Response<null>> => {
     try {
       const token = localStorage.getItem("token");

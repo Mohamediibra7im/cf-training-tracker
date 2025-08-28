@@ -9,7 +9,7 @@ export const useTags = () => {
   const onTagClick = (tag: ProblemTag) => {
     if (selectedTags.some((t) => t.value === tag.value)) {
       setSelectedTags((prevTags) =>
-        prevTags.filter((t) => t.value !== tag.value)
+        prevTags.filter((t) => t.value !== tag.value),
       );
     } else {
       setSelectedTags((prevTags) => [...prevTags, tag]);

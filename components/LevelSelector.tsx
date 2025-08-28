@@ -8,23 +8,33 @@ import { useLevels } from "@/hooks/useLevels";
 import useUser from "@/hooks/useUser";
 
 interface LevelSelectorProps {
-    onLevelChange: (ratings: { P1: number; P2: number; P3: number; P4: number }) => void;
+    onLevelChange: (ratings: {
+        P1: number;
+        P2: number;
+        P3: number;
+        P4: number;
+    }) => void;
     currentRatings: { P1: number; P2: number; P3: number; P4: number };
 }
 
-const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) => {
-    const { levels, isLoading, getDefaultLevel, getLevelByPerformance } = useLevels();
+const LevelSelector = ({
+    onLevelChange,
+    currentRatings,
+}: LevelSelectorProps) => {
+    const { levels, isLoading, getDefaultLevel, getLevelByPerformance } =
+        useLevels();
     const { user } = useUser();
     const [selectedLevelId, setSelectedLevelId] = useState<number>(1);
 
     useEffect(() => {
         if (levels.length > 0) {
             // Find the level that matches current ratings
-            const matchingLevel = levels.find(level =>
-                parseInt(level.P1) === currentRatings.P1 &&
-                parseInt(level.P2) === currentRatings.P2 &&
-                parseInt(level.P3) === currentRatings.P3 &&
-                parseInt(level.P4) === currentRatings.P4
+            const matchingLevel = levels.find(
+                (level) =>
+                    parseInt(level.P1) === currentRatings.P1 &&
+                    parseInt(level.P2) === currentRatings.P2 &&
+                    parseInt(level.P3) === currentRatings.P3 &&
+                    parseInt(level.P4) === currentRatings.P4,
             );
 
             if (matchingLevel) {
@@ -47,7 +57,7 @@ const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) =>
     }, [levels, currentRatings, user, getLevelByPerformance, onLevelChange]);
 
     const handleLevelChange = (levelId: number) => {
-        const level = levels.find(l => l.id === levelId);
+        const level = levels.find((l) => l.id === levelId);
         if (level) {
             setSelectedLevelId(levelId);
             onLevelChange({
@@ -87,7 +97,7 @@ const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) =>
         }
     };
 
-    const currentLevel = levels.find(level => level.id === selectedLevelId);
+    const currentLevel = levels.find((level) => level.id === selectedLevelId);
 
     // State to show/hide ratings
     const [showRatings, setShowRatings] = useState(true);
@@ -111,7 +121,9 @@ const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) =>
     return (
         <Card className="border-2 border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <CardHeader>
-                <CardTitle className="text-3xl font-semibold">Contest Problems Level</CardTitle>
+                <CardTitle className="text-3xl font-semibold">
+                    Contest Problems Level
+                </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 {/* Show/Hide Ratings Button */}
@@ -173,19 +185,35 @@ const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) =>
                         <>
                             <div className="text-center p-3 bg-muted/50 rounded-lg">
                                 <div className="text-sm text-muted-foreground">Problem A</div>
-                                <div className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}>{currentLevel.P1}</div>
+                                <div
+                                    className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}
+                                >
+                                    {currentLevel.P1}
+                                </div>
                             </div>
                             <div className="text-center p-3 bg-muted/50 rounded-lg">
                                 <div className="text-sm text-muted-foreground">Problem B</div>
-                                <div className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}>{currentLevel.P2}</div>
+                                <div
+                                    className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}
+                                >
+                                    {currentLevel.P2}
+                                </div>
                             </div>
                             <div className="text-center p-3 bg-muted/50 rounded-lg">
                                 <div className="text-sm text-muted-foreground">Problem C</div>
-                                <div className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}>{currentLevel.P3}</div>
+                                <div
+                                    className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}
+                                >
+                                    {currentLevel.P3}
+                                </div>
                             </div>
                             <div className="text-center p-3 bg-muted/50 rounded-lg">
                                 <div className="text-sm text-muted-foreground">Problem D</div>
-                                <div className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}>{currentLevel.P4}</div>
+                                <div
+                                    className={`text-lg font-bold text-primary ${!showRatings ? "blur-sm select-none" : ""}`}
+                                >
+                                    {currentLevel.P4}
+                                </div>
                             </div>
                         </>
                     )}
@@ -199,7 +227,9 @@ const LevelSelector = ({ onLevelChange, currentRatings }: LevelSelectorProps) =>
                         className="flex items-center gap-2"
                     >
                         <RotateCcw className="h-4 w-4" />
-                        {user && user.rating ? `Reset to Default Level` : "Reset to Default Level"}
+                        {user && user.rating
+                            ? "Reset to Default Level"
+                            : "Reset to Default Level"}
                     </Button>
                 </div>
 

@@ -12,7 +12,7 @@ export interface UserSyncData {
 }
 
 export async function syncUserProfile(
-  codeforcesHandle: string
+  codeforcesHandle: string,
 ): Promise<UserSyncData | null> {
   try {
     const cfUserResponse = await getUser(codeforcesHandle);
@@ -20,7 +20,7 @@ export async function syncUserProfile(
     if (!cfUserResponse.success) {
       console.error(
         "Failed to fetch user data from Codeforces:",
-        cfUserResponse.error
+        cfUserResponse.error,
       );
       return null;
     }
@@ -62,4 +62,3 @@ export function shouldSyncProfile(lastSyncTime?: number): boolean {
 
   return now - lastSyncTime >= twentyFourHours;
 }
- 

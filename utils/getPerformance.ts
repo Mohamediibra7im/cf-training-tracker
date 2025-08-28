@@ -1,4 +1,4 @@
-import {Training} from "@/types/Training";
+import { Training } from "@/types/Training";
 
 interface ProblemPerformance {
   rating: number;
@@ -12,7 +12,7 @@ interface ProblemPerformance {
  */
 const getExpectedSolveProb = (
   userRating: number,
-  problemRating: number
+  problemRating: number,
 ): number => {
   // ELO formula: Expected = 1 / (1 + 10^((opponent_rating - player_rating) / 400))
   const ratingDiff = problemRating - userRating;
@@ -49,7 +49,7 @@ const solvePerformanceToRating = (
   problemRating: number,
   expectedProb: number,
   actualSolved: boolean,
-  timeFactor: number
+  timeFactor: number,
 ): number => {
   let basePerformance;
 
@@ -75,7 +75,7 @@ const solvePerformanceToRating = (
  */
 const getPerformance = (
   training: Training,
-  userRating: number = 1500
+  userRating: number = 1500,
 ): number => {
   const contestDuration = (training.endTime - training.startTime) / 60000; // in minutes
 
@@ -93,7 +93,7 @@ const getPerformance = (
         solved,
         solveTime,
       };
-    }
+    },
   );
 
   let totalPerformance = 0;
@@ -112,7 +112,7 @@ const getPerformance = (
       problem.rating,
       expectedProb,
       problem.solved,
-      timeFactor
+      timeFactor,
     );
 
     // Simple average - no complex weighting that inflates ratings
@@ -149,7 +149,7 @@ const getPerformance = (
  */
 export const getAccuratePerformance = (
   training: Training,
-  userRating: number
+  userRating: number,
 ): number => {
   return getPerformance(training, userRating);
 };
@@ -160,7 +160,7 @@ export const getAccuratePerformance = (
 export const getRealTimePerformance = (
   training: Training,
   userRating: number,
-  currentTime: number = Date.now()
+  currentTime: number = Date.now(),
 ): {
   currentPerformance: number;
   projectedPerformance: number;
@@ -175,7 +175,7 @@ export const getRealTimePerformance = (
 
   // Project performance assuming no more problems are solved
   const solvedCount = training.problems.filter(
-    (p) => p.solvedTime !== null
+    (p) => p.solvedTime !== null,
   ).length;
   const unsolvedCount = training.problems.length - solvedCount;
 
@@ -187,7 +187,7 @@ export const getRealTimePerformance = (
     const additionalPenalty = unsolvedCount * 50;
     projectedPerformance = Math.max(
       currentPerformance - additionalPenalty,
-      600
+      600,
     );
   }
 
@@ -204,7 +204,7 @@ export const getRealTimePerformance = (
  */
 export const getPerformanceBreakdown = (
   training: Training,
-  userRating: number
+  userRating: number,
 ): {
   problemBreakdown: {
     rating: number;
@@ -244,7 +244,7 @@ export const getPerformanceBreakdown = (
       problemRating,
       expectedProb,
       solved,
-      timeFactor
+      timeFactor,
     );
 
     let expectedDifficulty: "Easy" | "Medium" | "Hard" | "Very Hard";
@@ -265,7 +265,7 @@ export const getPerformanceBreakdown = (
   const avgProblemRating =
     Object.values(training.customRatings).reduce(
       (sum, rating) => sum + rating,
-      0
+      0,
     ) / training.problems.length;
 
   const solveRate =
@@ -283,7 +283,7 @@ export const getPerformanceBreakdown = (
 
   const timeEfficiency = Math.max(
     0,
-    Math.min(1, (contestDuration - avgSolveTime) / contestDuration)
+    Math.min(1, (contestDuration - avgSolveTime) / contestDuration),
   );
 
   const ratingSpread =

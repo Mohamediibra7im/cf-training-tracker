@@ -27,7 +27,7 @@ const UpsolvedProblemSchema: Schema = new Schema({
 // Prevent duplicate problems per user
 UpsolvedProblemSchema.index(
   { user: 1, contestId: 1, index: 1 },
-  { unique: true }
+  { unique: true },
 );
 
 export default models.UpsolvedProblem ||

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!handle) {
       return NextResponse.json(
         { message: "Codeforces handle is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const verificationToken = jwt.sign(
       { userId: user._id, handle: user.codeforcesHandle },
       process.env.JWT_SECRET!,
-      { expiresIn: "5m" } // Token is valid for 5 minutes
+      { expiresIn: "5m" }, // Token is valid for 5 minutes
     );
 
     return NextResponse.json({ verificationToken });
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

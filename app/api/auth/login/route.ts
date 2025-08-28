@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
     if (!codeforcesHandle || !pin) {
       return NextResponse.json(
         { message: "Codeforces handle and PIN are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!/^\d{4}$/.test(pin)) {
       return NextResponse.json(
         { message: "PIN must be a 4-digit number" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (!isMatch) {
       return NextResponse.json(
         { message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
             lastSyncTime: syncData.lastSyncTime,
             avatar: syncData.avatar,
           },
-          { new: true }
+          { new: true },
         );
       }
     }
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
       process.env.JWT_SECRET!,
       {
         expiresIn: "14d",
-      }
+      },
     );
 
     return NextResponse.json({
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

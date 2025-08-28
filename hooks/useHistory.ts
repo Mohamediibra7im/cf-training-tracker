@@ -70,7 +70,7 @@ const useHistory = () => {
         console.error(error);
       }
     },
-    [isClient, mutate, user?.rating]
+    [isClient, mutate, user?.rating],
   );
 
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -85,7 +85,7 @@ const useHistory = () => {
       mutate(
         (currentData = []) =>
           currentData.filter((training) => training._id !== trainingId),
-        false
+        false,
       );
 
       try {
@@ -108,7 +108,7 @@ const useHistory = () => {
         setIsDeleting(null);
       }
     },
-    [mutate, isDeleting]
+    [mutate, isDeleting],
   );
 
   return {

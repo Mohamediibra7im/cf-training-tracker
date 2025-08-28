@@ -44,13 +44,13 @@ export async function POST(req: NextRequest) {
     await newTraining.save();
     return NextResponse.json(
       { message: "Training saved successfully", training: newTraining },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error saving training:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching trainings:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

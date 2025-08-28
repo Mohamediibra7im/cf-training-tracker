@@ -14,7 +14,7 @@ export interface HeatmapData {
 
 export const useHeatmapData = (
   history: Training[],
-  upsolvedProblems: TrainingProblem[] = []
+  upsolvedProblems: TrainingProblem[] = [],
 ): HeatmapData => {
   return useMemo(() => {
     const dailyCounts: { [key: string]: number } = {};

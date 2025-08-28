@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     console.error("FATAL: JWT_SECRET environment variable is not set.");
     return NextResponse.json(
       { message: "Server configuration error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -21,14 +21,14 @@ export async function POST(req: NextRequest) {
     if (!codeforcesHandle || !pin) {
       return NextResponse.json(
         { message: "Codeforces handle and PIN are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!/^\d{4}$/.test(pin)) {
       return NextResponse.json(
         { message: "PIN must be a 4-digit number" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { message: "User already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     if (!cfUserResponse.success) {
       return NextResponse.json(
         { message: "Invalid Codeforces handle" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -70,13 +70,13 @@ export async function POST(req: NextRequest) {
     await newUser.save();
     return NextResponse.json(
       { message: "User created successfully" },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

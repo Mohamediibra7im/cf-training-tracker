@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     if (!syncData) {
       return NextResponse.json(
         { message: "Failed to sync profile data" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
         lastSyncTime: syncData.lastSyncTime,
         avatar: syncData.avatar,
       },
-      { new: true }
+      { new: true },
     );
 
     return NextResponse.json({
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     console.error("Profile sync error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

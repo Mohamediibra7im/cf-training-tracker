@@ -10,7 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { Card, CardContent } from "@/components/ui/card";
 import { Trash2 } from "lucide-react";
 
 const Problem = ({
@@ -23,7 +24,7 @@ const Problem = ({
   const getSolvedStatus = () => {
     if (problem.solvedTime) {
       const solvedMinutes = Math.floor(
-        (problem.solvedTime - startTime) / 60000
+        (problem.solvedTime - startTime) / 60000,
       );
       return `✅ ${solvedMinutes}m `;
     }

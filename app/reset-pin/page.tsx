@@ -20,7 +20,7 @@ import {
 export default function ResetPinPage() {
   const router = useRouter();
   const [stage, setStage] = useState<"enterHandle" | "verify" | "resetPin">(
-    "enterHandle"
+    "enterHandle",
   );
   const [handle, setHandle] = useState("");
   const [verificationToken, setVerificationToken] = useState("");

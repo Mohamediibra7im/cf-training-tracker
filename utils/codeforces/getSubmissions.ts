@@ -1,11 +1,11 @@
-import {User} from "@/types/User";
-import {CodeforcesSubmission} from "@/types/Codeforces";
-import {SuccessResponse, ErrorResponse, Response} from "@/types/Response";
+import { User } from "@/types/User";
+import { CodeforcesSubmission } from "@/types/Codeforces";
+import { SuccessResponse, ErrorResponse, Response } from "@/types/Response";
 
 const getSubmissions = async (
   user: User,
   from?: number,
-  count?: number
+  count?: number,
 ): Promise<Response<CodeforcesSubmission[]>> => {
   try {
     let url = `https://codeforces.com/api/user.status?handle=${user.codeforcesHandle}`;

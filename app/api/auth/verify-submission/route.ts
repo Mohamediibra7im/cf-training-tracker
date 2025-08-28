@@ -17,13 +17,13 @@ export async function POST(req: NextRequest) {
     if (!verificationToken) {
       return NextResponse.json(
         { message: "Verification token is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const decoded = jwt.verify(
       verificationToken,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as DecodedToken;
     const { handle, iat } = decoded;
 
@@ -35,18 +35,22 @@ export async function POST(req: NextRequest) {
     if (submissionsData.status !== "OK") {
       return NextResponse.json(
         { message: "Could not fetch submissions from Codeforces." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const submissions = submissionsData.result;
 
     const recentCompilationError = submissions.find(
-      (sub: any) =>
+      (sub: {
+        problem: { contestId: number; index: string };
+        verdict: string;
+        creationTimeSeconds: number;
+      }) =>
         sub.problem.contestId === 4 &&
         sub.problem.index === "A" &&
         sub.verdict === "COMPILATION_ERROR" &&
-        sub.creationTimeSeconds >= iat - 30
+        sub.creationTimeSeconds >= iat - 30,
     );
 
     if (recentCompilationError) {
@@ -54,7 +58,7 @@ export async function POST(req: NextRequest) {
       const resetToken = jwt.sign(
         { userId: decoded.userId },
         process.env.JWT_SECRET!,
-        { expiresIn: "10m" } // This token is valid for 10 minutes
+        { expiresIn: "10m" }, // This token is valid for 10 minutes
       );
       return NextResponse.json({ success: true, resetToken });
     } else {
@@ -64,20 +68,20 @@ export async function POST(req: NextRequest) {
           message:
             "Verification failed. No recent compilation error found for problem 4A.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(
         { message: "Invalid or expired token." },
-        { status: 401 }
+        { status: 401 },
       );
     }
     console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

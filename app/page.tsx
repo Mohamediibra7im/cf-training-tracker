@@ -59,7 +59,8 @@ export default function Home() {
             </h1>
           </div>
           <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Master competitive programming with intelligent practice sessions, track your progress, and climb the Codeforces ladder.
+            Master competitive programming with intelligent practice sessions,
+            track your progress, and climb the Codeforces ladder.
           </p>
         </div>
         <Settings />

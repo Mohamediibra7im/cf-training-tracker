@@ -1,10 +1,10 @@
-import {useState, useEffect, useCallback} from "react";
-import {useRouter} from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import useUser from "@/hooks/useUser";
 import useProblems from "@/hooks/useProblems";
-import {TrainingProblem} from "@/types/TrainingProblem";
-import {Training} from "@/types/Training";
-import {ProblemTag} from "@/types/Codeforces";
+import { TrainingProblem } from "@/types/TrainingProblem";
+import { Training } from "@/types/Training";
+import { ProblemTag } from "@/types/Codeforces";
 import useHistory from "@/hooks/useHistory";
 import useUpsolvedProblems from "@/hooks/useUpsolvedProblems";
 import getTrainingSubmissionStatus, {
@@ -16,15 +16,15 @@ const SUBMISSION_STATUS_STORAGE_KEY = "training-tracker-submission-status";
 
 const useTraining = () => {
   const router = useRouter();
-  const {user, isLoading: isUserLoading} = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
   const {
     solvedProblems,
     isLoading: isProblemsLoading,
     refreshSolvedProblems,
     getRandomProblems,
   } = useProblems(user);
-  const {addTraining} = useHistory();
-  const {addUpsolvedProblems} = useUpsolvedProblems();
+  const { addTraining } = useHistory();
+  const { addUpsolvedProblems } = useUpsolvedProblems();
 
   const [isClient, setIsClient] = useState(false);
   const [problems, setProblems] = useState<TrainingProblem[]>([]);
@@ -51,7 +51,7 @@ const useTraining = () => {
       const statusResponse = await getTrainingSubmissionStatus(
         user,
         training.problems,
-        training.startTime
+        training.startTime,
       );
 
       if (statusResponse.success) {
@@ -61,13 +61,13 @@ const useTraining = () => {
         if (isClient) {
           localStorage.setItem(
             SUBMISSION_STATUS_STORAGE_KEY,
-            JSON.stringify(newStatuses)
+            JSON.stringify(newStatuses),
           );
         }
 
         // Then, update the solved times based on the new statuses
         const solvedProblemIds = new Set(
-          newStatuses.filter((s) => s.status === "AC").map((s) => s.problemId)
+          newStatuses.filter((s) => s.status === "AC").map((s) => s.problemId),
         );
 
         const updatedProblems = training.problems.map((problem) => {
@@ -89,14 +89,14 @@ const useTraining = () => {
           JSON.stringify(updatedProblems) !== JSON.stringify(training.problems)
         ) {
           setTraining((prev) =>
-            prev ? {...prev, problems: updatedProblems} : null
+            prev ? { ...prev, problems: updatedProblems } : null,
           );
         }
       } else {
         // Handle API errors gracefully
         console.error(
           "Failed to fetch submission status:",
-          statusResponse.error
+          statusResponse.error,
         );
       }
     } catch (error: unknown) {
@@ -135,7 +135,7 @@ const useTraining = () => {
     }
 
     // Use a local copy of training for the async operations
-    const currentTraining = {...training};
+    const currentTraining = { ...training };
 
     // Clear all training-related states immediately
     setProblems([]);
@@ -149,14 +149,14 @@ const useTraining = () => {
     const statusResponse = await getTrainingSubmissionStatus(
       user!,
       currentTraining.problems,
-      currentTraining.startTime
+      currentTraining.startTime,
     );
 
     let finalProblems = currentTraining.problems;
     if (statusResponse.success) {
       const newStatuses = statusResponse.data;
       const solvedProblemIds = new Set(
-        newStatuses.filter((s) => s.status === "AC").map((s) => s.problemId)
+        newStatuses.filter((s) => s.status === "AC").map((s) => s.problemId),
       );
       finalProblems = currentTraining.problems.map((problem) => {
         const problemId = `${problem.contestId}_${problem.index}`;
@@ -174,7 +174,7 @@ const useTraining = () => {
       });
     }
 
-    addTraining({...currentTraining, problems: finalProblems});
+    addTraining({ ...currentTraining, problems: finalProblems });
 
     const unsolvedProblems = finalProblems.filter((p) => !p.solvedTime);
     // Keep the original order as they were selected for training (1st, 2nd, 3rd, 4th)
@@ -201,7 +201,7 @@ const useTraining = () => {
     }
 
     const localSubmissionStatuses = localStorage.getItem(
-      SUBMISSION_STATUS_STORAGE_KEY
+      SUBMISSION_STATUS_STORAGE_KEY,
     );
     if (localSubmissionStatuses) {
       const parsed = JSON.parse(localSubmissionStatuses);
@@ -248,7 +248,7 @@ const useTraining = () => {
   }, [isTraining, refreshProblemStatus]);
 
   const startTraining = useCallback(
-    (customRatings: {P1: number; P2: number; P3: number; P4: number}) => {
+    (customRatings: { P1: number; P2: number; P3: number; P4: number }) => {
       if (!user) {
         router.push("/");
         return;
@@ -267,7 +267,7 @@ const useTraining = () => {
         performance: 0,
       });
     },
-    [user, problems, router]
+    [user, problems, router],
   );
 
   const stopTraining = () => {
@@ -284,7 +284,7 @@ const useTraining = () => {
     tags: ProblemTag[],
     lb: number,
     ub: number,
-    customRatings: {P1: number; P2: number; P3: number; P4: number}
+    customRatings: { P1: number; P2: number; P3: number; P4: number },
   ) => {
     const newProblems = getRandomProblems(tags, lb, ub, customRatings);
     if (newProblems) {

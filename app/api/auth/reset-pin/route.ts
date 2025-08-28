@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       if (!body.newPin || !/^\d{4}$/.test(body.newPin)) {
         return NextResponse.json(
           { message: "New PIN must be a 4-digit number." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       if (!user) {
         return NextResponse.json(
           { message: "User not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     ) {
       return NextResponse.json(
         { message: "Both current and new PINs must be 4-digit numbers." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     if (!isMatch) {
       return NextResponse.json(
         { message: "Incorrect current PIN." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -81,13 +81,13 @@ export async function POST(req: NextRequest) {
     if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(
         { message: "Invalid or expired token." },
-        { status: 401 }
+        { status: 401 },
       );
     }
     console.error(error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -4,7 +4,7 @@ import { SuccessResponse, ErrorResponse, Response } from "@/types/Response";
 const getUser = async (handle: string): Promise<Response<User>> => {
   try {
     const res = await fetch(
-      `https://codeforces.com/api/user.info?handles=${handle}`
+      `https://codeforces.com/api/user.info?handles=${handle}`,
     );
     const data = await res.json();
     if (data.status !== "OK") {

@@ -49,7 +49,7 @@ const ProblemRow = ({
         case "AC":
           if (problem.solvedTime && startTime) {
             const solvedMinutes = Math.floor(
-              (problem.solvedTime - startTime) / 60000
+              (problem.solvedTime - startTime) / 60000,
             );
             return (
               <span className="inline-flex items-center gap-1">
@@ -71,7 +71,7 @@ const ProblemRow = ({
     // Fallback to original logic
     if (problem.solvedTime && startTime) {
       const solvedMinutes = Math.floor(
-        (problem.solvedTime - startTime) / 60000
+        (problem.solvedTime - startTime) / 60000,
       );
       return (
         <span className="inline-flex items-center gap-1">
@@ -105,9 +105,10 @@ const ProblemRow = ({
 
   const content = (
     <div
-      className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${isPreContestPeriod
-        ? "bg-muted cursor-not-allowed opacity-70"
-        : overlayClass || "bg-card hover:bg-muted/50"
+      className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${
+        isPreContestPeriod
+          ? "bg-muted cursor-not-allowed opacity-70"
+          : overlayClass || "bg-card hover:bg-muted/50"
       }`}
     >
       <div className="flex items-center gap-4 flex-1">
@@ -175,7 +176,7 @@ const Trainer = ({
     tags: ProblemTag[],
     lb: number,
     ub: number,
-    customRatings: { P1: number; P2: number; P3: number; P4: number }
+    customRatings: { P1: number; P2: number; P3: number; P4: number },
   ) => void;
   startTraining: (customRatings: {
     P1: number;
@@ -234,7 +235,7 @@ const Trainer = ({
               {currentProblems.map((problem, index) => {
                 const problemId = `${problem.contestId}_${problem.index}`;
                 const submissionStatus = submissionStatuses.find(
-                  (status) => status.problemId === problemId
+                  (status) => status.problemId === problemId,
                 );
 
                 return (

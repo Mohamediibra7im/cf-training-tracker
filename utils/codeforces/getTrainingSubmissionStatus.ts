@@ -13,7 +13,7 @@ export type SubmissionStatus = {
 const getTrainingSubmissionStatus = async (
   user: User,
   problems: TrainingProblem[],
-  trainingStartTime: number
+  trainingStartTime: number,
 ): Promise<Response<SubmissionStatus[]>> => {
   try {
     const res = await getSubmissions(user);
@@ -34,11 +34,11 @@ const getTrainingSubmissionStatus = async (
           (sub: CodeforcesSubmission) =>
             sub.problem.contestId === problem.contestId &&
             sub.problem.index === problem.index &&
-            sub.creationTimeSeconds * 1000 >= trainingStartTime // Only submissions during training
+            sub.creationTimeSeconds * 1000 >= trainingStartTime, // Only submissions during training
         )
         .sort(
           (a: CodeforcesSubmission, b: CodeforcesSubmission) =>
-            b.creationTimeSeconds - a.creationTimeSeconds // Most recent first
+            b.creationTimeSeconds - a.creationTimeSeconds, // Most recent first
         );
 
       if (problemSubmissions.length === 0) {
@@ -51,7 +51,7 @@ const getTrainingSubmissionStatus = async (
 
       // Check for AC first, as it's the final success state
       const acceptedSubmission = problemSubmissions.find(
-        (sub: CodeforcesSubmission) => sub.verdict === "OK"
+        (sub: CodeforcesSubmission) => sub.verdict === "OK",
       );
 
       if (acceptedSubmission) {

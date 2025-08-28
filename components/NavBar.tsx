@@ -50,11 +50,10 @@ const NavBar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative transition-all duration-300 hover:text-primary ${
-                  pathname === link.href
-                    ? "text-primary font-semibold"
-                    : "text-foreground/70 hover:text-foreground"
-                }`}
+                className={`relative transition-all duration-300 hover:text-primary ${pathname === link.href
+                  ? "text-primary font-semibold"
+                  : "text-foreground/70 hover:text-foreground"
+                  }`}
               >
                 {link.label}
                 {pathname === link.href && (
@@ -128,11 +127,10 @@ const NavBar = () => {
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`text-xl transition-all duration-300 hover:text-primary ${
-                        pathname === link.href
-                          ? "text-primary font-semibold"
-                          : "text-foreground/70 hover:text-foreground"
-                      }`}
+                      className={`text-xl transition-all duration-300 hover:text-primary ${pathname === link.href
+                        ? "text-primary font-semibold"
+                        : "text-foreground/70 hover:text-foreground"
+                        }`}
                     >
                       {link.label}
                     </Link>

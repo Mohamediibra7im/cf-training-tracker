@@ -8,13 +8,13 @@ import { useLevels } from "@/hooks/useLevels";
 import useUser from "@/hooks/useUser";
 
 interface LevelSelectorProps {
-    onLevelChange: (ratings: {
-        P1: number;
-        P2: number;
-        P3: number;
-        P4: number;
-    }) => void;
-    currentRatings: { P1: number; P2: number; P3: number; P4: number };
+  onLevelChange: (ratings: {
+    P1: number;
+    P2: number;
+    P3: number;
+    P4: number;
+  }) => void;
+  currentRatings: { P1: number; P2: number; P3: number; P4: number };
 }
 
 const LevelSelector = ({

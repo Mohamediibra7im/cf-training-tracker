@@ -228,10 +228,11 @@ export default function TrainingPage() {
                               problem as keyof typeof customRatings,
                             )
                           }
-                          className={`hide-spinners w-full h-12 text-lg font-semibold text-center rounded-none z-10 ${isInvalid
+                          className={`hide-spinners w-full h-12 text-lg font-semibold text-center rounded-none z-10 ${
+                            isInvalid
                               ? "border-red-500 focus-visible:ring-red-500"
                               : ""
-                            }`}
+                          }`}
                         />
                         <Button
                           variant="outline"

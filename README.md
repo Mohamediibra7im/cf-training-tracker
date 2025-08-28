@@ -1,4 +1,4 @@
-# 🚀 CP Training Tracker
+# 🚀 CP - Training Tracker
 
 > **Master competitive programming with intelligent practice sessions, track your progress, and climb the Codeforces ladder.**
 

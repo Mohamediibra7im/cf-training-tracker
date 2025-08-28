@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 
 const CountDown = ({
   startTime,
@@ -10,8 +9,15 @@ const CountDown = ({
 }) => {
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const calculateTimeLeft = () => {
       const now = Date.now();
       if (now < startTime) {
@@ -38,33 +44,51 @@ const CountDown = ({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [startTime, endTime]);
+  }, [startTime, endTime, mounted]);
+
+  if (!mounted) {
+    return (
+      <div className="bg-muted/50 rounded-lg border-2 border-border/50 px-6 py-4">
+        <div className="text-2xl font-bold text-center text-foreground">
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   const hours = Math.floor(timeLeft / (1000 * 60 * 60));
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="text-2xl font-bold text-center">
-          {timeLeft === 0 ? (
-            isStarted ? (
-              <span className="text-red-500">Training has ended</span>
-            ) : (
-              <span className="text-green-500">Training will start soon</span>
-            )
+    <div className="bg-muted/50 rounded-lg border-2 border-border/50 px-6 py-4">
+      <div className="text-center">
+        {timeLeft === 0 ? (
+          isStarted ? (
+            <span className="text-[#B71F25] text-xl font-semibold">
+              Training has ended
+            </span>
           ) : (
-            <span>
-              {!isStarted && "Training will start in "}
+            <span className="text-[#1A92CF] text-xl font-semibold">
+              Training will start soon
+            </span>
+          )
+        ) : (
+          <div className="space-y-1">
+            {!isStarted && (
+              <div className="text-sm font-medium text-muted-foreground">
+                Training will start in
+              </div>
+            )}
+            <div className="text-2xl font-bold font-mono text-foreground">
               {hours.toString().padStart(2, "0")}:
               {minutes.toString().padStart(2, "0")}:
               {seconds.toString().padStart(2, "0")}
-            </span>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

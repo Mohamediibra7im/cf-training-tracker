@@ -1,10 +1,11 @@
-import { Level } from "@/types/Level";
-
-type User = {
+export interface User {
+  _id: string;
   codeforcesHandle: string;
   rating: number;
   avatar: string;
-  level: Level;
-};
-
-export type { User };
+  rank: string;
+  maxRating: number;
+  maxRank: string;
+  organization?: string;
+  lastSyncTime?: number;
+}

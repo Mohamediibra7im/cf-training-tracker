@@ -1,137 +1,167 @@
-import { useEffect } from "react";
-import useSWR from "swr";
+import { useEffect, useState, useCallback } from "react";
+import useSWR, { useSWRConfig } from "swr";
 import { User } from "@/types/User";
-import getUser from "@/utils/codeforces/getUser";
-import { getLevel, getLevelByRating } from "@/utils/getLevel";
-import { SuccessResponse, ErrorResponse } from "@/types/Response";
+import { SuccessResponse, ErrorResponse, Response } from "@/types/Response";
 
-const USER_STORAGE_KEY = "training-tracker-user";
 const USER_CACHE_KEY = "codeforces-user";
 
-const getStoredUser = () => {
-  try {
-    const stored = localStorage.getItem(USER_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-};
-
 const useUser = () => {
-  const { data: user, isLoading, mutate, error } = useSWR<User | null>(
+  const [isClient, setIsClient] = useState(false);
+  const {
+    data: user,
+    isLoading,
+    mutate,
+    error,
+  } = useSWR<User | null>(
     USER_CACHE_KEY,
-    getStoredUser,
+    null, // We will manage fetching manually or from localStorage
     {
-      fallbackData: getStoredUser(),
       revalidateOnFocus: false,
-      revalidateOnReconnect: false
+      revalidateOnReconnect: false,
     }
   );
 
   useEffect(() => {
-    const fetchLatestUser = async () => {
-      if (!user?.codeforcesHandle) return;
-      const res = await getUser(user.codeforcesHandle);
-      if (!res.success) return;
-      const profile = res.data;
-      if (
-        profile.rating !== user.rating ||
-        profile.avatar !== user.avatar
-      ) {
-        const newUser = {
-          codeforcesHandle: profile.handle as string,
-          avatar: profile.avatar as string,
-          rating: profile.rating as number,
-          level: getLevelByRating(profile.rating),
-        };
-        await mutate(newUser, { revalidate: false });
-      }
-    };
-    fetchLatestUser();
-  }, [user?.codeforcesHandle]);
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-    }
-  }, [user]);
+    // Only attempt to load user from localStorage after client hydration
+    if (!isClient) return;
 
-  const updateUser = async (codeforcesHandle: string) => {
-    try {
-      const res = await getUser(codeforcesHandle);
-      if (!res.success) {
-        throw new Error("Failed to fetch user");
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    if (token && storedUser) {
+      mutate(JSON.parse(storedUser), false);
+    } else {
+      // If no stored user, mark loading as complete
+      mutate(null, false);
+    }
+  }, [mutate, isClient]);
+
+  const register = useCallback(
+    async (codeforcesHandle: string, pin: string): Promise<Response<User>> => {
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ codeforcesHandle, pin }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return ErrorResponse(data.message);
+        }
+        // After successful registration, automatically log the user in
+        return await login(codeforcesHandle, pin);
+      } catch (error) {
+        return ErrorResponse("Failed to connect to the server.");
       }
-      
-      const profile = res.data;
-      const newUser = {
-        codeforcesHandle: profile.handle as string,
-        avatar: profile.avatar as string,
-        rating: profile.rating as number,
-        level: getLevelByRating(profile.rating),
-      };
-      
-      await mutate(newUser, { revalidate: false });
-      return SuccessResponse("User updated successfully");
-    } catch (error) {
-      console.error("Error updating user:", error);
-      return ErrorResponse("Failed to update user");
-    }
-  };
+    },
+    []
+  );
 
-  const changeUserLevel = async (newLevelNumber: number) => {
-    if (!user) {
-      return ErrorResponse("User not found");
-    }
+  const login = useCallback(
+    async (codeforcesHandle: string, pin: string): Promise<Response<User>> => {
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ codeforcesHandle, pin }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return ErrorResponse(data.message);
+        }
 
-    const originalLevel = user.level;
-    const newLevel = getLevel(newLevelNumber);
+        // Save token and user to localStorage for persistent sessions
+        if (isClient) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
 
-    try {
-      await mutate({ ...user, level: newLevel }, { revalidate: false });
-      return SuccessResponse("User level updated successfully");
-    } catch (error) {
-      await mutate({ ...user, level: originalLevel }, { revalidate: false });
-      console.error("Error updating user level:", error);
-      return ErrorResponse("Failed to update user level");
-    }
-  };
-
-  const updateUserLevel = async ({ delta }: { delta: number }) => {
-    // update user level after training
-    if (!user) {
-      return ErrorResponse("User not found");
-    }
-
-    const newLevel = getLevel(+user.level.level + delta);
-
-    if (!newLevel || +newLevel.level < 1 || +newLevel.level > 109) {
-      return ErrorResponse("Failed to update user level");
-    }
-
-    try {
-      await mutate({ ...user, level: newLevel }, { revalidate: false });
-      return SuccessResponse("User level updated successfully");
-    } catch (error) {
-      console.error("Error updating user level:", error);
-      return ErrorResponse("Failed to update user level");
-    }
-  };
+        await mutate(data.user, false);
+        return SuccessResponse(data.user);
+      } catch (error) {
+        return ErrorResponse("Failed to connect to the server.");
+      }
+    },
+    [isClient, mutate]
+  );
 
   const logout = () => {
-    mutate(null, { revalidate: false });
-    localStorage.removeItem(USER_STORAGE_KEY);
+    if (isClient) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+    mutate(null, false);
   };
+
+  const resetPin = async (
+    oldPin: string,
+    newPin: string
+  ): Promise<Response<null>> => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/auth/reset-pin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ oldPin, newPin }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        return ErrorResponse(data.message);
+      }
+
+      return SuccessResponse(null);
+    } catch (error) {
+      return ErrorResponse("Failed to connect to the server.");
+    }
+  };
+
+  const syncProfile = useCallback(async (): Promise<Response<User>> => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return ErrorResponse("Not authenticated");
+      }
+
+      const res = await fetch("/api/auth/sync-profile", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        return ErrorResponse(data.message);
+      }
+
+      // Update localStorage with new user data
+      if (isClient && data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        await mutate(data.user, false);
+      }
+
+      return SuccessResponse(data.user);
+    } catch (error) {
+      return ErrorResponse("Failed to sync profile");
+    }
+  }, [isClient, mutate]);
 
   return {
     user,
-    isLoading,
+    isLoading: isLoading || !isClient,
     error,
-
-    updateUser,
-    updateUserLevel,
-    changeUserLevel,
+    register,
+    login,
     logout,
+    resetPin,
+    syncProfile,
   };
 };
 

@@ -7,8 +7,10 @@ export const useTags = () => {
   const [selectedTags, setSelectedTags] = useState<ProblemTag[]>([]);
 
   const onTagClick = (tag: ProblemTag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags((prevTags) => prevTags.filter((t) => t.value !== tag.value));
+    if (selectedTags.some((t) => t.value === tag.value)) {
+      setSelectedTags((prevTags) =>
+        prevTags.filter((t) => t.value !== tag.value)
+      );
     } else {
       setSelectedTags((prevTags) => [...prevTags, tag]);
     }

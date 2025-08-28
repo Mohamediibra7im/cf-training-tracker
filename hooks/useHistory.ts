@@ -1,63 +1,123 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import useUser from "@/hooks/useUser";
+import { useState, useEffect, useCallback } from "react";
+import useSWR from "swr";
 import { Training } from "@/types/Training";
-import getPerformance from "@/utils/getPerformance";
+import { getAccuratePerformance } from "@/utils/getPerformance";
+import useUser from "@/hooks/useUser";
 
-const HISTORY_STORAGE_KEY = "training-tracker-history";
+// Define a custom error type
+interface FetchError extends Error {
+  info?: unknown;
+  status?: number;
+}
+
+const fetcher = async (url: string) => {
+  if (typeof window === "undefined") return [];
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch trainings");
+  }
+
+  return res.json();
+};
 
 const useHistory = () => {
-  const router = useRouter();
-  const { user, isLoading: isUserLoading } = useUser();
-  const [history, setHistory] = useState<Training[]>([]);
-  // Redirect if no user
-  useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push("/");
-    }
-  }, [user, isUserLoading, router]);
+  const [isClient, setIsClient] = useState(false);
+  const { user } = useUser();
+  const {
+    data: history,
+    error,
+    mutate,
+  } = useSWR<Training[]>(isClient ? "/api/trainings" : null, fetcher);
 
-  // Load history from localStorage
   useEffect(() => {
-    const history = localStorage.getItem(HISTORY_STORAGE_KEY);
-    if (history) {
-      setHistory(JSON.parse(history));
-    }
+    setIsClient(true);
   }, []);
 
-  const addTraining = (training: Training) => {
-    const performance = getPerformance(training);
+  const addTraining = useCallback(
+    async (training: Training) => {
+      if (!isClient) return;
 
-    const newTraining = { ...training, performance };
+      // Use the user's current rating for accurate performance calculation
+      const userRating = user?.rating || 1500; // Default to 1500 if rating not available
+      const performance = getAccuratePerformance(training, userRating);
+      const newTraining = { ...training, performance };
 
-    setHistory((prev) => [...prev, newTraining]);
+      const token = localStorage.getItem("token");
 
-    localStorage.setItem(
-      HISTORY_STORAGE_KEY,
-      JSON.stringify([...history, newTraining])
-    );
-  };
+      try {
+        await fetch("/api/trainings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newTraining),
+        });
+        // Revalidate the SWR cache to show the new training
+        mutate();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [isClient, mutate, user?.rating]
+  );
 
-  const deleteTraining = (training: Training) => {
-    setHistory((prev) => prev.filter((t) => t.startTime !== training.startTime));
-    localStorage.setItem(
-      HISTORY_STORAGE_KEY,
-      JSON.stringify(history.filter((t) => t.startTime !== training.startTime))
-    );
-  };
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
-  const clearHistory = () => {
-    setHistory([]);
-    localStorage.removeItem(HISTORY_STORAGE_KEY);
-  };
+  const deleteTraining = useCallback(
+    async (trainingId: string) => {
+      if (isDeleting) return;
+
+      setIsDeleting(trainingId);
+
+      // Optimistic update
+      mutate(
+        (currentData = []) =>
+          currentData.filter((training) => training._id !== trainingId),
+        false
+      );
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`/api/trainings/${trainingId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete training");
+        }
+      } catch (error) {
+        console.error("Error deleting training:", error);
+        // Rollback on error
+        mutate();
+      } finally {
+        setIsDeleting(null);
+      }
+    },
+    [mutate, isDeleting]
+  );
 
   return {
-    history,
-    isLoading: isUserLoading,
-
+    history: history || [],
+    isLoading: (!error && !history) || !isClient,
+    error,
     addTraining,
     deleteTraining,
-    clearHistory,
+    isDeleting,
   };
 };
 

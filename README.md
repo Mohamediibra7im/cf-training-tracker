@@ -1,27 +1,226 @@
-# Training Tracker
+# 🚀 CP Training Tracker
 
-This is a [web app](https://cp-training-tracker.vercel.app/) that helps you track your training history and performance for Competitive Programming.
+> **Master competitive programming with intelligent practice sessions, track your progress, and climb the Codeforces ladder.**
 
-The idea of this app is inspired by [this blog post](https://codeforces.com/blog/entry/136704). Huge thanks to the [author](https://codeforces.com/profile/pwned).
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-blue?style=flat&logo=vercel&logoColor=white)](https://cp-training-tracker.vercel.app/)
+[![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-## Usage
+## 📖 Overview
 
-1. Enter your Codeforces handle in Home page.
-2. Generate random problems in Training page. You can also generate problems with tags.
-3. View your training history in Statistics page.
+Training Tracker is a comprehensive web application designed to help competitive programmers improve their skills through structured practice sessions. The app integrates with Codeforces API to provide personalized problem recommendations, track performance metrics, and visualize progress over time.
 
-## Note
+### 🎯 Key Features
 
-1. The data are fetched from Codeforces API, so it may take a while to load.
-2. The calculation of rating of generated problems and performance are from [this blog post](https://codeforces.com/blog/entry/136704).
-3. For now, all the data (user info, training history, etc.) are stored in your browser's local storage, so once you clear the data, you will lose all your training history.
+- **🎲 Smart Problem Generation**: Generate random problems with customizable difficulty levels and tags
+- **📊 Performance Analytics**: Track your solving speed, accuracy, and rating progression
+- **🔥 Activity Heatmap**: Visualize your daily practice activity with an interactive heatmap
+- **📈 Progress Charts**: Monitor your performance trends and improvement over time
+- **🏷️ Tag-based Filtering**: Practice specific topics like DP, Graph Theory, or Data Structures
+- **⚡ Real-time Sync**: Automatically sync with your Codeforces profile
+- **🌙 Dark/Light Mode**: Beautiful UI with theme switching capability
+- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 
-## Contributing
+## 🛠️ Tech Stack
 
-If you have any ideas or suggestions, please feel free to open an issue or a pull request.
+### Frontend
 
-### Run locally
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Radix UI** - Accessible component primitives
+- **Lucide React** - Beautiful icons
+- **Recharts** - Data visualization library
+- **SWR** - Data fetching and caching
 
-1. Clone the repository.
-2. Run `npm install`. You might need to add `--legacy-peer-deps` option to install the dependencies.
-3. Run `npm run dev`.
+### Backend & Data
+
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB object modeling
+- **Codeforces API** - Problem and user data
+- **JWT** - Authentication tokens
+- **bcryptjs** - Password hashing
+
+### Development Tools
+
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **PostCSS** - CSS processing
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- MongoDB (for local development)
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/training-tracker.git
+   cd training-tracker
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   # If you encounter peer dependency issues, use:
+   npm install --legacy-peer-deps
+   ```
+
+3. **Set up environment variables**
+   Create a `.env.local` file in the root directory:
+
+   ```env
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret_key
+   ```
+
+4. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📱 Usage Guide
+
+### 1. Getting Started
+
+- Enter your Codeforces handle on the home page
+- The app will automatically fetch your profile data and submission history
+- Set up your PIN for secure access (optional)
+
+### 2. Training Sessions
+
+- Navigate to the **Training** page
+- Choose your preferred difficulty level or set custom ratings
+- Select specific tags to focus on particular topics
+- Generate problems and start your training session
+- Track your progress in real-time
+
+### 3. Performance Tracking
+
+- View detailed statistics on the **Statistics** page
+- Analyze your solving patterns with interactive charts
+- Monitor your rating progression over time
+- Review your activity heatmap
+
+### 4. Upsolved Problems
+
+- Access the **Upsolve** page to review problems you couldn't solve during training
+- Track your improvement on previously attempted problems
+
+## 🏗️ Project Structure
+
+```
+training-tracker/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   ├── training/          # Training session page
+│   ├── statistics/        # Analytics page
+│   ├── upsolve/          # Upsolved problems page
+│   └── reset-pin/        # PIN reset page
+├── components/            # React components
+│   ├── ui/               # Reusable UI components
+│   ├── ActivityHeatmap.tsx
+│   ├── ProgressChart.tsx
+│   ├── Trainer.tsx
+│   └── ...
+├── hooks/                # Custom React hooks
+├── lib/                  # Utility libraries
+├── models/               # MongoDB schemas
+├── types/                # TypeScript type definitions
+└── utils/                # Helper functions
+```
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## 🎨 Features in Detail
+
+### Smart Problem Generation
+
+The app uses advanced algorithms to generate problems that match your current skill level and learning goals. Problems are selected based on:
+
+- Your current Codeforces rating
+- Historical performance on similar problems
+- Selected difficulty range and tags
+- Problem quality and popularity
+
+### Performance Analytics
+
+Comprehensive analytics help you understand your strengths and areas for improvement:
+
+- **Solving Speed**: Track how quickly you solve problems
+- **Accuracy Rate**: Monitor your success rate across different difficulties
+- **Rating Progression**: Visualize your rating changes over time
+- **Topic Mastery**: Identify which topics you excel at or need more practice
+
+### Activity Tracking
+
+- **Daily Heatmap**: See your practice consistency with a GitHub-style activity map
+- **Session History**: Review all your training sessions with detailed metrics
+- **Progress Charts**: Interactive charts showing your improvement trends
+
+## 🤝 Contributing
+
+We welcome contributions from the competitive programming community! Here's how you can help:
+
+### Ways to Contribute
+
+- 🐛 **Report Bugs**: Open an issue with detailed bug reports
+- 💡 **Feature Requests**: Suggest new features or improvements
+- 📝 **Code Contributions**: Submit pull requests for bug fixes or new features
+- 📚 **Documentation**: Help improve documentation and guides
+- 🌟 **Star the Repository**: Show your support by starring the project
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Code Style
+
+- Follow the existing code style and formatting
+- Use TypeScript for all new code
+- Write meaningful commit messages
+- Add tests for new features when possible
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Inspiration**: This project is inspired by the excellent blog post on [Codeforces](https://codeforces.com/blog/entry/136704) by [pwned](https://codeforces.com/profile/pwned)
+- **Rating Calculations**: Performance and rating calculations are based on the methodology described in the aforementioned blog post
+- **Community**: Thanks to the competitive programming community for feedback and suggestions
+
+## Contributors:
+
+- [Mohammed Ibrahim](https://github.com/Mohamediibra7im)
+- [Daniel Yu](https://github.com/C0ldSmi1e)
+- [Sushant Singh](https://github.com/SXZZ5)
+- [alex-away](https://github.com/alex-away)
+
+---
+
+<div align="center">
+  <p>Made with ❤️ for the competitive programming community</p>
+  <p>⭐ Star this repository if you find it helpful!</p>
+</div>

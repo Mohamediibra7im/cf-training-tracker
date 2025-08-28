@@ -1,73 +1,55 @@
 "use client";
 
-import { useState } from "react";
-
 import { User } from "@/types/User";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Response } from "@/types/Response";
-import { LucideEdit } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const Profile = ({
-  user,
-  logout,
-  changeUserLevel,
-}: {
-  user: User;
-  logout: () => void;
-  changeUserLevel: (newLevelNumber: number) => Promise<Response<string>>;
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [newLevelNumber, setNewLevelNumber] = useState<number>(+user?.level.level);
-
-  const onSave = async () => {
-    setIsLoading(true);
-    await changeUserLevel(newLevelNumber);
-    setIsEditing(false);
-    setIsLoading(false);
-  };
-
+const Profile = ({ user }: { user: User }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-      <Avatar className="w-24 h-24 md:w-40 md:h-40">
-        <AvatarImage src={user?.avatar || "/default-avatar.jpg"} alt="avatar" />
-        <AvatarFallback>{user?.codeforcesHandle?.slice(0, 2).toUpperCase()}</AvatarFallback>
-      </Avatar>
-      <div className="flex flex-col items-center md:items-start justify-center gap-2">
-        <div className="text-lg">
-          <span className="font-bold">Username:</span> {user?.codeforcesHandle}
+    <Card className="lg:col-span-1">
+      <CardHeader>
+        <div className="flex items-center gap-4">
+          <Avatar className="h-16 w-16 border">
+            <AvatarImage src={user.avatar} alt={user.codeforcesHandle} />
+            <AvatarFallback>
+              {user.codeforcesHandle.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle className="text-xl font-bold">
+              {user.codeforcesHandle}
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {user.organization || "No organization"}
+            </p>
+          </div>
         </div>
-        <div>
-          <span className="font-bold">Rating:</span> {user?.rating}
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">Rating</p>
+            <p className="text-2xl font-bold text-primary">
+              {user.rating || 0}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {user.rank || "Unrated"}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">
+              Max Rating
+            </p>
+            <p className="text-2xl font-bold text-primary">
+              {user.maxRating || 0}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {user.maxRank || "Unrated"}
+            </p>
+          </div>
         </div>
-        <div>
-          {isEditing ? (
-            <div className="flex items-center gap-2">
-              <span className="font-bold">Level:</span>
-              <Input
-                className="w-20"
-                type="number"
-                value={newLevelNumber}
-                onChange={(e) => setNewLevelNumber(parseInt(e.target.value))}
-              />
-              <Button onClick={onSave} disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save"}
-              </Button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <span className="font-bold">Level:</span>{" "} {user?.level.level}
-              <LucideEdit className="w-4 h-4 cursor-pointer" onClick={() => setIsEditing(true)} />
-            </div>
-          )}
-        </div>
-        <Button onClick={logout} variant="outline" className="mt-2">
-          Logout
-        </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

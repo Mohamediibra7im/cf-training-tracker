@@ -13,20 +13,19 @@ declare global {
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-const MONGODB_URI = process.env.MONGO_URL!;
-
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGO_URL environment variable inside .env",
-  );
+  cached = global.mongoose = {conn: null, promise: null};
 }
 
 async function dbConnect() {
   if (cached!.conn) {
     return cached!.conn;
+  }
+
+  const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URL;
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Please define MONGODB_URI (or MONGO_URL) environment variable"
+    );
   }
 
   if (!cached!.promise) {

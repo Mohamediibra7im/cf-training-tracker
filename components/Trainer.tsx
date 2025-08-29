@@ -108,7 +108,7 @@ const ProblemRow = ({
       className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${isPreContestPeriod
         ? "bg-muted cursor-not-allowed opacity-70"
         : overlayClass || "bg-card hover:bg-muted/50"
-        }`}
+      }`}
     >
       <div className="flex items-center gap-4 flex-1">
         <div className="flex items-center gap-2">

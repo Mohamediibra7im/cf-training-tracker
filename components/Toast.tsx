@@ -77,9 +77,7 @@ const variantClasses: Record<ToastVariant, string> = {
 const ToastCard = ({ item, onClose }: { item: ToastItem; onClose: () => void }) => {
     const { title, description, variant = "default" } = item;
     return (
-        <Card
-            className={`border-2 shadow-lg animate-in fade-in-0 zoom-in-95 ${variantClasses[variant]} `}
-        >
+        <Card className={`border-2 shadow-lg animate-in fade-in-0 zoom-in-95 ${variantClasses[variant]} `}>
             <div className="px-4 py-3 min-w-[260px] max-w-[360px]">
                 {title && <div className="font-semibold mb-0.5">{title}</div>}
                 {description && (
@@ -96,7 +94,3 @@ const ToastCard = ({ item, onClose }: { item: ToastItem; onClose: () => void }) 
         </Card>
     );
 };
-
-
-
-

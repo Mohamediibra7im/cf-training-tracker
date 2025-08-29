@@ -5,7 +5,7 @@ import CountDown from "@/components/CountDown";
 import { ProblemTag } from "@/types/Codeforces";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, Lock } from "lucide-react";
+import { RefreshCw, Lock, CheckCircle2, XCircle, Loader2, Trophy } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SubmissionStatus } from "@/utils/codeforces/getTrainingSubmissionStatus";
 
@@ -52,17 +52,17 @@ const ProblemRow = ({
               (problem.solvedTime - startTime) / 60000,
             );
             return (
-              <span className="inline-flex items-center gap-1">
+              <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-500">
+                <CheckCircle2 className="h-4 w-4" />
                 <span>{solvedMinutes}m</span>
-                <span className="text-lg leading-none">✅</span>
               </span>
             );
           }
-          return <span className="text-lg leading-none">✅</span>;
+          return <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />;
         case "WA":
-          return <span className="text-lg leading-none">❌</span>;
+          return <XCircle className="h-4 w-4 text-red-600 dark:text-red-500" />;
         case "TESTING":
-          return <span className="text-lg leading-none animate-spin">🔄</span>;
+          return <Loader2 className="h-4 w-4 animate-spin text-blue-600 dark:text-blue-500" />;
         default:
           break;
       }
@@ -74,13 +74,13 @@ const ProblemRow = ({
         (problem.solvedTime - startTime) / 60000,
       );
       return (
-        <span className="inline-flex items-center gap-1">
+        <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-500">
+          <CheckCircle2 className="h-4 w-4" />
           <span>{solvedMinutes}m</span>
-          <span className="text-lg leading-none">✅</span>
         </span>
       );
     }
-    return <span className="text-lg leading-none">⌛</span>;
+    return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
   };
 
   const problemRating = customRatings[ratingKeys[index]];
@@ -105,11 +105,10 @@ const ProblemRow = ({
 
   const content = (
     <div
-      className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${
-        isPreContestPeriod
-          ? "bg-muted cursor-not-allowed opacity-70"
-          : overlayClass || "bg-card hover:bg-muted/50"
-      }`}
+      className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${isPreContestPeriod
+        ? "bg-muted cursor-not-allowed opacity-70"
+        : overlayClass || "bg-card hover:bg-muted/50"
+        }`}
     >
       <div className="flex items-center gap-4 flex-1">
         <div className="flex items-center gap-2">
@@ -134,7 +133,7 @@ const ProblemRow = ({
           </span>
         )}
         {isTraining && (
-          <span className="text-lg font-medium min-w-[80px] text-right">
+          <span className="text-lg font-medium min-w-[100px] text-right inline-flex items-center justify-end gap-1">
             {getSolvedStatus()}
           </span>
         )}
@@ -209,17 +208,21 @@ const Trainer = ({
   const isPreContestPeriod =
     isTraining && training?.startTime && currentTime < training.startTime;
 
-  const onFinishTraining = () => {
-    if (confirm("Are you sure to finish the training?")) {
-      finishTraining();
-    }
+  const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
+  const onFinishTraining = () => setIsFinishDialogOpen(true);
+  const confirmFinish = () => {
+    setIsFinishDialogOpen(false);
+    finishTraining();
   };
+  const cancelFinish = () => setIsFinishDialogOpen(false);
 
-  const onStopTraining = () => {
-    if (confirm("Are you sure to stop the training?")) {
-      stopTraining();
-    }
+  const [isStopDialogOpen, setIsStopDialogOpen] = useState(false);
+  const onStopTraining = () => setIsStopDialogOpen(true);
+  const confirmStop = () => {
+    setIsStopDialogOpen(false);
+    stopTraining();
   };
+  const cancelStop = () => setIsStopDialogOpen(false);
 
   const currentProblems =
     isTraining && training?.problems ? training.problems : problems;
@@ -227,6 +230,60 @@ const Trainer = ({
   return (
     <Card className="border-2 border-border/50 shadow-lg">
       <CardContent className="pt-8 space-y-8">
+        {isStopDialogOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="stop-title"
+            className="fixed inset-0 z-50 flex items-center justify-center"
+          >
+            <div className="absolute inset-0 bg-black/50" onClick={cancelStop} />
+            <div className="relative z-10 w-[90%] max-w-md">
+              <div className="rounded-lg border-2 border-red-500/40 bg-background shadow-xl">
+                <div className="p-5 sm:p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <XCircle className="h-6 w-6 text-red-500" />
+                    <h3 id="stop-title" className="text-xl font-semibold">Stop training?</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    This will end your current session without saving it. Are you sure you want to stop?
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+                    <Button variant="outline" onClick={cancelStop}>Cancel</Button>
+                    <Button variant="destructive" onClick={confirmStop}>Stop</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isFinishDialogOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="finish-title"
+            className="fixed inset-0 z-50 flex items-center justify-center"
+          >
+            <div className="absolute inset-0 bg-black/50" onClick={cancelFinish} />
+            <div className="relative z-10 w-[90%] max-w-md">
+              <div className="rounded-lg border-2 border-yellow-500/40 bg-background shadow-xl">
+                <div className="p-5 sm:p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Trophy className="h-6 w-6 text-yellow-500" />
+                    <h3 id="finish-title" className="text-xl font-semibold">Finish training?</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    We will save your session, add unsolved problems to upsolve reminders, and take you to your statistics.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
+                    <Button variant="outline" onClick={cancelFinish}>Cancel</Button>
+                    <Button onClick={confirmFinish} className="bg-yellow-600 hover:bg-yellow-600/90 text-white">Finish</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Problems Section */}
         {currentProblems && currentProblems.length > 0 && (
           <div className="space-y-2">

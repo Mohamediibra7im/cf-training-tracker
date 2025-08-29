@@ -12,31 +12,52 @@ import {
 } from "@/components/ui/table";
 
 import { Card, CardContent } from "@/components/ui/card";
+import useUpsolvedProblems from "@/hooks/useUpsolvedProblems";
+import { CheckCircle2, XCircle, BadgeCheck } from "lucide-react";
 import { Trash2 } from "lucide-react";
 
 const Problem = ({
   problem,
   startTime,
+  postSolvedTime,
 }: {
   problem: TrainingProblem;
   startTime: number;
+  postSolvedTime: number | null;
 }) => {
-  const getSolvedStatus = () => {
+  const renderStatus = () => {
     if (problem.solvedTime) {
-      const solvedMinutes = Math.floor(
-        (problem.solvedTime - startTime) / 60000,
+      const solvedMinutes = Math.floor((problem.solvedTime - startTime) / 60000);
+      return (
+        <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-500">
+          <CheckCircle2 className="h-4 w-4" />
+          <span>{solvedMinutes}m</span>
+        </span>
       );
-      return `✅ ${solvedMinutes}m `;
     }
-    return "❌ ";
+
+    if (postSolvedTime) {
+      return (
+        <span className="inline-flex items-center gap-1 text-yellow-600 dark:text-yellow-500" title="Upsolved after session">
+          <BadgeCheck className="h-4 w-4" />
+        </span>
+      );
+    }
+
+    return (
+      <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-500">
+        <XCircle className="h-4 w-4" />
+      </span>
+    );
   };
+
   return (
     <Link
-      className="text-primary hover:underline duration-300 font-medium text-sm flex items-center gap-1"
+      className="text-primary hover:underline duration-300 font-medium text-sm flex items-center gap-1 whitespace-nowrap"
       href={problem.url}
       target="_blank"
     >
-      <span className="text-base">{getSolvedStatus()}</span>
+      <span className="text-base">{renderStatus()}</span>
       <span className="truncate">
         {problem.contestId}-{problem.index}
       </span>
@@ -53,6 +74,14 @@ const History = ({
   deleteTraining: (trainingId: string) => void;
   isDeleting: string | null;
 }) => {
+  const { upsolvedProblems } = useUpsolvedProblems();
+
+  const findPostSolvedTime = (p: TrainingProblem): number | null => {
+    const found = upsolvedProblems?.find(
+      (u) => u.contestId === p.contestId && u.index === p.index,
+    );
+    return found?.solvedTime ?? null;
+  };
   const onDelete = (trainingId: string) => {
     if (confirm("Are you sure you want to delete this training session?")) {
       deleteTraining(trainingId);
@@ -98,7 +127,11 @@ const History = ({
                 <TableCell>{calculateAverageRating(training)}</TableCell>
                 {training.problems.map((p) => (
                   <TableCell key={p.contestId}>
-                    <Problem problem={p} startTime={training.startTime} />
+                    <Problem
+                      problem={p}
+                      startTime={training.startTime}
+                      postSolvedTime={findPostSolvedTime(p)}
+                    />
                   </TableCell>
                 ))}
                 <TableCell>{training.performance}</TableCell>
@@ -179,7 +212,11 @@ const History = ({
                           P{index + 1}:
                         </span>
                         <div className="flex-1 min-w-0">
-                          <Problem problem={p} startTime={training.startTime} />
+                          <Problem
+                            problem={p}
+                            startTime={training.startTime}
+                            postSolvedTime={findPostSolvedTime(p)}
+                          />
                         </div>
                       </div>
                     ))}

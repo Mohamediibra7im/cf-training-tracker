@@ -5,6 +5,7 @@ import useUser from "@/hooks/useUser";
 import Loader from "@/components/Loader";
 import History from "@/components/History";
 import ProgressChart from "@/components/ProgressChart";
+import UpsolveReminder from "@/components/UpsolveReminder";
 
 export default function StatisticsPage() {
   const { user, isLoading: isUserLoading } = useUser();
@@ -22,6 +23,7 @@ export default function StatisticsPage() {
   return (
     <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl">
       <div className="space-y-6 sm:space-y-8">
+        <UpsolveReminder />
         {/* Header Section */}
         <div className="flex flex-col items-start gap-2 sm:gap-3">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">

@@ -11,6 +11,7 @@ import LevelSelector from "@/components/LevelSelector";
 import useTags from "@/hooks/useTags";
 import useUser from "@/hooks/useUser";
 import Loader from "@/components/Loader";
+import UpsolveReminder from "@/components/UpsolveReminder";
 
 export default function TrainingPage() {
   const { user } = useUser();
@@ -75,6 +76,7 @@ export default function TrainingPage() {
   if (isTraining) {
     return (
       <section className="container grid items-center gap-6 pb-6 pt-2 md:py-4">
+        <UpsolveReminder />
         <Trainer
           isTraining={isTraining}
           training={training}
@@ -97,6 +99,7 @@ export default function TrainingPage() {
 
   return (
     <section className="container grid items-center gap-6 pb-6 pt-2 md:py-4">
+      <UpsolveReminder />
       <div className="flex flex-col items-start gap-1">
         <h1 className="text-3xl font-bold leading-tight tracking-tight">
           Create a Contest

@@ -6,6 +6,7 @@ import AuthGuard from "@/components/AuthGuard";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
+import { ToastProvider } from "@/components/Toast";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -144,15 +145,17 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col bg-background overflow-x-hidden">
-            <NavBar />
-            <main className="flex-1">
-              <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 max-w-7xl">
-                <AuthGuard>{children}</AuthGuard>
-              </div>
-            </main>
-            <Footer />
-          </div>
+          <ToastProvider>
+            <div className="relative flex min-h-screen flex-col bg-background overflow-x-hidden">
+              <NavBar />
+              <main className="flex-1">
+                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 max-w-7xl">
+                  <AuthGuard>{children}</AuthGuard>
+                </div>
+              </main>
+              <Footer />
+            </div>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

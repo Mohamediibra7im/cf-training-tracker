@@ -3,7 +3,7 @@
 import { TrainingProblem } from "@/types/TrainingProblem";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, CheckCircle2, XCircle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -46,9 +46,13 @@ const UpsolvedProblemsList = ({
                       target="_blank"
                       title={problem.name}
                     >
-                      <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0 whitespace-nowrap">
                         <span className="flex-shrink-0">
-                          {problem.solvedTime ? "✅" : "❌"}
+                          {problem.solvedTime ? (
+                            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />
+                          ) : (
+                            <XCircle className="h-4 w-4 text-red-600 dark:text-red-500" />
+                          )}
                         </span>
                         <span className="truncate">{problem.name}</span>
                       </div>
@@ -93,7 +97,11 @@ const UpsolvedProblemsList = ({
                     >
                       <div className="flex items-start gap-2 min-w-0">
                         <span className="text-lg flex-shrink-0 mt-0.5">
-                          {problem.solvedTime ? "✅" : "❌"}
+                          {problem.solvedTime ? (
+                            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />
+                          ) : (
+                            <XCircle className="h-4 w-4 text-red-600 dark:text-red-500" />
+                          )}
                         </span>
                         <span className="break-words leading-tight">
                           {problem.name}

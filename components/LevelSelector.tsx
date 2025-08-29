@@ -100,7 +100,7 @@ const LevelSelector = ({
   const currentLevel = levels.find((level) => level.id === selectedLevelId);
 
   // State to show/hide ratings
-  const [showRatings, setShowRatings] = useState(true);
+  const [showRatings, setShowRatings] = useState(false);
 
   if (isLoading) {
     return (

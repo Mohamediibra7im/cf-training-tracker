@@ -230,7 +230,7 @@ const Trainer = ({
         {/* Problems Section */}
         {currentProblems && currentProblems.length > 0 && (
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Problems</h3>
+            <h3 className="text-2xl font-semibold">Problems</h3>
             <div className="space-y-1.5">
               {currentProblems.map((problem, index) => {
                 const problemId = `${problem.contestId}_${problem.index}`;

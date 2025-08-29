@@ -56,7 +56,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-2">
+      <div className="fixed z-50 bottom-12 right-4 flex flex-col gap-2">
         {items.map((item) => (
           <ToastCard key={item.id} item={item} onClose={() => remove(item.id)} />
         ))}
@@ -73,9 +73,9 @@ export const useToast = () => {
 
 const variantClasses: Record<ToastVariant, string> = {
   default: "border-border/50 bg-card",
-  success: "border-green-500/40 bg-green-500/10",
-  warning: "border-yellow-500/40 bg-yellow-500/10",
-  destructive: "border-red-500/40 bg-red-500/10",
+  success: "border-green-500/50 bg-green-500/20",
+  warning: "border-yellow-500/50 bg-yellow-500/20",
+  destructive: "border-red-500/50 bg-red-500/20",
 };
 
 const ToastCard = ({ item, onClose }: { item: ToastItem; onClose: () => void }) => {

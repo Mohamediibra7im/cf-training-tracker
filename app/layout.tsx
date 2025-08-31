@@ -7,6 +7,7 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
 import { ToastProvider } from "@/components/Toast";
+import { Analytics } from "@vercel/analytics/next";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -161,6 +162,7 @@ export default function RootLayout({
                 </div>
               </main>
               <Footer />
+              <Analytics />
             </div>
           </ToastProvider>
         </ThemeProvider>

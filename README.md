@@ -176,30 +176,7 @@ Comprehensive analytics help you understand your strengths and areas for improve
 
 ## 🤝 Contributing
 
-We welcome contributions from the competitive programming community! Here's how you can help:
-
-### Ways to Contribute
-
-- 🐛 **Report Bugs**: Open an issue with detailed bug reports
-- 💡 **Feature Requests**: Suggest new features or improvements
-- 📝 **Code Contributions**: Submit pull requests for bug fixes or new features
-- 📚 **Documentation**: Help improve documentation and guides
-- 🌟 **Star the Repository**: Show your support by starring the project
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Style
-
-- Follow the existing code style and formatting
-- Use TypeScript for all new code
-- Write meaningful commit messages
-- Add tests for new features when possible
+Please read the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
 
 ## 📄 License
 
@@ -210,13 +187,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Inspiration**: This project is inspired by the excellent blog post on [Codeforces](https://codeforces.com/blog/entry/136704) by [pwned](https://codeforces.com/profile/pwned)
 - **Rating Calculations**: Performance and rating calculations are based on the methodology described in the aforementioned blog post
 - **Community**: Thanks to the competitive programming community for feedback and suggestions
-
-## Contributors:
-
-- [Mohammed Ibrahim](https://github.com/Mohamediibra7im)
-- [Daniel Yu](https://github.com/C0ldSmi1e)
-- [Sushant Singh](https://github.com/SXZZ5)
-- [alex-away](https://github.com/alex-away)
 
 ---
 

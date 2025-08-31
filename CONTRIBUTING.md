@@ -60,10 +60,7 @@ Thank you for your interest in contributing to the Training Tracker project! We 
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ---
 
 Made with ❤️ for the competitive programming community.
+

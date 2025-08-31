@@ -162,10 +162,10 @@ export default function RootLayout({
                 </div>
               </main>
               <Footer />
-              <Analytics />
             </div>
           </ToastProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -17,7 +17,15 @@ const Footer = () => {
             <div className="flex items-center gap-1">
               <span>Made with</span>
               <Heart className="h-4 w-4 text-red-500" />
-              <span>for CP community</span>
+              <span>for CP community by</span>
+              <a
+                href="https://mohamed-ibrahim-omar.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-primary transition-colors"
+              >
+                Mohamed Ibrahim
+              </a>
             </div>
           </div>
         </div>

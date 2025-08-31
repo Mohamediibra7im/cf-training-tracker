@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     "algorithm practice",
     "programming contest",
     "CP practice",
+    "CP training",
     "coding practice",
     "algorithm problems",
     "competitive coding",
@@ -41,6 +42,12 @@ export const metadata: Metadata = {
     "Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform",
     "Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces",
     "Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces-Virtual-Contest",
+    "CF-Training-Tracker-Codeforces",
+    "CF-Training-Tracker-Codeforces-Virtual-Contest",
+    "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice",
+    "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform",
+    "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces",
+    "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces-Virtual-Contest",
   ],
   authors: [{ name: "Training-Tracker Team" }],
   creator: "Training-Tracker",
@@ -55,7 +62,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "CP - Training Tracker - Codeforces Virtual Contest Practice Platform",
+    title: "CF - Training Tracker - Codeforces Virtual Contest Practice Platform",
     description:
       "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills.",
     url: "https://cp-training-tracker.vercel.app",
@@ -65,7 +72,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CP - Training-Tracker - Codeforces Practice Platform",
+        alt: "CF - Training-Tracker - Codeforces Practice Platform",
       },
     ],
     locale: "en_US",
@@ -102,7 +109,7 @@ export default function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "Training-Tracker",
+    name: "CF-Training-Tracker",
     description:
       "A Codeforces virtual contest practice platform for competitive programming",
     url: "https://cp-training-tracker.vercel.app",
@@ -115,7 +122,7 @@ export default function RootLayout({
     },
     author: {
       "@type": "Organization",
-      name: "Training-Tracker Team",
+      name: "Mohammed Ibrahim",
     },
     keywords:
       "Codeforces, competitive programming, virtual contest, practice problems, algorithm practice",

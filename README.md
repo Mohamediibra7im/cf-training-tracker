@@ -2,7 +2,7 @@
 
 > **Master competitive programming with intelligent practice sessions, track your progress, and climb the Codeforces ladder.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-blue?style=flat&logo=vercel&logoColor=white)](https://cp-training-tracker.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-blue?style=flat&logo=vercel&logoColor=white)](https://cf-training-tracker.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)

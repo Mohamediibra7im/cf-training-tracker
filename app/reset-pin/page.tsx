@@ -16,9 +16,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useToast } from "@/components/Toast";
+import { CheckCircle2, KeyRound} from "lucide-react";
 
 export default function ResetPinPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [stage, setStage] = useState<"enterHandle" | "verify" | "resetPin">(
     "enterHandle",
   );
@@ -111,8 +114,16 @@ export default function ResetPinPage() {
 
     const data = await res.json();
     if (res.ok) {
-      alert("PIN reset successfully! You can now log in with your new PIN.");
-      router.push("/");
+      toast({
+        title: "PIN Reset Successful!",
+        description: "You can now log in with your new PIN",
+        variant: "success",
+        durationMs: 4000
+      });
+
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } else {
       setError(data.message || "Failed to reset PIN.");
     }
@@ -162,7 +173,7 @@ export default function ResetPinPage() {
                 >
                   Codeforces Problem 4A
                 </a>{" "}
-                and make a submission that results in a **compilation error**.
+                and make a submission that results in a <b className="text-red-700">compilation error</b>.
               </CardDescription>
               <div className="text-6xl font-bold">{countdown}</div>
               <p>Time remaining to submit</p>
@@ -178,8 +189,11 @@ export default function ResetPinPage() {
 
           {stage === "resetPin" && (
             <form onSubmit={handleResetPin} className="space-y-6">
-              <CardDescription className="text-center">
-                Verification successful! You can now set a new PIN.
+              <CardDescription className="text-center flex flex-col items-center gap-2">
+                <div className="bg-green-500/10 p-2 rounded-full border-2 border-green-500/30">
+                  <CheckCircle2 className="h-8 w-8 text-green-500" />
+                </div>
+                <span>Verification successful! You can now set a new PIN.</span>
               </CardDescription>
               <div className="space-y-2">
                 <label
@@ -227,8 +241,15 @@ export default function ResetPinPage() {
                   </InputOTP>
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Resetting..." : "Reset PIN"}
+              <Button type="submit" className="w-full flex items-center justify-center gap-2" disabled={isLoading}>
+                {isLoading ? (
+                  <>Resetting...</>
+                ) : (
+                  <>
+                    <KeyRound className="h-4 w-4" />
+                    <span>Reset PIN</span>
+                  </>
+                )}
               </Button>
             </form>
           )}

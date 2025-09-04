@@ -3,8 +3,7 @@ import { Nunito } from "next/font/google";
 import type React from "react";
 import type { Metadata } from "next";
 import AuthGuard from "@/components/AuthGuard";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import ConditionalNavBar from "@/components/ConditionalNavBar";
 import ThemeProvider from "@/components/ThemeProvider";
 import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/next";
@@ -81,7 +80,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Training-Tracker - Codeforces Virtual Contest Practice Platform",
+    title: "CF-Training-Tracker - Codeforces Virtual Contest Practice Platform",
     description:
       "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills.",
     images: ["/og-image.png"],
@@ -155,13 +154,11 @@ export default function RootLayout({
         >
           <ToastProvider>
             <div className="relative flex min-h-screen flex-col bg-background overflow-x-hidden">
-              <NavBar />
-              <main className="flex-1">
-                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 max-w-7xl">
-                  <AuthGuard>{children}</AuthGuard>
-                </div>
-              </main>
-              <Footer />
+              <AuthGuard>
+                <ConditionalNavBar>
+                  {children}
+                </ConditionalNavBar>
+              </AuthGuard>
             </div>
           </ToastProvider>
         </ThemeProvider>

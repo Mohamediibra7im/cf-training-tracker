@@ -1,3 +1,4 @@
+import { rateLimit } from "@/lib/rateLimit";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -6,6 +7,8 @@ import User from "@/models/User";
 import { verifyAuth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  const rateLimitResponse = await rateLimit(req);
+  if (rateLimitResponse) return rateLimitResponse;
   try {
     await dbConnect();
     const body = await req.json();

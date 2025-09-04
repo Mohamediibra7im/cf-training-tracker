@@ -100,7 +100,17 @@ Training Tracker is a comprehensive web application designed to help competitive
 
 ## 📱 Usage Guide
 
-For detailed instructions on how to use all features of CF Training Tracker, please refer to our [comprehensive usage guide](./docs/USAGE_GUIDE.md).
+For detailed instructions on how to use all features of CF Training Tracker, please refer to our [comprehensive usage guide](./GUIDE.md).
+
+This guide includes detailed information about:
+
+- 🚀 Getting started with account creation and login
+- 🏋️ Setting up effective training sessions
+- 📊 Understanding your performance analytics
+- 🔍 Managing your upsolve problems list
+- ⚙️ Customizing your account settings
+- 📱 Using the app on mobile devices
+- ❓ Troubleshooting common issues
 
 ### 1. Getting Started
 

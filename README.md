@@ -100,6 +100,8 @@ Training Tracker is a comprehensive web application designed to help competitive
 
 ## 📱 Usage Guide
 
+For detailed instructions on how to use all features of CF Training Tracker, please refer to our [comprehensive usage guide](./docs/USAGE_GUIDE.md).
+
 ### 1. Getting Started
 
 - Enter your Codeforces handle on the home page

@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { rateLimit } from "@/lib/rateLimit";
 import dbConnect from "@/lib/mongodb";
 import Training from "@/models/Training";
 import User from "@/models/User";
 import { verifyAuth } from "@/lib/auth";
 
 async function getUserFromToken(request: NextRequest) {
-  const rateLimitResponse = await rateLimit(request);
-  if (rateLimitResponse) return rateLimitResponse;
   await dbConnect(); // Ensure DB connection before any query
   const token = request.headers.get("authorization")?.split(" ")[1];
   if (!token) {
@@ -33,11 +30,7 @@ async function getUserFromToken(request: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const userResult = await getUserFromToken(req);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { error, user } = userResult;
+  const { error, user } = await getUserFromToken(req);
   if (error) {
     return error;
   }
@@ -63,11 +56,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const userResult = await getUserFromToken(req);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { error, user } = userResult;
+  const { error, user } = await getUserFromToken(req);
   if (error) {
     return error;
   }

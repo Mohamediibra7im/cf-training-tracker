@@ -1,12 +1,9 @@
-import { rateLimit } from "@/lib/rateLimit";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import dbConnect from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
-  const rateLimitResponse = await rateLimit(req);
-  if (rateLimitResponse) return rateLimitResponse;
   try {
     await dbConnect();
     const { handle } = await req.json();

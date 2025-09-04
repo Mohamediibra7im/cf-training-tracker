@@ -1,4 +1,3 @@
-import { rateLimit } from "@/lib/rateLimit";
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
@@ -6,8 +5,6 @@ import { verifyAuth } from "@/lib/auth";
 import { syncUserProfile, shouldSyncProfile } from "@/utils/syncUserProfile";
 
 export async function POST(req: NextRequest) {
-  const rateLimitResponse = await rateLimit(req);
-  if (rateLimitResponse) return rateLimitResponse;
   try {
     await dbConnect();
 

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { rateLimit } from "@/lib/rateLimit";
 import jwt from "jsonwebtoken";
 import dbConnect from "@/lib/mongodb";
 
@@ -11,8 +10,6 @@ interface DecodedToken {
 }
 
 export async function POST(req: NextRequest) {
-  const rateLimitResponse = await rateLimit(req);
-  if (rateLimitResponse) return rateLimitResponse;
   try {
     await dbConnect();
     const { verificationToken } = await req.json();

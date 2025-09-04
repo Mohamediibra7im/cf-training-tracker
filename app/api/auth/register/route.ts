@@ -1,4 +1,3 @@
-import { rateLimit } from "@/lib/rateLimit";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/mongodb";
@@ -7,8 +6,6 @@ import getUser from "@/utils/codeforces/getUser";
 import getRankFromRating from "@/utils/getRankFromRating";
 
 export async function POST(req: NextRequest) {
-  const rateLimitResponse = await rateLimit(req);
-  if (rateLimitResponse) return rateLimitResponse;
   if (!process.env.JWT_SECRET) {
     console.error("FATAL: JWT_SECRET environment variable is not set.");
     return NextResponse.json(

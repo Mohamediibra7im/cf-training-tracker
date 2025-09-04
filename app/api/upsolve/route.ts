@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { rateLimit } from "@/lib/rateLimit";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import UpsolvedProblem from "@/models/UpsolvedProblem";
@@ -7,8 +6,6 @@ import { verifyAuth } from "@/lib/auth";
 import { TrainingProblem } from "@/types/TrainingProblem";
 
 async function getUserFromToken(request: NextRequest) {
-  const rateLimitResponse = await rateLimit(request);
-  if (rateLimitResponse) return rateLimitResponse;
   const token = request.headers.get("authorization")?.split(" ")[1];
   if (!token) {
     return {
@@ -36,11 +33,7 @@ async function getUserFromToken(request: NextRequest) {
 export async function GET(request: NextRequest) {
   await dbConnect();
 
-  const userResult = await getUserFromToken(request);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { user, error } = userResult;
+  const { user, error } = await getUserFromToken(request);
   if (error) return error;
 
   try {
@@ -58,11 +51,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   await dbConnect();
 
-  const userResult = await getUserFromToken(request);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { user, error } = userResult;
+  const { user, error } = await getUserFromToken(request);
   if (error) return error;
 
   try {
@@ -98,11 +87,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   await dbConnect();
 
-  const userResult = await getUserFromToken(request);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { user, error } = userResult;
+  const { user, error } = await getUserFromToken(request);
   if (error) return error;
 
   try {
@@ -140,11 +125,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   await dbConnect();
 
-  const userResult = await getUserFromToken(request);
-  if (userResult instanceof NextResponse) {
-    return userResult;
-  }
-  const { user, error } = userResult;
+  const { user, error } = await getUserFromToken(request);
   if (error) return error;
 
   try {

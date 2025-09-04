@@ -100,43 +100,7 @@ Training Tracker is a comprehensive web application designed to help competitive
 
 ## 📱 Usage Guide
 
-For detailed instructions on how to use all features of CF Training Tracker, please refer to our [comprehensive usage guide](./GUIDE.md).
-
-This guide includes detailed information about:
-
-- 🚀 Getting started with account creation and login
-- 🏋️ Setting up effective training sessions
-- 📊 Understanding your performance analytics
-- 🔍 Managing your upsolve problems list
-- ⚙️ Customizing your account settings
-- 📱 Using the app on mobile devices
-- ❓ Troubleshooting common issues
-
-### 1. Getting Started
-
-- Enter your Codeforces handle on the home page
-- The app will automatically fetch your profile data and submission history
-- Set up your PIN for secure access (optional)
-
-### 2. Training Sessions
-
-- Navigate to the **Training** page
-- Choose your preferred difficulty level or set custom ratings
-- Select specific tags to focus on particular topics
-- Generate problems and start your training session
-- Track your progress in real-time
-
-### 3. Performance Tracking
-
-- View detailed statistics on the **Statistics** page
-- Analyze your solving patterns with interactive charts
-- Monitor your rating progression over time
-- Review your activity heatmap
-
-### 4. Upsolved Problems
-
-- Access the **Upsolve** page to review problems you couldn't solve during training
-- Track your improvement on previously attempted problems
+For detailed usage instructions, please refer to the [Usage Guide](./GUIDE.md).
 
 ## 🏗️ Project Structure
 

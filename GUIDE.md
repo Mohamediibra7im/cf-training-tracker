@@ -1,4 +1,4 @@
-# 📘 CF Training Tracker - Comprehensive Usage Guide
+# 📘 Comprehensive Usage Guide
 
 Welcome to the CF Training Tracker usage guide! This document provides detailed instructions on how to use all features of the application effectively.
 

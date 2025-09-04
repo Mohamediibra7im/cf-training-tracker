@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import { syncUserProfile, shouldSyncProfile } from "@/utils/syncUserProfile";
+import { loginLimiter, rateLimitRequest } from "@/lib/rateLimiter";
 
 export async function POST(req: NextRequest) {
   if (!process.env.JWT_SECRET) {
@@ -13,6 +14,29 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+
+  // Get client IP for rate limiting
+  const ip = req.headers.get("x-forwarded-for") ||
+    req.headers.get("x-real-ip") ||
+    "unknown";
+
+  // Check if this IP is already rate limited
+  const rateLimitResult = await rateLimitRequest(ip, loginLimiter);
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      {
+        message: `You have made too many requests. Please wait ${rateLimitResult.remainingSeconds} seconds and try again.`,
+        retryAfter: rateLimitResult.remainingSeconds
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimitResult.remainingSeconds)
+        }
+      }
+    );
+  }
+
   try {
     await dbConnect();
     const { codeforcesHandle, pin } = await req.json();
@@ -33,11 +57,15 @@ export async function POST(req: NextRequest) {
 
     const user = await User.findOne({ codeforcesHandle });
     if (!user) {
+      // Consume more points for invalid username to discourage user enumeration
+      await loginLimiter.consume(ip, 2);
       return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
     const isMatch = await bcrypt.compare(pin, user.pin);
     if (!isMatch) {
+      // Consume more points for invalid password
+      await loginLimiter.consume(ip, 1);
       return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
@@ -82,6 +110,12 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error(error);
+    // Don't count server errors against rate limit
+    try {
+      await loginLimiter.reward(ip);
+    } catch (rewardError) {
+      console.error("Error rewarding rate limit points:", rewardError);
+    }
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

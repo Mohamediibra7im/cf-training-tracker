@@ -4,8 +4,10 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-blue?style=flat&logo=vercel&logoColor=white)](https://cf-training-tracker.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.19.0-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
 ## 📖 Overview
 
@@ -26,13 +28,17 @@ Training Tracker is a comprehensive web application designed to help competitive
 
 ### Frontend
 
-- **Next.js 14** - React framework with App Router
+- **Next.js** - React framework with App Router
+- **React** - UI library
 - **TypeScript** - Type-safe JavaScript
 - **Tailwind CSS** - Utility-first CSS framework
 - **Radix UI** - Accessible component primitives
 - **Lucide React** - Beautiful icons
 - **Recharts** - Data visualization library
+- **@uiw/react-heat-map** - Activity heatmap visualization
 - **SWR** - Data fetching and caching
+- **next-themes** - Theme switching (dark/light mode)
+- **input-otp** - One-time password input component
 
 ### Backend & Data
 
@@ -41,12 +47,14 @@ Training Tracker is a comprehensive web application designed to help competitive
 - **Codeforces API** - Problem and user data
 - **JWT** - Authentication tokens
 - **bcryptjs** - Password hashing
+- **rate-limiter-flexible** - API rate limiting
 
 ### Development Tools
 
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **PostCSS** - CSS processing
+- **Vercel Analytics** - Performance monitoring
 
 ## 🚀 Getting Started
 

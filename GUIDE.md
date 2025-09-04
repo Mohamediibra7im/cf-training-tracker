@@ -317,7 +317,6 @@ For optimal mobile experience:
 **Problem**: Profile sync not working
 
 - Check your internet connection
-- Verify the Codeforces API is operational
 - Try again after a few minutes
 
 **Problem**: Problems not generating for training
@@ -355,3 +354,4 @@ Happy coding and improving your competitive programming skills with CF Training 
   <p>📝 This usage guide is a living document and may be updated as new features are added.</p>
   <p>Last updated: September 4, 2025</p>
 </div>
+

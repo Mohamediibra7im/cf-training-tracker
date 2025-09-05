@@ -28,8 +28,7 @@
         "SwitchCase": 1
       }
     ],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "double"],
+    "linebreak-style": ["off"],
     "semi": ["error", "always"],
     "no-console": 0,
     "@typescript-eslint/no-unused-vars": [

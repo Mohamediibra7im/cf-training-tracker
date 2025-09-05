@@ -21,6 +21,11 @@ Training Tracker is a comprehensive web application designed to help competitive
 - **📈 Progress Charts**: Monitor your performance trends and improvement over time
 - **🏷️ Tag-based Filtering**: Practice specific topics like DP, Graph Theory, or Data Structures
 - **⚡ Real-time Sync**: Automatically sync with your Codeforces profile
+- **🔔 Notification System**: Comprehensive notification center with user and admin features
+  - **User Interface**: Bell icon with unread count, notification center with mark as read/delete
+  - **Admin Management**: Create, edit, delete notifications with rich text editor and targeting
+  - **Notification Types**: Announcements, new features, maintenance, updates, and alerts
+  - **Smart Features**: User-specific read states, notification hiding, and real-time updates
 - **🌙 Dark/Light Mode**: Beautiful UI with theme switching capability
 - **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 
@@ -42,10 +47,10 @@ Training Tracker is a comprehensive web application designed to help competitive
 
 ### Backend & Data
 
-- **MongoDB** - NoSQL database
-- **Mongoose** - MongoDB object modeling
+- **MongoDB** - NoSQL database with notification and user management
+- **Mongoose** - MongoDB object modeling with notification schemas
 - **Codeforces API** - Problem and user data
-- **JWT** - Authentication tokens
+- **JWT** - Authentication tokens with role-based access
 - **bcryptjs** - Password hashing
 - **rate-limiter-flexible** - API rate limiting
 
@@ -108,19 +113,36 @@ For detailed usage instructions, please refer to the [Usage Guide](./GUIDE.md).
 training-tracker/
 ├── app/                    # Next.js App Router pages
 │   ├── api/               # API routes
+│   │   ├── admin/         # Admin-only API endpoints
+│   │   │   └── notifications/ # Notification management
+│   │   ├── auth/          # Authentication endpoints
+│   │   ├── notifications/ # User notification endpoints
+│   │   ├── trainings/     # Training session API
+│   │   └── upsolve/       # Upsolve problems API
+│   ├── admin/             # Admin panel pages
+│   │   └── notifications/ # Notification management UI
 │   ├── training/          # Training session page
 │   ├── statistics/        # Analytics page
 │   ├── upsolve/          # Upsolved problems page
+│   ├── notifications/    # Notification center page
 │   └── reset-pin/        # PIN reset page
 ├── components/            # React components
 │   ├── ui/               # Reusable UI components
 │   ├── ActivityHeatmap.tsx
 │   ├── ProgressChart.tsx
 │   ├── Trainer.tsx
+│   ├── NotificationCenter.tsx    # Notification bell & panel
+│   ├── AdminNotificationPanel.tsx # Admin notification management
 │   └── ...
 ├── hooks/                # Custom React hooks
+│   ├── useNotifications.ts       # Notification system hooks
+│   ├── useAdminNotifications.ts  # Admin notification hooks
+│   └── ...
 ├── lib/                  # Utility libraries
 ├── models/               # MongoDB schemas
+│   ├── Notification.ts   # Notification model
+│   ├── UserNotification.ts # User notification relationship
+│   └── ...
 ├── types/                # TypeScript type definitions
 └── utils/                # Helper functions
 ```

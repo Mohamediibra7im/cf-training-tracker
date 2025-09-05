@@ -8,4 +8,5 @@ export interface User {
   maxRank: string;
   organization?: string;
   lastSyncTime?: number;
+  role: "user" | "admin";
 }

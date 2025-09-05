@@ -105,6 +105,7 @@ export async function POST(req: NextRequest) {
         maxRank: updatedUser.maxRank,
         organization: updatedUser.organization,
         lastSyncTime: updatedUser.lastSyncTime,
+        role: updatedUser.role,
       },
       token,
     });

@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
           maxRank: user.maxRank,
           organization: user.organization,
           lastSyncTime: user.lastSyncTime,
+          role: user.role,
         },
       });
     }
@@ -77,6 +78,7 @@ export async function POST(req: NextRequest) {
         maxRank: updatedUser.maxRank,
         organization: updatedUser.organization,
         lastSyncTime: updatedUser.lastSyncTime,
+        role: updatedUser.role,
       },
     });
   } catch (error) {

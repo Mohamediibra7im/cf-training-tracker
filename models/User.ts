@@ -10,6 +10,7 @@ export interface IUser extends Document {
   maxRank: string;
   organization: string;
   lastSyncTime: number;
+  role: "user" | "admin";
 }
 
 const UserSchema: Schema = new Schema({
@@ -22,6 +23,7 @@ const UserSchema: Schema = new Schema({
   maxRank: { type: String, default: "Unrated" },
   organization: { type: String },
   lastSyncTime: { type: Number, default: 0 },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
 });
 
 export default models.User || model<IUser>("User", UserSchema);

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ModeToggle from "@/components/ModeToggle";
+import NotificationCenter from "@/components/NotificationCenter";
 import { Menu } from "lucide-react";
 import ClientOnly from "@/components/ClientOnly";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,12 +23,19 @@ const links = [
   { href: "/training", label: "Training" },
   { href: "/statistics", label: "Statistics" },
   { href: "/upsolve", label: "Upsolve" },
+  { href: "/help", label: "Help" },
+];
+
+const adminLinks = [
+  { href: "/admin/notifications", label: "Admin" },
 ];
 
 const NavBar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useUser();
+
+  const allLinks = user?.role === "admin" ? [...links, ...adminLinks] : links;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-lg">
@@ -45,15 +53,14 @@ const NavBar = () => {
               <span className="block font-bold text-lg">Training Tracker</span>
             </Link>
           </div>
-          <nav className="hidden md:flex items-center gap-8">
-            {links.map((link) => (
+          <nav className="hidden md:flex space-x-8">
+            {allLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative transition-all duration-300 hover:text-primary ${
-                  pathname === link.href
-                    ? "text-primary font-semibold"
-                    : "text-foreground/70 hover:text-foreground"
+                className={`relative transition-all duration-300 hover:text-primary ${pathname === link.href
+                  ? "text-primary font-semibold"
+                  : "text-foreground/70 hover:text-foreground"
                 }`}
               >
                 {link.label}
@@ -87,6 +94,11 @@ const NavBar = () => {
                 </span>
               </a>
             )}
+          </ClientOnly>
+
+          {/* Notifications */}
+          <ClientOnly>
+            {user && <NotificationCenter />}
           </ClientOnly>
 
           {/* Theme Toggle */}
@@ -123,15 +135,14 @@ const NavBar = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
-                  {links.map((link) => (
+                  {allLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`text-xl transition-all duration-300 hover:text-primary ${
-                        pathname === link.href
-                          ? "text-primary font-semibold"
-                          : "text-foreground/70 hover:text-foreground"
+                      className={`text-xl transition-all duration-300 hover:text-primary ${pathname === link.href
+                        ? "text-primary font-semibold"
+                        : "text-foreground/70 hover:text-foreground"
                       }`}
                     >
                       {link.label}

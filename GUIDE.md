@@ -11,7 +11,14 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
    - [Syncing Your Codeforces Profile](#syncing-your-codeforces-profile)
    - [PIN Management](#pin-management)
 
-2. [🏋️ Training Sessions](#training-sessions)
+2. [🔔 Notification System](#notification-system)
+
+   - [Understanding Notifications](#understanding-notifications)
+   - [Notification Center](#notification-center)
+   - [Managing Your Notifications](#managing-your-notifications)
+   - [Admin Notification Management](#admin-notification-management)
+
+3. [🏋️ Training Sessions](#training-sessions)
 
    - [Setting Up a Training Session](#setting-up-a-training-session)
    - [Difficulty Levels](#difficulty-levels)
@@ -21,7 +28,7 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
    - [Submitting Solutions](#submitting-solutions)
    - [Session Results](#session-results)
 
-3. [📊 Statistics and Analytics](#statistics-and-analytics)
+4. [📊 Statistics and Analytics](#statistics-and-analytics)
 
    - [Performance Overview](#performance-overview)
    - [Rating Progression](#rating-progression)
@@ -29,24 +36,24 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
    - [Problem Tags Distribution](#problem-tags-distribution)
    - [Interpreting Your Performance Data](#interpreting-your-performance-data)
 
-4. [🔍 Upsolving](#upsolving)
+5. [🔍 Upsolving](#upsolving)
 
    - [What is Upsolving?](#what-is-upsolving)
    - [Managing Your Upsolve List](#managing-your-upsolve-list)
    - [Tracking Upsolve Progress](#tracking-upsolve-progress)
 
-5. [⚙️ Account Settings](#account-settings)
+6. [⚙️ Account Settings](#account-settings)
 
    - [Changing Your PIN](#changing-your-pin)
    - [Resetting a Forgotten PIN](#resetting-a-forgotten-pin)
    - [Theme Settings](#theme-settings)
 
-6. [📱 Mobile Usage](#mobile-usage)
+7. [📱 Mobile Usage](#mobile-usage)
 
    - [Responsive Design Features](#responsive-design-features)
    - [Touch Interaction Tips](#touch-interaction-tips)
 
-7. [❓ Troubleshooting](#troubleshooting)
+8. [❓ Troubleshooting](#troubleshooting)
    - [Common Issues](#common-issues)
    - [Contact Support](#contact-support)
 
@@ -89,6 +96,62 @@ The sync process updates:
 Your PIN is your secure password for accessing CF Training Tracker. Keep it safe and do not share it with others.
 
 ---
+
+## 🔔 Notification System <a name="notification-system"></a>
+
+The CF Training Tracker includes a comprehensive notification system to keep you updated with important announcements, new features, system maintenance, and other updates.
+
+### Understanding Notifications <a name="understanding-notifications"></a>
+
+The notification system supports five types of notifications:
+
+- **📢 Announcements**: Important platform news and updates
+- **✨ New Features**: Information about newly released features
+- **🔧 Maintenance**: System maintenance and downtime notifications
+- **📥 Updates**: General system updates and improvements
+- **⚠️ Alerts**: Critical information requiring immediate attention
+
+### Notification Center <a name="notification-center"></a>
+
+#### Accessing the Notification Center
+
+1. Look for the bell icon (🔔) in the top navigation bar
+2. The bell shows a red badge with the count of unread notifications
+3. Click the bell icon to open the notification center panel
+
+#### Notification Center Features
+
+The notification center provides:
+
+- **Real-time Updates**: New notifications appear instantly
+- **Visual Indicators**: Different icons for each notification type
+- **Read/Unread Status**: Clear visual distinction between read and unread notifications
+- **Timestamps**: When each notification was created
+- **Priority Display**: Notifications are ordered by creation date (newest first)
+
+### Managing Your Notifications <a name="managing-your-notifications"></a>
+
+#### Marking Notifications as Read
+
+1. **Individual**: Click the green checkmark (✓) button next to any notification
+2. **Automatic**: Notifications are marked as read when you click the main notification area
+
+#### Deleting Notifications
+
+1. Click the red X button next to any notification
+2. Confirm deletion in the popup dialog
+3. **Note**: Deleting a notification only removes it from your view - other users will still see it
+
+#### Notification States
+
+- **Unread**: White background with bold text
+- **Read**: Gray background with normal text
+- **Hidden**: Removed from your notification list (delete action)
+
+### Admin Notification Management <a name="admin-notification-management"></a>
+
+> **Admin Access Required**: This section applies only to users with admin privileges.
+
 
 ## 🏋️ Training Sessions <a name="training-sessions"></a>
 
@@ -354,4 +417,3 @@ Happy coding and improving your competitive programming skills with CF Training 
   <p>📝 This usage guide is a living document and may be updated as new features are added.</p>
   <p>Last updated: September 4, 2025</p>
 </div>
-

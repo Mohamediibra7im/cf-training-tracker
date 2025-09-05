@@ -18,6 +18,17 @@ const Footer = () => {
               <span>Made with</span>
               <Heart className="h-4 w-4 text-red-500" />
               <span>for CP community</span>
+              <span>
+                by{" "}
+                <a
+                  href="https://mohamed-ibrahim-omar.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary"
+                >
+                  Midoriya
+                </a>
+              </span>
             </div>
           </div>
         </div>

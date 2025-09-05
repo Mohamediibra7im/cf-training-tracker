@@ -106,9 +106,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     variant={isActive ? 'default' : 'outline'}
                     asChild
                     className={`h-auto p-4 justify-start ${isActive
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0'
-                        : 'hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/20 dark:hover:to-pink-900/20'
-                      }`}
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0'
+                      : 'hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/20 dark:hover:to-pink-900/20'
+                    }`}
                   >
                     <Link href={page.href} className="flex items-center space-x-3 w-full">
                       <Icon className="h-5 w-5" />

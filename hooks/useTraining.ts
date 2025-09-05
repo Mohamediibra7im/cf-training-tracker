@@ -1,10 +1,10 @@
-import {useState, useEffect, useCallback} from "react";
-import {useRouter} from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import useUser from "@/hooks/useUser";
 import useProblems from "@/hooks/useProblems";
-import {TrainingProblem} from "@/types/TrainingProblem";
-import {Training} from "@/types/Training";
-import {ProblemTag} from "@/types/Codeforces";
+import { TrainingProblem } from "@/types/TrainingProblem";
+import { Training } from "@/types/Training";
+import { ProblemTag } from "@/types/Codeforces";
 import useHistory from "@/hooks/useHistory";
 import useUpsolvedProblems from "@/hooks/useUpsolvedProblems";
 import getTrainingSubmissionStatus, {
@@ -16,10 +16,10 @@ const SUBMISSION_STATUS_STORAGE_KEY = "training-tracker-submission-status";
 
 const useTraining = () => {
   const router = useRouter();
-  const {user, isLoading: isUserLoading} = useUser();
-  const {isLoading: isProblemsLoading, getRandomProblems} = useProblems(user);
-  const {addTraining} = useHistory();
-  const {addUpsolvedProblems} = useUpsolvedProblems();
+  const { user, isLoading: isUserLoading } = useUser();
+  const { isLoading: isProblemsLoading, getRandomProblems } = useProblems(user);
+  const { addTraining } = useHistory();
+  const { addUpsolvedProblems } = useUpsolvedProblems();
 
   const [isClient, setIsClient] = useState(false);
   const [problems, setProblems] = useState<TrainingProblem[]>([]);
@@ -84,7 +84,7 @@ const useTraining = () => {
           JSON.stringify(updatedProblems) !== JSON.stringify(training.problems)
         ) {
           setTraining((prev) =>
-            prev ? {...prev, problems: updatedProblems} : null
+            prev ? { ...prev, problems: updatedProblems } : null
           );
         }
       } else {
@@ -130,7 +130,7 @@ const useTraining = () => {
     }
 
     // Use a local copy of training for the async operations
-    const currentTraining = {...training};
+    const currentTraining = { ...training };
 
     // Clear all training-related states immediately
     setProblems([]);
@@ -177,7 +177,7 @@ const useTraining = () => {
       });
     }
 
-    addTraining({...currentTraining, problems: finalProblems});
+    addTraining({ ...currentTraining, problems: finalProblems });
 
     const unsolvedProblems = finalProblems.filter((p) => !p.solvedTime);
     // Keep the original order as they were selected for training (1st, 2nd, 3rd, 4th)
@@ -236,22 +236,22 @@ const useTraining = () => {
     };
   }, [training, isClient, finishTraining]);
 
-  // Auto-refresh on component mount and when window regains focus
-  useEffect(() => {
-    if (isTraining) {
-      refreshProblemStatus(); // Initial refresh
-
-      const handleFocus = () => refreshProblemStatus();
-      window.addEventListener("focus", handleFocus);
-
-      return () => {
-        window.removeEventListener("focus", handleFocus);
-      };
-    }
-  }, [isTraining, refreshProblemStatus]);
+  // Remove auto-refresh - only refresh manually when button is clicked
+  // useEffect(() => {
+  //   if (isTraining) {
+  //     refreshProblemStatus(); // Initial refresh
+  //
+  //     const handleFocus = () => refreshProblemStatus();
+  //     window.addEventListener("focus", handleFocus);
+  //
+  //     return () => {
+  //       window.removeEventListener("focus", handleFocus);
+  //     };
+  //   }
+  // }, [isTraining, refreshProblemStatus]);
 
   const startTraining = useCallback(
-    (customRatings: {P1: number; P2: number; P3: number; P4: number}) => {
+    (customRatings: { P1: number; P2: number; P3: number; P4: number }) => {
       if (!user) {
         router.push("/");
         return;
@@ -287,7 +287,7 @@ const useTraining = () => {
     tags: ProblemTag[],
     lb: number,
     ub: number,
-    customRatings: {P1: number; P2: number; P3: number; P4: number}
+    customRatings: { P1: number; P2: number; P3: number; P4: number }
   ) => {
     const newProblems = getRandomProblems(tags, lb, ub, customRatings);
     if (newProblems) {

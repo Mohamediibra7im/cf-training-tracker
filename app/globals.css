@@ -98,6 +98,58 @@ body {
 
   /* Enhanced focus styles */
   *:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Grid pattern for backgrounds */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(to right, hsl(var(--muted)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--muted)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Improved scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.1); }
+    50% { box-shadow: 0 0 30px hsl(var(--primary) / 0.2); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Focus enhancements */
+  *:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
@@ -123,6 +175,31 @@ body {
            shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300;
   }
 
+  /* Advanced button with glow effect */
+  .btn-glow {
+    @apply relative overflow-hidden;
+    box-shadow: 0 4px 15px 0 rgba(var(--primary), 0.3);
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 8px 25px 0 rgba(var(--primary), 0.4);
+  }
+
+  .btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-glow:hover::before {
+    left: 100%;
+  }
+
   /* Glass morphism effect */
   .glass {
     @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-xl;
@@ -136,6 +213,22 @@ body {
   .card-enhanced {
     @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-lg 
            hover:shadow-xl hover:border-primary/30 transition-all duration-300;
+  }
+
+  /* Enhanced card with stronger effects */
+  .card-premium {
+    @apply bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-md border border-border/60 
+           shadow-2xl hover:shadow-3xl hover:border-primary/40 hover:from-primary/5 hover:to-accent/5
+           transition-all duration-500 ease-out;
+  }
+
+  /* Floating glow effect */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.1);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.3), 0 0 40px hsl(var(--accent) / 0.1);
   }
 
   /* Gradient text */
@@ -212,4 +305,67 @@ body {
 .hide-spinners::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* Enhanced authentication page styles */
+.auth-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--primary) / 0.03) 50%,
+    hsl(var(--accent) / 0.03) 100%
+  );
+}
+
+/* Smooth transitions for form elements */
+.form-input {
+  @apply transition-all duration-300 ease-out;
+}
+
+.form-input:focus {
+  @apply scale-[1.02] shadow-lg;
+}
+
+/* Button hover effects */
+.btn-enhanced {
+  @apply transform transition-all duration-300 ease-out;
+}
+
+.btn-enhanced:hover {
+  @apply -translate-y-0.5 shadow-xl;
+}
+
+.btn-enhanced:active {
+  @apply translate-y-0 shadow-lg;
+}
+
+/* Loading state animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--primary) / 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
 }

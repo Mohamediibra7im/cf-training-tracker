@@ -14,26 +14,50 @@ const TagSelector = ({
   onClearTags: () => void;
 }) => {
   return (
-    <div className="space-y-2">
-      <span className="font-medium text-muted-foreground">
-        Problems will be generated randomly if no tags are selected.
-      </span>
-      <ScrollArea className="w-full rounded-md border">
-        <div className="flex flex-wrap justify-center gap-x-1 gap-y-1 p-2">
-          {allTags.map((tag) => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <span className="text-muted-foreground">
+          Problems will be generated randomly if no tags are selected.
+        </span>
+        {selectedTags.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {selectedTags.length} tag{selectedTags.length !== 1 ? 's' : ''} selected
+            </span>
             <Button
-              key={tag.value}
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-              onClick={() => onTagClick(tag)}
+              variant="outline"
+              size="sm"
+              onClick={onClearTags}
+              className="h-8 px-3 text-xs hover:bg-destructive hover:text-destructive-foreground transition-colors duration-300"
             >
-              {tag.name}
+              Clear All
             </Button>
-          ))}
+          </div>
+        )}
+      </div>
+
+      <ScrollArea className="w-full rounded-xl border-2 border-border/50 bg-muted/20">
+        <div className="flex flex-wrap gap-2 p-4">
+          {allTags.map((tag) => {
+            const isSelected = selectedTags.includes(tag);
+            return (
+              <Button
+                key={tag.value}
+                variant={isSelected ? "default" : "outline"}
+                onClick={() => onTagClick(tag)}
+                size="sm"
+                title={tag.name}
+                className={`transition-all duration-300 ${isSelected
+                  ? "bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg hover:shadow-xl scale-105"
+                  : "hover:border-primary/50 hover:bg-primary/10 hover:scale-105 hover:text-green-500 hover:cursor-pointer hover:font-semibold"
+                }`}
+              >
+                {tag.name}
+              </Button>
+            );
+          })}
         </div>
       </ScrollArea>
-      <Button variant="destructive" onClick={onClearTags}>
-        Clear All
-      </Button>
     </div>
   );
 };

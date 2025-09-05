@@ -39,18 +39,11 @@ export async function POST(req: NextRequest) {
 
   try {
     await dbConnect();
-    const { codeforcesHandle, pin } = await req.json();
+    const { codeforcesHandle, password } = await req.json();
 
-    if (!codeforcesHandle || !pin) {
+    if (!codeforcesHandle || !password) {
       return NextResponse.json(
-        { message: "Codeforces handle and PIN are required" },
-        { status: 400 }
-      );
-    }
-
-    if (!/^\d{4}$/.test(pin)) {
-      return NextResponse.json(
-        { message: "PIN must be a 4-digit number" },
+        { message: "Codeforces handle and password are required" },
         { status: 400 }
       );
     }
@@ -59,14 +52,14 @@ export async function POST(req: NextRequest) {
     if (!user) {
       // Consume more points for invalid username to discourage user enumeration
       await loginLimiter.consume(ip, 2);
-      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ message: "Wrong Handle" }, { status: 401 });
     }
 
-    const isMatch = await bcrypt.compare(pin, user.pin);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       // Consume more points for invalid password
       await loginLimiter.consume(ip, 1);
-      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ message: "Wrong Password" }, { status: 401 });
     }
 
     // Check if profile sync is needed and update if necessary

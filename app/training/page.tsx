@@ -75,91 +75,124 @@ export default function TrainingPage() {
   // If training is active, show only the problems section
   if (isTraining) {
     return (
-      <section className="container grid items-center gap-6 pb-6 pt-2 md:py-4">
-        <UpsolveReminder />
-        <Trainer
-          isTraining={isTraining}
-          training={training}
-          problems={problems}
-          generateProblems={generateProblems}
-          startTraining={startTraining}
-          stopTraining={stopTraining}
-          refreshProblemStatus={refreshProblemStatus}
-          finishTraining={finishTraining}
-          selectedTags={selectedTags}
-          lb={firstInput}
-          ub={secondInput}
-          customRatings={customRatings}
-          submissionStatuses={submissionStatuses}
-          isRefreshing={isRefreshing}
-        />
+      <section className="min-h-screen">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8">
+          <UpsolveReminder />
+
+          {/* Training Header */}
+          <div className="text-center p-4 sm:p-6 lg:p-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+              Training Session Active
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2">
+              Focus mode enabled. Good luck with your problems!
+            </p>
+          </div>
+
+          <Trainer
+            isTraining={isTraining}
+            training={training}
+            problems={problems}
+            generateProblems={generateProblems}
+            startTraining={startTraining}
+            stopTraining={stopTraining}
+            refreshProblemStatus={refreshProblemStatus}
+            finishTraining={finishTraining}
+            selectedTags={selectedTags}
+            lb={firstInput}
+            ub={secondInput}
+            customRatings={customRatings}
+            submissionStatuses={submissionStatuses}
+            isRefreshing={isRefreshing}
+          />
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="container grid items-center gap-6 pb-6 pt-2 md:py-4">
-      <UpsolveReminder />
-      <div className="flex flex-col items-start gap-1">
-        <h1 className="text-3xl font-bold leading-tight tracking-tight">
-          Create a Contest
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Select problem ratings to generate your custom training session.
-        </p>
-      </div>
+    <section className="min-h-screen">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8 lg:space-y-10">
+        <UpsolveReminder />
 
-      <div className="space-y-8">
-        {/* Level Selector */}
-        <LevelSelector
-          onLevelChange={handleLevelChange}
-          currentRatings={customRatings}
-        />
+        {/* Hero Section */}
+        <div className="text-center p-4 sm:p-6 lg:p-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+            Create Your Contest
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            Craft the perfect training session with customizable problem ratings, tags, and contest rounds to elevate your competitive programming skills.
+          </p>
+        </div>
 
-        <Card className="border-2 border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardContent className="pt-6 space-y-8">
-            {/* Tags Section */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">Select Tags (Optional)</h3>
-              <TagSelector
-                allTags={allTags}
-                selectedTags={selectedTags}
-                onTagClick={onTagClick}
-                onClearTags={onClearTags}
-              />
-            </div>
+        <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+          {/* Level Selector */}
+          <LevelSelector
+            onLevelChange={handleLevelChange}
+            currentRatings={customRatings}
+          />
 
-            {/* Contest Round Range Section */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">
-                Contest Round Range (Optional)
-              </h3>
-              <Textboxpair
-                onFirstInputChange={onFirstInputChange}
-                onSecondInputChange={onSecondInputChange}
-              />
-            </div>
+          {/* Configuration Panel */}
+          <Card className="w-full">
+            <CardContent className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 lg:space-y-10">
+              {/* Tags Section */}
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+                    Select Tags
+                  </h3>
+                  <span className="px-3 py-1 bg-muted rounded-full text-xs sm:text-sm text-muted-foreground w-fit">
+                    Optional
+                  </span>
+                </div>
+                <div className="p-4 sm:p-6">
+                  <TagSelector
+                    allTags={allTags}
+                    selectedTags={selectedTags}
+                    onTagClick={onTagClick}
+                    onClearTags={onClearTags}
+                  />
+                </div>
+              </div>
 
+              {/* Contest Round Range Section */}
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
+                    Contest Round Range
+                  </h3>
+                  <span className="px-3 py-1 bg-muted rounded-full text-xs sm:text-sm text-muted-foreground w-fit">
+                    Optional
+                  </span>
+                </div>
+                <div className="p-4 sm:p-6">
+                  <Textboxpair
+                    onFirstInputChange={onFirstInputChange}
+                    onSecondInputChange={onSecondInputChange}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          </CardContent>
-        </Card>
-
-        <Trainer
-          isTraining={isTraining}
-          training={training}
-          problems={problems}
-          generateProblems={generateProblems}
-          startTraining={startTraining}
-          stopTraining={stopTraining}
-          refreshProblemStatus={refreshProblemStatus}
-          finishTraining={finishTraining}
-          selectedTags={selectedTags}
-          lb={firstInput}
-          ub={secondInput}
-          customRatings={customRatings}
-          submissionStatuses={submissionStatuses}
-          isRefreshing={isRefreshing}
-        />
+          {/* Trainer Section */}
+          <Trainer
+            isTraining={isTraining}
+            training={training}
+            problems={problems}
+            generateProblems={generateProblems}
+            startTraining={startTraining}
+            stopTraining={stopTraining}
+            refreshProblemStatus={refreshProblemStatus}
+            finishTraining={finishTraining}
+            selectedTags={selectedTags}
+            lb={firstInput}
+            ub={secondInput}
+            customRatings={customRatings}
+            submissionStatuses={submissionStatuses}
+            isRefreshing={isRefreshing}
+          />
+        </div>
       </div>
     </section>
   );

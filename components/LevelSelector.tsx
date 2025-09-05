@@ -119,13 +119,14 @@ const LevelSelector = ({
   }
 
   return (
-    <Card className="border-2 border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <CardHeader>
-        <CardTitle className="text-3xl font-semibold">
+    <Card className="relative overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-card via-card/95 to-muted/30">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5"></div>
+      <CardHeader className="relative">
+        <CardTitle className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
           Contest Problems Level
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="relative space-y-6">
         {/* Show/Hide Ratings Button */}
         <div className="flex justify-end">
           <Button

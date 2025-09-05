@@ -105,38 +105,92 @@ const ProblemRow = ({
 
   const content = (
     <div
-      className={`flex items-center justify-between p-2.5 border rounded-lg transition-colors relative ${isPreContestPeriod
-        ? "bg-muted cursor-not-allowed opacity-70"
-        : overlayClass || "bg-card hover:bg-muted/50"
+      className={`group relative overflow-hidden rounded-xl border-2 transition-all duration-300 ${isPreContestPeriod
+        ? "bg-muted/50 cursor-not-allowed opacity-70 border-muted"
+        : overlayClass || "bg-card/80 hover:bg-card border-border/50 hover:border-primary/30 hover:shadow-lg"
       }`}
     >
-      <div className="flex items-center gap-4 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-lg w-6 text-center">
+      {/* Gradient overlay on hover */}
+      {!isPreContestPeriod && (
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      )}
+
+      {/* Mobile Layout */}
+      <div className="block sm:hidden relative p-3">
+        <div className="flex items-start gap-3">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0 transition-colors duration-300 ${isPreContestPeriod
+            ? "bg-muted text-muted-foreground"
+            : "bg-gradient-to-br from-primary to-accent text-primary-foreground"
+          }`}>
             {problemLabels[index]}
-          </span>
-          {isPreContestPeriod && (
-            <Lock className="h-4 w-4 text-muted-foreground" />
-          )}
-        </div>
-        <div className="flex-1">
-          <div className="font-semibold text-primary">{problem.name}</div>
-          <div className="text-muted-foreground">
-            {problem.contestId}-{problem.index}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-foreground text-base truncate mb-1">
+              {problem.name}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground text-xs">
+                {problem.contestId}-{problem.index}
+              </div>
+              <div className="flex items-center gap-2">
+                {!isTraining && (
+                  <div className="px-2 py-1 bg-muted rounded text-xs font-medium text-muted-foreground">
+                    {problemRating}
+                  </div>
+                )}
+                {isTraining && (
+                  <div className="text-sm font-medium">
+                    {getSolvedStatus()}
+                  </div>
+                )}
+                {isPreContestPeriod && (
+                  <Lock className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        {!isTraining && (
-          <span className="font-medium text-muted-foreground">
-            {problemRating}
-          </span>
-        )}
-        {isTraining && (
-          <span className="text-lg font-medium min-w-[100px] text-right inline-flex items-center justify-end gap-1">
-            {getSolvedStatus()}
-          </span>
-        )}
+
+      {/* Desktop Layout */}
+      <div className="hidden sm:block relative p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 flex-1">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-colors duration-300 ${isPreContestPeriod
+                ? "bg-muted text-muted-foreground"
+                : "bg-gradient-to-br from-primary to-accent text-primary-foreground group-hover:shadow-lg"
+              }`}>
+                {problemLabels[index]}
+              </div>
+              {isPreContestPeriod && (
+                <Lock className="h-5 w-5 text-muted-foreground" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-foreground text-lg truncate group-hover:text-primary transition-colors duration-300">
+                {problem.name}
+              </div>
+              <div className="text-muted-foreground text-sm">
+                Contest {problem.contestId} • Problem {problem.index}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            {!isTraining && (
+              <div className="px-3 py-1 bg-muted rounded-full">
+                <span className="font-medium text-muted-foreground text-sm">
+                  {problemRating}
+                </span>
+              </div>
+            )}
+            {isTraining && (
+              <div className="text-lg font-medium min-w-[120px] text-right">
+                {getSolvedStatus()}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -228,29 +282,32 @@ const Trainer = ({
     isTraining && training?.problems ? training.problems : problems;
 
   return (
-    <Card className="border-2 border-border/50 shadow-lg">
-      <CardContent className="pt-8 space-y-8">
+    <Card className="relative overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-card via-card/95 to-muted/30">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5"></div>
+      <CardContent className="relative pt-8 space-y-8">
         {isStopDialogOpen && (
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="stop-title"
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-black/50" onClick={cancelStop} />
             <div className="relative z-10 w-[90%] max-w-md">
-              <div className="rounded-lg border-2 border-red-500/40 bg-background shadow-xl">
-                <div className="p-5 sm:p-6 space-y-4">
+              <div className="rounded-2xl border-2 border-red-500/40 bg-background/95 backdrop-blur-xl shadow-2xl">
+                <div className="p-6 space-y-6">
                   <div className="flex items-center gap-3">
-                    <XCircle className="h-6 w-6 text-red-500" />
+                    <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                      <XCircle className="h-6 w-6 text-red-500" />
+                    </div>
                     <h3 id="stop-title" className="text-xl font-semibold">Stop training?</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground">
                     This will end your current session without saving it. Are you sure you want to stop?
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
-                    <Button variant="outline" onClick={cancelStop}>Cancel</Button>
-                    <Button variant="destructive" onClick={confirmStop}>Stop</Button>
+                  <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
+                    <Button variant="outline" onClick={cancelStop} className="flex-1 sm:flex-none">Cancel</Button>
+                    <Button variant="destructive" onClick={confirmStop} className="flex-1 sm:flex-none">Stop Training</Button>
                   </div>
                 </div>
               </div>
@@ -262,33 +319,44 @@ const Trainer = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="finish-title"
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
           >
             <div className="absolute inset-0 bg-black/50" onClick={cancelFinish} />
             <div className="relative z-10 w-[90%] max-w-md">
-              <div className="rounded-lg border-2 border-yellow-500/40 bg-background shadow-xl">
-                <div className="p-5 sm:p-6 space-y-4">
+              <div className="rounded-2xl border-2 border-yellow-500/40 bg-background/95 backdrop-blur-xl shadow-2xl">
+                <div className="p-6 space-y-6">
                   <div className="flex items-center gap-3">
-                    <Trophy className="h-6 w-6 text-yellow-500" />
+                    <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                      <Trophy className="h-6 w-6 text-yellow-500" />
+                    </div>
                     <h3 id="finish-title" className="text-xl font-semibold">Finish training?</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground">
                     We will save your session, add unsolved problems to upsolve reminders, and take you to your statistics.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:justify-end pt-2">
-                    <Button variant="outline" onClick={cancelFinish}>Cancel</Button>
-                    <Button onClick={confirmFinish} className="bg-yellow-600 hover:bg-yellow-600/90 text-white">Finish</Button>
+                  <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
+                    <Button variant="outline" onClick={cancelFinish} className="flex-1 sm:flex-none">Cancel</Button>
+                    <Button onClick={confirmFinish} className="bg-yellow-600 hover:bg-yellow-600/90 text-white flex-1 sm:flex-none">Finish Training</Button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         )}
+
         {/* Problems Section */}
         {currentProblems && currentProblems.length > 0 && (
-          <div className="space-y-2">
-            <h3 className="text-2xl font-semibold">Problems</h3>
-            <div className="space-y-1.5">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                Problems
+              </h3>
+              <div className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
+                {currentProblems.length} problems
+              </div>
+            </div>
+            <div className="grid gap-4">
               {currentProblems.map((problem, index) => {
                 const problemId = `${problem.contestId}_${problem.index}`;
                 const submissionStatus = submissionStatuses.find(
@@ -311,83 +379,174 @@ const Trainer = ({
           </div>
         )}
 
-        <div className="flex flex-col items-center gap-4">
+        {/* Action Buttons Section */}
+        <div className="flex flex-col items-center gap-6">
           {!isTraining ? (
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={() =>
-                  generateProblems(selectedTags, lb, ub, customRatings)
-                }
-              >
-                {problems && problems.length > 0
-                  ? "Regenerate"
-                  : "Generate Problems"}
-              </Button>
-              {problems && problems.length > 0 && (
-                <Button onClick={() => startTraining(customRatings)}>
-                  Start
+            <div className="w-full max-w-md">
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button
+                  onClick={() =>
+                    generateProblems(selectedTags, lb, ub, customRatings)
+                  }
+                  size="lg"
+                  className="flex-1 h-12 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {problems && problems.length > 0
+                    ? "🔄 Regenerate Problems"
+                    : "✨ Generate Problems"}
                 </Button>
-              )}
+                {problems && problems.length > 0 && (
+                  <Button
+                    onClick={() => startTraining(customRatings)}
+                    size="lg"
+                    className="flex-1 h-12 text-lg font-semibold bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    🚀 Start Training
+                  </Button>
+                )}
+              </div>
             </div>
           ) : (
             training && (
               <>
                 {isPreContestPeriod ? (
-                  // Pre-contest layout: Timer center, Stop button far right
-                  <div className="flex w-full py-6 items-center justify-between">
-                    <div className="flex-1"></div>
-                    <div className="text-center">
-                      <CountDown
-                        startTime={training.startTime}
-                        endTime={training.endTime}
-                      />
-                    </div>
-                    <div className="flex-1 flex justify-end">
+                  // Pre-contest layout: Responsive design
+                  <div className="w-full p-4 sm:p-6">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden space-y-4 text-center">
+                      <div className="p-4 bg-muted/20 rounded-lg">
+                        <div className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
+                          Contest Starts In
+                        </div>
+                        <CountDown
+                          startTime={training.startTime}
+                          endTime={training.endTime}
+                        />
+                      </div>
                       <Button
                         variant="destructive"
                         onClick={onStopTraining}
-                        className="text-lg font-semibold px-6 py-3"
+                        className="font-semibold px-6 py-3 h-auto w-full transition-all duration-300"
                       >
-                        Stop
+                        Stop Training
                       </Button>
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex sm:items-center sm:justify-between">
+                      <div className="flex-1"></div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground mb-2">Contest starts in</div>
+                        <CountDown
+                          startTime={training.startTime}
+                          endTime={training.endTime}
+                        />
+                      </div>
+                      <div className="flex-1 flex justify-end">
+                        <Button
+                          variant="destructive"
+                          onClick={onStopTraining}
+                          className="font-semibold px-6 md:px-8 h-12 transition-all duration-300"
+                        >
+                          Stop Training
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ) : (
-                  // During contest layout: Refresh left, Timer center, Buttons right
-                  <div className="flex flex-col lg:flex-row lg:items-center w-full py-6 gap-4">
-                    <div className="lg:flex-1 flex justify-center lg:justify-start">
+                  // During contest layout: Responsive design
+                  <div className="w-full p-4 sm:p-6">
+                    {/* Mobile Layout (Stack vertically) */}
+                    <div className="block sm:hidden space-y-4">
+                      {/* Timer at top on mobile */}
+                      <div className="text-center p-4 bg-muted/20 rounded-lg">
+                        <div className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
+                          Time Remaining
+                        </div>
+                        <CountDown
+                          startTime={training.startTime}
+                          endTime={training.endTime}
+                        />
+                      </div>
+
+                      {/* Buttons row on mobile */}
+                      <div className="grid grid-cols-3 gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={refreshProblemStatus}
+                          className="font-semibold px-2 py-3 h-auto text-xs border-2 hover:border-primary/50 transition-all duration-300"
+                          disabled={isRefreshing}
+                        >
+                          <RefreshCw
+                            className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                          />
+                          <span className="ml-1 hidden xs:inline">
+                            {isRefreshing ? "..." : "Refresh"}
+                          </span>
+                        </Button>
+
+                        <Button
+                          onClick={onFinishTraining}
+                          className="font-semibold px-2 py-3 h-auto text-xs bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 transition-all duration-300"
+                        >
+                          <span className="text-xs">🏆</span>
+                          <span className="ml-1">Finish</span>
+                        </Button>
+
+                        <Button
+                          variant="destructive"
+                          onClick={onStopTraining}
+                          className="font-semibold px-2 py-3 h-auto text-xs transition-all duration-300"
+                        >
+                          <span className="text-xs">⛔</span>
+                          <span className="ml-1">Stop</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout (Single row) */}
+                    <div className="hidden sm:flex sm:items-center gap-4 md:gap-6">
                       <Button
                         variant="outline"
                         onClick={refreshProblemStatus}
-                        className="text-lg font-semibold px-6 py-3"
+                        className="font-semibold px-4 md:px-6 lg:px-8 h-12 border-2 hover:border-primary/50 shadow-lg hover:shadow-xl transition-all duration-300 flex-shrink-0"
                         disabled={isRefreshing}
                       >
                         <RefreshCw
-                          className={`h-5 w-5 mr-3 ${isRefreshing ? "animate-spin" : ""}`}
+                          className={`h-5 w-5 mr-2 md:mr-3 ${isRefreshing ? "animate-spin" : ""}`}
                         />
-                        {isRefreshing ? "Refreshing..." : "Refresh"}
+                        <span className="hidden md:inline">
+                          {isRefreshing ? "Refreshing..." : "Refresh Status"}
+                        </span>
+                        <span className="md:hidden">
+                          {isRefreshing ? "..." : "Refresh"}
+                        </span>
                       </Button>
-                    </div>
-                    <div className="lg:flex-1 text-center">
-                      <CountDown
-                        startTime={training.startTime}
-                        endTime={training.endTime}
-                      />
-                    </div>
-                    <div className="lg:flex-1 flex gap-3 justify-center lg:justify-end">
-                      <Button
-                        onClick={onFinishTraining}
-                        className="text-lg font-semibold px-6 py-3 flex-1 sm:flex-none"
-                      >
-                        Finish
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={onStopTraining}
-                        className="text-lg font-semibold px-6 py-3 flex-1 sm:flex-none"
-                      >
-                        Stop
-                      </Button>
+
+                      <div className="flex-1 text-center min-w-0">
+                        <div className="text-sm text-muted-foreground mb-2">Time remaining</div>
+                        <CountDown
+                          startTime={training.startTime}
+                          endTime={training.endTime}
+                        />
+                      </div>
+
+                      <div className="flex gap-2 md:gap-3 flex-shrink-0">
+                        <Button
+                          onClick={onFinishTraining}
+                          className="font-semibold px-4 md:px-6 lg:px-8 h-12 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          🏆 <span className="ml-1 md:ml-2">Finish</span>
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={onStopTraining}
+                          className="font-semibold px-4 md:px-6 lg:px-8 h-12 shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          <span className="hidden sm:inline">Stop</span>
+                          <span className="sm:hidden">⛔</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}

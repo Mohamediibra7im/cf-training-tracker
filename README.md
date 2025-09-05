@@ -125,7 +125,7 @@ training-tracker/
 │   ├── statistics/        # Analytics page
 │   ├── upsolve/          # Upsolved problems page
 │   ├── notifications/    # Notification center page
-│   └── reset-pin/        # PIN reset page
+│   └── reset-password/   # Password reset page
 ├── components/            # React components
 │   ├── ui/               # Reusable UI components
 │   ├── ActivityHeatmap.tsx

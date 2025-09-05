@@ -4,17 +4,27 @@ import jwt from "jsonwebtoken";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import { verifyAuth } from "@/lib/auth";
+import { validatePassword } from "@/utils/passwordValidation";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
 
-    // This part handles the "Forgot PIN" flow
+    // This part handles the "Forgot Password" flow
     if (body.resetToken) {
-      if (!body.newPin || !/^\d{4}$/.test(body.newPin)) {
+      if (!body.newPassword) {
         return NextResponse.json(
-          { message: "New PIN must be a 4-digit number." },
+          { message: "New password is required." },
+          { status: 400 },
+        );
+      }
+
+      // Validate password strength
+      const passwordValidation = validatePassword(body.newPassword);
+      if (!passwordValidation.isValid) {
+        return NextResponse.json(
+          { message: passwordValidation.errors.join(". ") },
           { status: 400 },
         );
       }
@@ -31,10 +41,10 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const hashedNewPin = await bcrypt.hash(body.newPin, 10);
-      await User.findByIdAndUpdate(decoded.userId, { pin: hashedNewPin });
+      const hashedNewPassword = await bcrypt.hash(body.newPassword, 10);
+      await User.findByIdAndUpdate(decoded.userId, { password: hashedNewPassword });
 
-      return NextResponse.json({ message: "PIN has been reset successfully." });
+      return NextResponse.json({ message: "Password has been reset successfully." });
     }
 
     // This part handles the simple reset for logged-in users
@@ -48,14 +58,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
 
-    if (
-      !body.oldPin ||
-      !body.newPin ||
-      !/^\d{4}$/.test(body.oldPin) ||
-      !/^\d{4}$/.test(body.newPin)
-    ) {
+    if (!body.oldPassword || !body.newPassword) {
       return NextResponse.json(
-        { message: "Both current and new PINs must be 4-digit numbers." },
+        { message: "Both current and new passwords are required." },
+        { status: 400 },
+      );
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(body.newPassword);
+    if (!passwordValidation.isValid) {
+      return NextResponse.json(
+        { message: passwordValidation.errors.join(". ") },
         { status: 400 },
       );
     }
@@ -65,18 +79,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const isMatch = await bcrypt.compare(body.oldPin, user.pin);
+    const isMatch = await bcrypt.compare(body.oldPassword, user.password);
     if (!isMatch) {
       return NextResponse.json(
-        { message: "Incorrect current PIN." },
+        { message: "Incorrect current password." },
         { status: 401 },
       );
     }
 
-    const hashedNewPin = await bcrypt.hash(body.newPin, 10);
-    await User.findByIdAndUpdate(decoded.userId, { pin: hashedNewPin });
+    const hashedNewPassword = await bcrypt.hash(body.newPassword, 10);
+    await User.findByIdAndUpdate(decoded.userId, { password: hashedNewPassword });
 
-    return NextResponse.json({ message: "PIN reset successfully." });
+    return NextResponse.json({ message: "Password reset successfully." });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(

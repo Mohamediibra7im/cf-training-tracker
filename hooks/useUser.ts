@@ -39,34 +39,13 @@ const useUser = () => {
     }
   }, [mutate, isClient]);
 
-  const register = useCallback(
-    async (codeforcesHandle: string, pin: string): Promise<Response<User>> => {
-      try {
-        const res = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ codeforcesHandle, pin }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          return ErrorResponse(data.message);
-        }
-        // After successful registration, automatically log the user in
-        return await login(codeforcesHandle, pin);
-      } catch (error) {
-        return ErrorResponse("Failed to connect to the server.");
-      }
-    },
-    [],
-  );
-
   const login = useCallback(
-    async (codeforcesHandle: string, pin: string): Promise<Response<User>> => {
+    async (codeforcesHandle: string, password: string): Promise<Response<User>> => {
       try {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ codeforcesHandle, pin }),
+          body: JSON.stringify({ codeforcesHandle, password }),
         });
         const data = await res.json();
         if (!res.ok) {
@@ -81,11 +60,32 @@ const useUser = () => {
 
         await mutate(data.user, false);
         return SuccessResponse(data.user);
-      } catch (error) {
+      } catch (_error) {
         return ErrorResponse("Failed to connect to the server.");
       }
     },
     [isClient, mutate],
+  );
+
+  const register = useCallback(
+    async (codeforcesHandle: string, password: string, confirmPassword: string): Promise<Response<User>> => {
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ codeforcesHandle, password, confirmPassword }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return ErrorResponse(data.message);
+        }
+        // After successful registration, automatically log the user in
+        return await login(codeforcesHandle, password);
+      } catch (_error) {
+        return ErrorResponse("Failed to connect to the server.");
+      }
+    },
+    [login],
   );
 
   const logout = () => {
@@ -96,9 +96,9 @@ const useUser = () => {
     mutate(null, false);
   };
 
-  const resetPin = async (
-    oldPin: string,
-    newPin: string,
+  const resetPassword = async (
+    oldPassword: string,
+    newPassword: string,
   ): Promise<Response<null>> => {
     try {
       const token = localStorage.getItem("token");
@@ -108,7 +108,7 @@ const useUser = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ oldPin, newPin }),
+        body: JSON.stringify({ oldPassword, newPassword }),
       });
 
       const data = await res.json();
@@ -117,7 +117,7 @@ const useUser = () => {
       }
 
       return SuccessResponse(null);
-    } catch (error) {
+    } catch (_error) {
       return ErrorResponse("Failed to connect to the server.");
     }
   };
@@ -148,7 +148,7 @@ const useUser = () => {
       }
 
       return SuccessResponse(data.user);
-    } catch (error) {
+    } catch (_error) {
       return ErrorResponse("Failed to sync profile");
     }
   }, [isClient, mutate]);
@@ -160,7 +160,7 @@ const useUser = () => {
     register,
     login,
     logout,
-    resetPin,
+    resetPassword,
     syncProfile,
   };
 };

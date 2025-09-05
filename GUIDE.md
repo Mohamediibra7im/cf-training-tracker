@@ -9,7 +9,7 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
    - [Creating an Account](#creating-an-account)
    - [Logging In](#logging-in)
    - [Syncing Your Codeforces Profile](#syncing-your-codeforces-profile)
-   - [PIN Management](#pin-management)
+   - [Password Management](#password-management)
 
 2. [🔔 Notification System](#notification-system)
 
@@ -44,8 +44,8 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
 
 6. [⚙️ Account Settings](#account-settings)
 
-   - [Changing Your PIN](#changing-your-pin)
-   - [Resetting a Forgotten PIN](#resetting-a-forgotten-pin)
+   - [Changing Your Password](#changing-your-password)
+   - [Resetting a Forgotten Password](#resetting-a-forgotten-password)
    - [Theme Settings](#theme-settings)
 
 7. [📱 Mobile Usage](#mobile-usage)
@@ -65,7 +65,7 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
 
 1. Navigate to the CF Training Tracker homepage
 2. Enter your Codeforces handle in the input field
-3. Create a 4-digit PIN that you'll use for future logins
+3. Create a strong password that you'll use for future logins
 4. Click "Register" to create your account
 5. The application will fetch your Codeforces profile data and submission history
 
@@ -74,7 +74,7 @@ Welcome to the CF Training Tracker usage guide! This document provides detailed 
 ### Logging In <a name="logging-in"></a>
 
 1. On the homepage, enter your Codeforces handle
-2. Enter your 4-digit PIN
+2. Enter your password
 3. Click "Login" to access your account
 
 ### Syncing Your Codeforces Profile <a name="syncing-your-codeforces-profile"></a>
@@ -91,9 +91,9 @@ The sync process updates:
 - Recent submissions
 - Solved problems list
 
-### PIN Management <a name="pin-management"></a>
+### Password Management <a name="password-management"></a>
 
-Your PIN is your secure password for accessing CF Training Tracker. Keep it safe and do not share it with others.
+Your password is your secure credential for accessing CF Training Tracker. Keep it safe and do not share it with others.
 
 ---
 
@@ -151,7 +151,6 @@ The notification center provides:
 ### Admin Notification Management <a name="admin-notification-management"></a>
 
 > **Admin Access Required**: This section applies only to users with admin privileges.
-
 
 ## 🏋️ Training Sessions <a name="training-sessions"></a>
 
@@ -318,25 +317,24 @@ For each problem in your upsolve list:
 
 ## ⚙️ Account Settings <a name="account-settings"></a>
 
-### Changing Your PIN <a name="changing-your-pin"></a>
+### Changing Your Password <a name="changing-your-password"></a>
 
 1. Click on your profile avatar in the navigation bar
 2. Select "Settings" from the dropdown menu
-3. Click "Reset PIN"
-4. Enter your current PIN and your new 4-digit PIN
-5. Confirm your new PIN
-6. Click "Save" to update your PIN
+3. Enter your current password and create a new strong password
+4. Confirm your new password
+5. Click "Change Password" to update your password
 
-### Resetting a Forgotten PIN <a name="resetting-a-forgotten-pin"></a>
+### Resetting a Forgotten Password <a name="resetting-a-forgotten-password"></a>
 
-If you forget your PIN:
+If you forget your password:
 
-1. Click "Forgot PIN?" on the login page
+1. Click "Forgot Password?" on the login page
 2. Enter your Codeforces handle
 3. Follow the verification process:
    - Submit a compilation error to problem 4A on Codeforces
    - Verify the submission
-4. Once verified, create a new 4-digit PIN
+4. Once verified, create a new strong password
 
 ### Theme Settings <a name="theme-settings"></a>
 

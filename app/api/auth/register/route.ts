@@ -4,6 +4,7 @@ import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import getUser from "@/utils/codeforces/getUser";
 import getRankFromRating from "@/utils/getRankFromRating";
+import { validatePassword } from "@/utils/passwordValidation";
 
 export async function POST(req: NextRequest) {
   if (!process.env.JWT_SECRET) {
@@ -16,18 +17,28 @@ export async function POST(req: NextRequest) {
 
   try {
     await dbConnect();
-    const { codeforcesHandle, pin } = await req.json();
+    const { codeforcesHandle, password, confirmPassword } = await req.json();
 
-    if (!codeforcesHandle || !pin) {
+    if (!codeforcesHandle || !password || !confirmPassword) {
       return NextResponse.json(
-        { message: "Codeforces handle and PIN are required" },
+        { message: "Codeforces handle, password, and password confirmation are required" },
         { status: 400 },
       );
     }
 
-    if (!/^\d{4}$/.test(pin)) {
+    // Validate password strength
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
       return NextResponse.json(
-        { message: "PIN must be a 4-digit number" },
+        { message: passwordValidation.errors.join(". ") },
+        { status: 400 },
+      );
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        { message: "Passwords do not match" },
         { status: 400 },
       );
     }
@@ -51,11 +62,11 @@ export async function POST(req: NextRequest) {
     const cfUser = cfUserResponse.data;
     const rating = cfUser.rating ?? 0;
     const rank = cfUser.rank ?? getRankFromRating(rating);
-    const hashedPassword = await bcrypt.hash(pin, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       codeforcesHandle,
-      pin: hashedPassword,
+      password: hashedPassword,
       rating: rating,
       avatar: cfUser.avatar,
       rank: rank,

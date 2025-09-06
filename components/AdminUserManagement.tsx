@@ -218,82 +218,70 @@ export default function AdminUserManagement() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
+      {/* Header Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-emerald-500/5 rounded-2xl"></div>
-        <div className="relative flex justify-between items-center p-6 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-slate-700/30 shadow-lg">
+        <div className="relative flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 p-4 sm:p-6 bg-card/50 backdrop-blur-sm rounded-2xl border border-border/50 shadow-lg">
           <div className="space-y-2">
             <div className="flex items-center space-x-3">
-              <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg">
-                <Crown className="h-6 w-6 text-white" />
+              <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg">
+                <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
                   User Management
                 </h2>
-                <p className="text-muted-foreground mt-1 text-lg">
+                <p className="text-muted-foreground mt-1 text-sm sm:text-base lg:text-lg">
                   Manage user roles and permissions across the platform
                 </p>
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex flex-col items-center space-y-1">
-              <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-2">
-                <User className="h-4 w-4 mr-2" />
-                <span className="font-semibold">{users.length}</span>
-                <span className="ml-1">total users</span>
-              </Badge>
-            </div>
-            <div className="flex flex-col items-center space-y-1">
-              <Badge variant="outline" className="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 px-4 py-2">
-                <Crown className="h-4 w-4 mr-2" />
-                <span className="font-semibold">{users.filter(u => u.role === 'admin').length}</span>
-                <span className="ml-1">admins</span>
-              </Badge>
-            </div>
+
+          {/* Stats Cards */}
+          <div className="flex flex-row sm:flex-row lg:flex-col xl:flex-row items-center gap-3 sm:gap-4">
+            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-3 sm:px-4 py-2 rounded-2xl">
+              <User className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="font-semibold text-sm sm:text-base">{users.length}</span>
+              <span className="ml-1 text-xs sm:text-sm">total users</span>
+            </Badge>
+            <Badge variant="outline" className="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 px-3 sm:px-4 py-2 rounded-2xl">
+              <Crown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="font-semibold text-sm sm:text-base">{users.filter(u => u.role === 'admin').length}</span>
+              <span className="ml-1 text-xs sm:text-sm">admins</span>
+            </Badge>
           </div>
         </div>
       </div>
 
-      <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 dark:from-blue-500/20 dark:via-indigo-500/20 dark:to-purple-500/20 border-b border-blue-200/30 dark:border-blue-700/30">
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
-                <User className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <span className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  Search Users
-                </span>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  Find users by their Codeforces handle
-                </p>
-              </div>
+      {/* Search Section */}
+      <Card className="border-border/50 shadow-lg bg-card/50 backdrop-blur-sm rounded-2xl">
+        <CardHeader className="space-y-1 pb-4">
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
+            <div className="p-1.5 bg-primary/10 rounded-xl">
+              <Search className="h-4 w-5 sm:h-5 sm:w-5 text-primary" />
             </div>
-            <div className="flex items-center space-x-2">
-              <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300">
-                <User className="h-3 w-3 mr-1" />
-                Search
-              </Badge>
-            </div>
+            Search Users
           </CardTitle>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Find users by their Codeforces handle
+          </p>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="space-y-4">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-blue-400" />
+              <Search className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
             </div>
             <Input
               type="text"
               placeholder="Search by Codeforces handle..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-md pl-12 h-12 border-2 border-blue-200 dark:border-blue-700 focus:border-blue-500 dark:focus:border-blue-400 bg-blue-50/50 dark:bg-blue-900/10 focus:bg-white dark:focus:bg-slate-800 transition-all duration-200"
+              className="pl-10 sm:pl-12 h-10 sm:h-12 bg-background border-2 focus:ring-2 transition-all duration-200"
             />
             {searchTerm && (
-              <Badge variant="secondary" className="absolute right-3 top-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md">
+              <Badge variant="secondary" className="absolute right-3 top-2 sm:top-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-2xl">
                 {filteredUsers.length} found
               </Badge>
             )}
@@ -301,152 +289,229 @@ export default function AdminUserManagement() {
         </CardContent>
       </Card>
 
-      <Card className="border-0 shadow-lg bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-teal-500/10 dark:from-emerald-500/20 dark:via-green-500/20 dark:to-teal-500/20 border-b border-emerald-200/30 dark:border-emerald-700/30">
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 rounded-lg bg-gradient-to-r from-emerald-500 to-green-600 shadow-md">
-                <Shield className="h-5 w-5 text-white" />
+      {/* Users List */}
+      <Card className="border-border/50 shadow-lg bg-card/50 backdrop-blur-sm rounded-2xl">
+        <CardHeader className="space-y-1 pb-4">
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-primary/10 rounded-xl">
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div>
-                <span className="text-lg font-semibold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                  Users ({filteredUsers.length})
-                </span>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  Manage roles and permissions for all platform users
-                </p>
-              </div>
+              <span>Users ({filteredUsers.length})</span>
             </div>
-            <div className="flex items-center space-x-2">
-              {searchTerm && (
-                <Badge variant="outline" className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300">
-                  Filtered results
-                </Badge>
-              )}
-              <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300">
-                <Shield className="h-3 w-3 mr-1" />
-                Active
+            {searchTerm && (
+              <Badge variant="outline" className="hidden sm:inline-flex">
+                Filtered results
               </Badge>
-            </div>
+            )}
           </CardTitle>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Manage roles and permissions for all platform users
+          </p>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gradient-to-r from-emerald-50/80 via-green-50/80 to-teal-50/80 dark:from-emerald-900/20 dark:via-green-900/20 dark:to-teal-900/20 border-b-2 border-emerald-200 dark:border-emerald-700">
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">
-                    <div className="flex items-center space-x-2">
-                      <User className="h-4 w-4" />
-                      <span>Handle</span>
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">
-                    <div className="flex items-center space-x-2">
-                      <Crown className="h-4 w-4" />
-                      <span>Role</span>
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">
-                    <div className="flex items-center space-x-2">
-                      <Star className="h-4 w-4" />
-                      <span>Rating</span>
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">
-                    <div className="flex items-center space-x-2">
-                      <Shield className="h-4 w-4" />
-                      <span>Rank</span>
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>Joined</span>
-                    </div>
-                  </TableHead>
-                  <TableHead className="font-bold text-emerald-700 dark:text-emerald-300">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user._id} className="hover:bg-muted/30 transition-colors">
-                    <TableCell className="font-medium">
-                      <div className="flex items-center space-x-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="text-xs bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+        <CardContent className="p-0 sm:p-6">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border/50 bg-muted/30">
+                    <TableHead className="font-semibold text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <User className="h-4 w-4" />
+                        <span>Handle</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="font-semibold text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <Crown className="h-4 w-4" />
+                        <span>Role</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="font-semibold text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <Star className="h-4 w-4" />
+                        <span>Rating</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="font-semibold text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <Shield className="h-4 w-4" />
+                        <span>Rank</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="font-semibold text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>Joined</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="font-semibold text-foreground text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers.map((user) => (
+                    <TableRow key={user._id} className="border-border/50 hover:bg-muted/20 transition-colors">
+                      <TableCell className="font-medium">
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="h-8 w-8 rounded-2xl">
+                            <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs rounded-2xl">
+                              {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            {user.codeforcesHandle ? (
+                              <a
+                                href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors"
+                              >
+                                <span>{user.codeforcesHandle}</span>
+                                <ExternalLink className="h-3 w-3" />
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground">No handle</span>
+                            )}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={user.role === 'admin' ? 'default' : 'secondary'}
+                          className={user.role === 'admin'
+                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-2xl'
+                            : 'bg-muted text-muted-foreground font-medium rounded-2xl'
+                          }
+                        >
+                          {user.role === 'admin' ? (
+                            <Crown className="h-3 w-3 mr-1" />
+                          ) : (
+                            <User className="h-3 w-3 mr-1" />
+                          )}
+                          {user.role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-1">
+                          <Star className="h-3 w-3 text-yellow-500" />
+                          <span className="font-medium">{user.rating || 'Unrated'}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={`${getRankColor(user.rating)} border-current font-medium rounded-2xl`}>
+                          {getRankFromRating(user.rating)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                          <Calendar className="h-3 w-3" />
+                          <span>{formatDate(user.createdAt)}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-end">
+                          {user.role === 'user' ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => updateUserRole(user._id, 'admin')}
+                              disabled={updating === user._id}
+                              className="bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-xl"
+                            >
+                              {updating === user._id ? (
+                                <>
+                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                                  Updating...
+                                </>
+                              ) : (
+                                <>
+                                  <Crown className="h-3 w-3 mr-1" />
+                                  Make Admin
+                                </>
+                              )}
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => updateUserRole(user._id, 'user')}
+                              disabled={updating === user._id}
+                              className="bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-xl"
+                            >
+                              {updating === user._id ? (
+                                <>
+                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                                  Updating...
+                                </>
+                              ) : (
+                                <>
+                                  <User className="h-3 w-3 mr-1" />
+                                  Make User
+                                </>
+                              )}
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+
+          {/* Mobile/Tablet Card View */}
+          <div className="lg:hidden space-y-4 p-4">
+            {filteredUsers.map((user) => (
+              <Card key={user._id} className="border-border/50 hover:shadow-md transition-all duration-300 hover:scale-[1.01] bg-gradient-to-r from-card to-muted/10 rounded-2xl">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-4">
+                    {/* Header */}
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex items-center space-x-3 flex-1 min-w-0">
+                        <Avatar className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl">
+                          <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm rounded-2xl">
                             {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div className="flex-1 min-w-0">
                           {user.codeforcesHandle ? (
                             <a
                               href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors"
+                              className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors text-sm sm:text-base font-medium"
                             >
-                              <span>{user.codeforcesHandle}</span>
-                              <ExternalLink className="h-3 w-3" />
+                              <span className="truncate">{user.codeforcesHandle}</span>
+                              <ExternalLink className="h-3 w-3 flex-shrink-0" />
                             </a>
                           ) : (
-                            <span className="text-gray-500">No handle</span>
+                            <span className="text-muted-foreground text-sm sm:text-base">No handle</span>
                           )}
+                          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                            Joined: {formatDate(user.createdAt)}
+                          </p>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={user.role === 'admin' ? 'default' : 'secondary'}
-                        className={user.role === 'admin'
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
-                          : 'bg-gray-100 text-gray-700'
-                        }
-                      >
-                        {user.role === 'admin' ? (
-                          <Crown className="h-3 w-3 mr-1" />
-                        ) : (
-                          <User className="h-3 w-3 mr-1" />
-                        )}
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-3 w-3 text-yellow-500" />
-                        <span className="font-medium">{user.rating || 'Unrated'}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={`${getRankColor(user.rating)} border-current`}>
-                        {getRankFromRating(user.rating)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        <span>{formatDate(user.createdAt)}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
+
+                      {/* Role Action Button */}
+                      <div className="flex-shrink-0">
                         {user.role === 'user' ? (
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => updateUserRole(user._id, 'admin')}
                             disabled={updating === user._id}
-                            className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 text-green-700 hover:text-green-800 transition-all duration-200"
+                            className="bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800 transition-all text-xs sm:text-sm rounded-xl"
                           >
                             {updating === user._id ? (
-                              <>
-                                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                                Updating...
-                              </>
+                              <Loader2 className="h-3 w-3 animate-spin" />
                             ) : (
                               <>
                                 <Crown className="h-3 w-3 mr-1" />
-                                Make Admin
+                                <span className="hidden sm:inline">Make Admin</span>
+                                <span className="sm:hidden">Admin</span>
                               </>
                             )}
                           </Button>
@@ -456,46 +521,73 @@ export default function AdminUserManagement() {
                             variant="outline"
                             onClick={() => updateUserRole(user._id, 'user')}
                             disabled={updating === user._id}
-                            className="bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all duration-200"
+                            className="bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all text-xs sm:text-sm rounded-xl"
                           >
                             {updating === user._id ? (
-                              <>
-                                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                                Updating...
-                              </>
+                              <Loader2 className="h-3 w-3 animate-spin" />
                             ) : (
                               <>
                                 <User className="h-3 w-3 mr-1" />
-                                Make User
+                                <span className="hidden sm:inline">Make User</span>
+                                <span className="sm:hidden">User</span>
                               </>
                             )}
                           </Button>
                         )}
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                    </div>
+
+                    {/* Badges */}
+                    <div className="flex flex-wrap gap-2">
+                      <Badge
+                        variant={user.role === 'admin' ? 'default' : 'secondary'}
+                        className={user.role === 'admin'
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs rounded-2xl'
+                          : 'bg-muted text-muted-foreground text-xs rounded-2xl'
+                        }
+                      >
+                        {user.role === 'admin' ? (
+                          <Crown className="h-3 w-3 mr-1" />
+                        ) : (
+                          <User className="h-3 w-3 mr-1" />
+                        )}
+                        {user.role}
+                      </Badge>
+
+                      <Badge variant="outline" className="text-xs rounded-2xl">
+                        <Star className="h-3 w-3 mr-1 text-yellow-500" />
+                        {user.rating || 'Unrated'}
+                      </Badge>
+
+                      <Badge variant="outline" className={`${getRankColor(user.rating)} border-current text-xs rounded-2xl`}>
+                        <Shield className="h-3 w-3 mr-1" />
+                        {getRankFromRating(user.rating)}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
+          {/* Empty State */}
           {filteredUsers.length === 0 && !loading && (
-            <div className="text-center py-16">
+            <div className="text-center py-12 sm:py-16 px-4">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 rounded-2xl opacity-50"></div>
-                <div className="relative p-8">
-                  <div className="p-4 rounded-full bg-gradient-to-r from-gray-400 to-slate-500 w-fit mx-auto mb-6 shadow-lg">
-                    <User className="h-12 w-12 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-r from-muted/20 to-muted/20 rounded-2xl opacity-50"></div>
+                <div className="relative p-6 sm:p-8">
+                  <div className="p-3 sm:p-4 rounded-full bg-gradient-to-r from-muted-foreground/20 to-muted-foreground/30 w-fit mx-auto mb-4 sm:mb-6">
+                    <User className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">
+                  <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">
                     {searchTerm ? 'No users found matching your search.' : 'No users found.'}
                   </h3>
                   {searchTerm && (
                     <div className="space-y-2">
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-sm sm:text-base text-muted-foreground">
                         Try adjusting your search terms or clear the search to see all users.
                       </p>
-                      <Badge variant="outline" className="mt-3 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                      <Badge variant="outline" className="mt-2 sm:mt-3 bg-muted/50 text-muted-foreground text-xs sm:text-sm">
                         Searched for: &ldquo;{searchTerm}&rdquo;
                       </Badge>
                     </div>
@@ -509,44 +601,45 @@ export default function AdminUserManagement() {
 
       {/* Beautiful Confirmation Dialog */}
       <Dialog open={confirmDialog.open} onOpenChange={(open) => !open && setConfirmDialog({ open: false, user: null, newRole: null })}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className={`rounded-full p-3 ${confirmDialog.newRole === 'admin'
+        <DialogContent className="w-[95vw] max-w-md mx-auto sm:w-full rounded-xl">
+          <DialogHeader className="text-center space-y-3 sm:space-y-4">
+            <div className="flex justify-center mb-3 sm:mb-4">
+              <div className={`rounded-full p-2 sm:p-3 ${confirmDialog.newRole === 'admin'
                 ? 'bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20'
                 : 'bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800'
               }`}>
                 {confirmDialog.newRole === 'admin' ? (
-                  <Crown className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 dark:text-purple-400" />
                 ) : (
-                  <User className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+                  <User className="h-6 w-6 sm:h-8 sm:w-8 text-gray-600 dark:text-gray-400" />
                 )}
               </div>
             </div>
-            <DialogTitle className={`text-xl font-semibold ${confirmDialog.newRole === 'admin'
+            <DialogTitle className={`text-lg sm:text-xl font-semibold ${confirmDialog.newRole === 'admin'
               ? 'text-purple-600 dark:text-purple-400'
               : 'text-gray-600 dark:text-gray-400'
             }`}>
               {confirmDialog.newRole === 'admin' ? 'Promote to Admin' : 'Demote to User'}
             </DialogTitle>
-            <DialogDescription className="text-center space-y-4">
-              <div className="bg-muted/50 rounded-lg p-4">
-                <div className="flex items-center justify-center space-x-3 mb-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+            <DialogDescription className="text-center space-y-3 sm:space-y-4">
+              <div className="bg-muted/50 rounded-2xl p-3 sm:p-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
+                  <Avatar className="h-8 w-8 sm:h-10 sm:w-10 rounded-2xl">
+                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs sm:text-sm rounded-2xl">
                       {confirmDialog.user?.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="text-left">
-                    <p className="font-semibold text-gray-900 dark:text-gray-100">
+                  <div className="text-center sm:text-left">
+                    <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                       {confirmDialog.user?.codeforcesHandle || 'Unknown User'}
                     </p>
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Badge variant="outline" className="text-xs">
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground mt-1">
+                      <Badge variant="outline" className="text-xs rounded-2xl">
                         Current: {confirmDialog.user?.role}
                       </Badge>
-                      <span>→</span>
-                      <Badge variant="outline" className="text-xs">
+                      <span className="hidden sm:inline">→</span>
+                      <span className="sm:hidden">↓</span>
+                      <Badge variant="outline" className="text-xs rounded-2xl">
                         New: {confirmDialog.newRole}
                       </Badge>
                     </div>
@@ -554,14 +647,14 @@ export default function AdminUserManagement() {
                 </div>
               </div>
 
-              <div className={`flex items-center justify-center gap-2 p-3 rounded-lg ${confirmDialog.newRole === 'admin'
+              <div className={`flex flex-col sm:flex-row items-center justify-center gap-2 p-3 rounded-2xl ${confirmDialog.newRole === 'admin'
                 ? 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20'
                 : 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20'
               }`}>
-                <span className="text-xl">
+                <span className="text-lg sm:text-xl">
                   {confirmDialog.newRole === 'admin' ? '👑' : '⚠️'}
                 </span>
-                <span className="text-sm font-medium">
+                <span className="text-xs sm:text-sm font-medium text-center">
                   {confirmDialog.newRole === 'admin'
                     ? 'This user will gain administrative privileges and access to all admin features.'
                     : 'This user will lose administrative privileges and be restricted to regular user features.'
@@ -569,41 +662,45 @@ export default function AdminUserManagement() {
                 </span>
               </div>
 
-              <p className="text-base font-medium">
+              <p className="text-sm sm:text-base font-medium">
                 Are you sure you want to {confirmDialog.newRole === 'admin' ? 'promote' : 'demote'} this user?
               </p>
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex gap-3 sm:gap-3 sm:justify-center">
+          <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-3 sm:justify-center pt-4">
             <Button
               variant="outline"
               onClick={() => setConfirmDialog({ open: false, user: null, newRole: null })}
               disabled={updating !== null}
-              className="flex-1 sm:flex-none"
+              className="w-full sm:w-auto order-2 sm:order-1 rounded-xl"
             >
               Cancel
             </Button>
             <Button
               onClick={handleConfirmRoleChange}
               disabled={updating !== null}
-              className={`flex-1 sm:flex-none ${confirmDialog.newRole === 'admin'
+              className={`w-full sm:w-auto order-1 sm:order-2 rounded-xl ${confirmDialog.newRole === 'admin'
                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
                 : 'bg-gradient-to-r from-gray-600 to-slate-600 hover:from-gray-700 hover:to-slate-700'
               }`}
             >
               {updating !== null ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {confirmDialog.newRole === 'admin' ? 'Promoting...' : 'Demoting...'}
+                  <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                  <span className="text-sm sm:text-base">
+                    {confirmDialog.newRole === 'admin' ? 'Promoting...' : 'Demoting...'}
+                  </span>
                 </>
               ) : (
                 <>
                   {confirmDialog.newRole === 'admin' ? (
-                    <Crown className="mr-2 h-4 w-4" />
+                    <Crown className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   ) : (
-                    <User className="mr-2 h-4 w-4" />
+                    <User className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   )}
-                  {confirmDialog.newRole === 'admin' ? 'Promote User' : 'Demote User'}
+                  <span className="text-sm sm:text-base">
+                    {confirmDialog.newRole === 'admin' ? 'Promote User' : 'Demote User'}
+                  </span>
                 </>
               )}
             </Button>

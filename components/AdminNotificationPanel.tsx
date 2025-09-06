@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit, Trash2, Eye, EyeOff, RefreshCw } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, EyeOff, RefreshCw, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -231,120 +231,153 @@ export default function AdminNotificationPanel() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Notification Management</h1>
-          <p className="text-muted-foreground">Create and manage system notifications</p>
+    <div className="space-y-6 sm:space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Notification Management
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Create and manage system notifications
+          </p>
         </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} >
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
               <Plus className="h-4 w-4 mr-2" />
-              Create Notification
+              <span className="hidden sm:inline">Create Notification</span>
+              <span className="sm:hidden">Create</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[525px]">
+          <DialogContent className="w-[95vw] max-w-[600px] mx-auto sm:w-full max-h-[95vh] overflow-y-auto rounded-xl">
             <form onSubmit={handleSubmit}>
-              <DialogHeader>
-                <DialogTitle>Create New Notification</DialogTitle>
-                <DialogDescription>
-                  Create a new system notification for users
+              <DialogHeader className="space-y-2 sm:space-y-3 pb-4">
+                <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-bold flex items-center gap-2">
+                  <div className="p-1 sm:p-1.5 bg-primary/10 rounded-lg">
+                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                  </div>
+                  <span className="text-base sm:text-xl lg:text-2xl">Create New Notification</span>
+                </DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm lg:text-base text-muted-foreground">
+                  Create a new system notification that will be visible to your selected audience.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
+              <div className="grid gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4 lg:py-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="title" className="text-xs sm:text-sm font-medium">Title</Label>
                   <Input
                     id="title"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Notification title"
+                    placeholder="Enter notification title..."
+                    className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base"
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="message" className="text-xs sm:text-sm font-medium">Message</Label>
                   <Textarea
                     id="message"
                     value={formData.message}
                     onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                    placeholder="Notification message"
+                    placeholder="Enter detailed notification message..."
                     rows={3}
+                    className="resize-none text-sm sm:text-base min-h-[60px] sm:min-h-[80px]"
                     required
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="type">Type</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="type" className="text-xs sm:text-sm font-medium">Type</Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value: "announcement" | "new_feature" | "maintenance" | "update" | "alert") =>
                         setFormData(prev => ({ ...prev, type: value }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="announcement">📢 Announcement</SelectItem>
-                        <SelectItem value="new_feature">✨ New Feature</SelectItem>
-                        <SelectItem value="maintenance">🔧 Maintenance</SelectItem>
-                        <SelectItem value="update">🔄 Update</SelectItem>
-                        <SelectItem value="alert">🚨 Alert</SelectItem>
+                        <SelectItem value="announcement" className="text-sm">📢 Announcement</SelectItem>
+                        <SelectItem value="new_feature" className="text-sm">✨ New Feature</SelectItem>
+                        <SelectItem value="maintenance" className="text-sm">🔧 Maintenance</SelectItem>
+                        <SelectItem value="update" className="text-sm">🔄 Update</SelectItem>
+                        <SelectItem value="alert" className="text-sm">🚨 Alert</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="priority">Priority</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="priority" className="text-xs sm:text-sm font-medium">Priority</Label>
                     <Select
                       value={formData.priority}
                       onValueChange={(value: "low" | "medium" | "high") =>
                         setFormData(prev => ({ ...prev, priority: value }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="low" className="text-sm">🟢 Low</SelectItem>
+                        <SelectItem value="medium" className="text-sm">🟡 Medium</SelectItem>
+                        <SelectItem value="high" className="text-sm">🔴 High</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="targetAudience">Target Audience</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="targetAudience" className="text-xs sm:text-sm font-medium">Target Audience</Label>
                   <Select
                     value={formData.targetAudience}
                     onValueChange={(value: "all" | "admins" | "users") =>
                       setFormData(prev => ({ ...prev, targetAudience: value }))
                     }
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Users</SelectItem>
-                      <SelectItem value="users">Users Only</SelectItem>
-                      <SelectItem value="admins">Admins Only</SelectItem>
+                      <SelectItem value="all" className="text-sm">👥 All Users</SelectItem>
+                      <SelectItem value="users" className="text-sm">👤 Users Only</SelectItem>
+                      <SelectItem value="admins" className="text-sm">👑 Admins Only</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="expiresAt">Expires At (Optional)</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="expiresAt" className="text-xs sm:text-sm font-medium">Expires At (Optional)</Label>
                   <Input
                     id="expiresAt"
                     type="date"
                     value={formData.expiresAt}
                     onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
+                    className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base"
                   />
                 </div>
               </div>
-              <DialogFooter>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Creating..." : "Create Notification"}
+              <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsCreateDialogOpen(false)}
+                  className="w-full sm:w-auto order-2 sm:order-1 text-sm sm:text-base h-9 sm:h-10"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full sm:w-auto order-1 sm:order-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-sm sm:text-base h-9 sm:h-10"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      <span>Creating...</span>
+                    </div>
+                  ) : (
+                    <span>Create Notification</span>
+                  )}
                 </Button>
               </DialogFooter>
             </form>
@@ -352,86 +385,172 @@ export default function AdminNotificationPanel() {
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Notifications</CardTitle>
-          <CardDescription>
-            Manage all system notifications
+      {/* Notifications Table/Cards */}
+      <Card className="border-border/50 shadow-lg bg-card/50 backdrop-blur-sm">
+        <CardHeader className="space-y-1 pb-4">
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
+            <Bell className="h-5 w-5 text-primary" />
+            All Notifications
+          </CardTitle>
+          <CardDescription className="text-sm sm:text-base">
+            Manage all system notifications and their visibility
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Audience</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {notifications.map((notification: NotificationData) => (
-                <TableRow key={notification._id}>
-                  <TableCell className="font-medium">{notification.title}</TableCell>
-                  <TableCell>
-                    <Badge className={getTypeColor(notification.type)} variant="secondary">
-                      {notification.type}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={getPriorityColor(notification.priority)} variant="secondary">
-                      {notification.priority}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{notification.targetAudience}</TableCell>
-                  <TableCell>
-                    <Badge variant={notification.isActive ? "default" : "secondary"}>
-                      {notification.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(notification.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
-                        className={notification.isActive ? "text-green-600 hover:text-green-700" : "text-gray-500 hover:text-gray-700"}
-                        title={`${notification.isActive ? "Deactivate" : "Activate"} "${notification.title}"`}
-                      >
-                        {notification.isActive ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(notification)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(notification._id, notification.title)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        title={`Delete "${notification.title}"`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+        <CardContent className="p-0 sm:p-6">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border/50 bg-muted/30">
+                    <TableHead className="font-semibold text-foreground">Title</TableHead>
+                    <TableHead className="font-semibold text-foreground">Type</TableHead>
+                    <TableHead className="font-semibold text-foreground">Priority</TableHead>
+                    <TableHead className="font-semibold text-foreground">Audience</TableHead>
+                    <TableHead className="font-semibold text-foreground">Status</TableHead>
+                    <TableHead className="font-semibold text-foreground">Created</TableHead>
+                    <TableHead className="font-semibold text-foreground text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {notifications.map((notification: NotificationData) => (
+                    <TableRow key={notification._id} className="border-border/50 hover:bg-muted/20 transition-colors">
+                      <TableCell className="font-medium max-w-xs">
+                        <div className="truncate" title={notification.title}>
+                          {notification.title}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`${getTypeColor(notification.type)} font-medium`} variant="secondary">
+                          {notification.type.replace('_', ' ')}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`${getPriorityColor(notification.priority)} font-medium`} variant="secondary">
+                          {notification.priority}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="capitalize">{notification.targetAudience}</TableCell>
+                      <TableCell>
+                        <Badge variant={notification.isActive ? "default" : "secondary"} className="font-medium">
+                          {notification.isActive ? "🟢 Active" : "🔴 Inactive"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(notification.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
+                            className={`${notification.isActive ? "text-orange-600 hover:text-orange-700 hover:bg-orange-50" : "text-green-600 hover:text-green-700 hover:bg-green-50"} transition-colors`}
+                            title={`${notification.isActive ? "Deactivate" : "Activate"} "${notification.title}"`}
+                          >
+                            {notification.isActive ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEdit(notification)}
+                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(notification._id, notification.title)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+                            title={`Delete "${notification.title}"`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+
+          {/* Mobile/Tablet Card View */}
+          <div className="lg:hidden space-y-4 p-4">
+            {notifications.map((notification: NotificationData) => (
+              <Card key={notification._id} className="border-border/50 hover:shadow-md transition-all duration-300 hover:scale-[1.01] bg-gradient-to-r from-card to-muted/10">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-4">
+                    {/* Header */}
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground text-sm sm:text-base truncate" title={notification.title}>
+                          {notification.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                          Created: {new Date(notification.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
+                          className={`${notification.isActive ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"} transition-colors p-2`}
+                        >
+                          {notification.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(notification)}
+                          className="text-blue-600 hover:bg-blue-50 transition-colors p-2"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(notification._id, notification.title)}
+                          className="text-red-600 hover:bg-red-50 transition-colors p-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+
+                    {/* Badges */}
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className={`${getTypeColor(notification.type)} text-xs`} variant="secondary">
+                        {notification.type.replace('_', ' ')}
+                      </Badge>
+                      <Badge className={`${getPriorityColor(notification.priority)} text-xs`} variant="secondary">
+                        {notification.priority}
+                      </Badge>
+                      <Badge variant={notification.isActive ? "default" : "secondary"} className="text-xs">
+                        {notification.isActive ? "🟢 Active" : "🔴 Inactive"}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs capitalize">
+                        👥 {notification.targetAudience}
+                      </Badge>
+                    </div>
+
+                    {/* Message Preview */}
+                    <div className="pt-2 border-t border-border/50">
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                        {notification.message}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </CardContent>
       </Card>
 

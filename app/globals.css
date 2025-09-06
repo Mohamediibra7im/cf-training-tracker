@@ -349,6 +349,24 @@ body {
   }
 }
 
+/* Toast notification animations */
+@keyframes progress-shrink {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-progress-shrink {
+  animation: progress-shrink linear forwards;
+}
+
 .loading-shimmer {
   position: relative;
   overflow: hidden;

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, AlertCircle, Megaphone, Sparkles, Settings, RefreshCw, Check, X } from "lucide-react";
+import Link from "next/link";
+import { Bell, AlertCircle, Megaphone, Sparkles, Settings, RefreshCw, Check, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useNotifications, useNotificationCount, markNotificationAsRead, deleteNotification } from "@/hooks/useNotifications";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 interface NotificationItemProps {
   notification: {
@@ -138,7 +142,14 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }: Notification
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>
+        <div className="text-sm text-muted-foreground mb-2 prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:my-1 prose-ul:my-1 prose-ol:my-1">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+          >
+            {notification.message}
+          </ReactMarkdown>
+        </div>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>By {notification.createdBy.codeforcesHandle}</span>
           <span>{new Date(notification.createdAt).toLocaleDateString()}</span>
@@ -185,32 +196,53 @@ export default function NotificationCenter() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-[400px] sm:w-[540px]">
-        <SheetHeader>
+      <SheetContent className="w-[90vw] max-w-[400px] sm:max-w-[540px] flex flex-col h-full p-6">
+        <SheetHeader className="flex-shrink-0 pb-4">
           <SheetTitle>Notifications</SheetTitle>
           <SheetDescription>
             Stay updated with the latest announcements and updates.
           </SheetDescription>
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-120px)] mt-6">
-          {notifications.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">
-              <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No notifications yet</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {notifications.map((notification: NotificationItemProps["notification"]) => (
-                <NotificationItem
-                  key={notification._id}
-                  notification={notification}
-                  onMarkAsRead={handleMarkAsRead}
-                  onDelete={handleDelete}
-                />
-              ))}
+
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+              {notifications.length === 0 ? (
+                <div className="text-center text-muted-foreground py-8">
+                  <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No notifications yet</p>
+                </div>
+              ) : (
+                <div className="space-y-4 pr-4 pb-4">
+                  {notifications.slice(0, 5).map((notification: NotificationItemProps["notification"]) => (
+                    <NotificationItem
+                      key={notification._id}
+                      notification={notification}
+                      onMarkAsRead={handleMarkAsRead}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                  {notifications.length > 5 && (
+                    <div className="text-center text-sm text-muted-foreground">
+                      And {notifications.length - 5} more...
+                    </div>
+                  )}
+                </div>
+              )}
+            </ScrollArea>
+          </div>
+
+          {notifications.length > 0 && (
+            <div className="flex-shrink-0 pt-4 border-t bg-background">
+              <Link href="/notifications" onClick={() => setIsOpen(false)} className="block w-full">
+                <Button variant="outline" className="w-full text-sm h-9" size="sm">
+                  <ExternalLink className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="truncate">View All Notifications</span>
+                </Button>
+              </Link>
             </div>
           )}
-        </ScrollArea>
+        </div>
       </SheetContent>
     </Sheet>
   );

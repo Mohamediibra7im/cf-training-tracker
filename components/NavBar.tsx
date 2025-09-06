@@ -23,6 +23,7 @@ const links = [
   { href: "/training", label: "Training" },
   { href: "/statistics", label: "Statistics" },
   { href: "/upsolve", label: "Upsolve" },
+  { href: "/notifications", label: "Notifications" },
   { href: "/help", label: "Help" },
 ];
 

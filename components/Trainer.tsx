@@ -14,14 +14,12 @@ const ProblemRow = ({
   index,
   isTraining,
   startTime,
-  customRatings,
   submissionStatus,
 }: {
   problem: TrainingProblem;
   index: number;
   isTraining: boolean;
   startTime: number | null;
-  customRatings: { P1: number; P2: number; P3: number; P4: number };
   submissionStatus?: SubmissionStatus;
 }) => {
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -38,7 +36,6 @@ const ProblemRow = ({
 
   const isPreContestPeriod = isTraining && startTime && currentTime < startTime;
   const problemLabels = ["A", "B", "C", "D"];
-  const ratingKeys = ["P1", "P2", "P3", "P4"] as const;
 
   const getSolvedStatus = () => {
     if (!isTraining) return "";
@@ -82,8 +79,6 @@ const ProblemRow = ({
     }
     return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
   };
-
-  const problemRating = customRatings[ratingKeys[index]];
 
   // Get overlay class based on submission status
   const getOverlayClass = () => {
@@ -133,11 +128,6 @@ const ProblemRow = ({
                 {problem.contestId}-{problem.index}
               </div>
               <div className="flex items-center gap-2">
-                {!isTraining && (
-                  <div className="px-2 py-1 bg-muted rounded text-xs font-medium text-muted-foreground">
-                    {problemRating}
-                  </div>
-                )}
                 {isTraining && (
                   <div className="text-sm font-medium">
                     {getSolvedStatus()}
@@ -177,13 +167,6 @@ const ProblemRow = ({
             </div>
           </div>
           <div className="flex items-center gap-4 shrink-0">
-            {!isTraining && (
-              <div className="px-3 py-1 bg-muted rounded-full">
-                <span className="font-medium text-muted-foreground text-sm">
-                  {problemRating}
-                </span>
-              </div>
-            )}
             {isTraining && (
               <div className="text-lg font-medium min-w-[120px] text-right">
                 {getSolvedStatus()}
@@ -370,7 +353,6 @@ const Trainer = ({
                     index={index}
                     isTraining={isTraining}
                     startTime={training?.startTime ?? null}
-                    customRatings={customRatings}
                     submissionStatus={submissionStatus}
                   />
                 );

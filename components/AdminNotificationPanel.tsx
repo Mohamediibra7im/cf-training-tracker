@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import MarkdownEditor from "@/components/ui/markdown-editor";
 import {
   Select,
   SelectContent,
@@ -34,6 +34,9 @@ import {
 } from "@/components/ui/table";
 import { useAdminNotifications, createNotification, updateNotification, deleteNotification } from "@/hooks/useAdminNotifications";
 import { useToast } from "@/components/Toast";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 interface NotificationData {
   _id: string;
@@ -276,14 +279,12 @@ export default function AdminNotificationPanel() {
                   />
                 </div>
                 <div className="space-y-1.5 sm:space-y-2">
-                  <Label htmlFor="message" className="text-xs sm:text-sm font-medium">Message</Label>
-                  <Textarea
-                    id="message"
+                  <MarkdownEditor
                     value={formData.message}
-                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                    placeholder="Enter detailed notification message..."
-                    rows={3}
-                    className="resize-none text-sm sm:text-base min-h-[60px] sm:min-h-[80px]"
+                    onChange={(value) => setFormData(prev => ({ ...prev, message: value }))}
+                    label="Message"
+                    placeholder="Enter detailed notification message with Markdown support..."
+                    rows={4}
                     required
                   />
                 </div>
@@ -542,9 +543,14 @@ export default function AdminNotificationPanel() {
 
                     {/* Message Preview */}
                     <div className="pt-2 border-t border-border/50">
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                        {notification.message}
-                      </p>
+                      <div className="text-xs sm:text-sm text-muted-foreground line-clamp-3 prose prose-xs max-w-none dark:prose-invert prose-p:m-0 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                        >
+                          {notification.message}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -576,13 +582,12 @@ export default function AdminNotificationPanel() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-message">Message</Label>
-                <Textarea
-                  id="edit-message"
+                <MarkdownEditor
                   value={formData.message}
-                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                  placeholder="Notification message"
-                  rows={3}
+                  onChange={(value) => setFormData(prev => ({ ...prev, message: value }))}
+                  label="Message"
+                  placeholder="Notification message with Markdown support..."
+                  rows={4}
                   required
                 />
               </div>

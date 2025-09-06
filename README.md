@@ -11,7 +11,7 @@
 
 ## 📖 Overview
 
-Training Tracker is a comprehensive web application designed to help competitive programmers improve their skills through structured practice sessions. The app integrates with Codeforces API to provide personalized problem recommendations, track performance metrics, and visualize progress over time.
+CF-Training Tracker is a comprehensive web application designed to help competitive programmers improve their skills through structured practice sessions. The app integrates with Codeforces API to provide personalized problem recommendations, track performance metrics, and visualize progress over time.
 
 ### 🎯 Key Features
 
@@ -200,3 +200,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <p>Made with ❤️ for the competitive programming community</p>
   <p>⭐ Star this repository if you find it helpful!</p>
 </div>
+

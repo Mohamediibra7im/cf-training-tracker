@@ -196,14 +196,6 @@ export default function AdminUserManagement() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -309,125 +301,153 @@ export default function AdminUserManagement() {
             Manage roles and permissions for all platform users
           </p>
         </CardHeader>
-        <CardContent className="p-0 sm:p-6">
+        <CardContent className="p-0">
           {/* Desktop Table View */}
           <div className="hidden lg:block">
-            <div className="overflow-x-auto">
+            <div className="overflow-hidden rounded-2xl border border-border/50 shadow-sm">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-border/50 bg-muted/30">
-                    <TableHead className="font-semibold text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <User className="h-4 w-4" />
-                        <span>Handle</span>
+                  <TableRow className="bg-gradient-to-r from-muted/40 via-muted/30 to-muted/40 border-b border-border/30 hover:bg-muted/50 transition-colors">
+                    <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-1.5 rounded-xl bg-primary/10">
+                          <User className="h-4 w-4 text-primary" />
+                        </div>
+                        <span>User Details</span>
                       </div>
                     </TableHead>
-                    <TableHead className="font-semibold text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <Crown className="h-4 w-4" />
+                    <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-1.5 rounded-xl bg-purple-500/10">
+                          <Crown className="h-4 w-4 text-purple-600" />
+                        </div>
                         <span>Role</span>
                       </div>
                     </TableHead>
-                    <TableHead className="font-semibold text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <Star className="h-4 w-4" />
-                        <span>Rating</span>
+                    <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-1.5 rounded-xl bg-yellow-500/10">
+                          <Star className="h-4 w-4 text-yellow-600" />
+                        </div>
+                        <span>Performance</span>
                       </div>
                     </TableHead>
-                    <TableHead className="font-semibold text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <Shield className="h-4 w-4" />
-                        <span>Rank</span>
+                    <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm text-center">
+                      <div className="flex items-center justify-center space-x-3">
+                        <div className="p-1.5 rounded-xl bg-blue-500/10">
+                          <Shield className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <span>Actions</span>
                       </div>
                     </TableHead>
-                    <TableHead className="font-semibold text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>Joined</span>
-                      </div>
-                    </TableHead>
-                    <TableHead className="font-semibold text-foreground text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
-                  {filteredUsers.map((user) => (
-                    <TableRow key={user._id} className="border-border/50 hover:bg-muted/20 transition-colors">
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="h-8 w-8 rounded-2xl">
-                            <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs rounded-2xl">
-                              {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
+                <TableBody className="divide-y divide-border/30">
+                  {filteredUsers.map((user, index) => (
+                    <TableRow
+                      key={user._id}
+                      className={`group hover:bg-gradient-to-r hover:from-muted/30 hover:via-muted/20 hover:to-muted/30 transition-all duration-300 border-border/20 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/10'
+                      }`}
+                    >
+                      <TableCell className="px-6 py-5">
+                        <div className="flex items-center space-x-4">
+                          <div className="relative">
+                            <Avatar className="h-12 w-12 rounded-2xl ring-2 ring-primary/10 transition-all duration-300 group-hover:ring-primary/20">
+                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-bold rounded-2xl">
+                                {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background flex items-center justify-center">
+                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
                             {user.codeforcesHandle ? (
-                              <a
-                                href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors"
-                              >
-                                <span>{user.codeforcesHandle}</span>
-                                <ExternalLink className="h-3 w-3" />
-                              </a>
+                              <div className="space-y-1">
+                                <a
+                                  href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors font-semibold text-base group-hover:text-blue-700"
+                                >
+                                  <span className="truncate">{user.codeforcesHandle}</span>
+                                  <ExternalLink className="h-4 w-4 flex-shrink-0 opacity-70" />
+                                </a>
+                                <p className="text-xs text-muted-foreground font-medium">
+                                  ID: {user._id.slice(-8)}
+                                </p>
+                              </div>
                             ) : (
-                              <span className="text-muted-foreground">No handle</span>
+                              <div className="space-y-1">
+                                <span className="text-muted-foreground font-medium">No handle</span>
+                                <p className="text-xs text-muted-foreground">
+                                  ID: {user._id.slice(-8)}
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={user.role === 'admin' ? 'default' : 'secondary'}
-                          className={user.role === 'admin'
-                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-2xl'
-                            : 'bg-muted text-muted-foreground font-medium rounded-2xl'
-                          }
-                        >
-                          {user.role === 'admin' ? (
-                            <Crown className="h-3 w-3 mr-1" />
-                          ) : (
-                            <User className="h-3 w-3 mr-1" />
-                          )}
-                          {user.role}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Star className="h-3 w-3 text-yellow-500" />
-                          <span className="font-medium">{user.rating || 'Unrated'}</span>
+                      <TableCell className="px-6 py-5">
+                        <div className="flex items-center">
+                          <Badge
+                            variant={user.role === 'admin' ? 'default' : 'secondary'}
+                            className={`${user.role === 'admin'
+                              ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/25'
+                              : 'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 dark:from-gray-700 dark:to-gray-600 dark:text-gray-200 shadow-lg shadow-gray-500/10'
+                            } font-bold px-4 py-2 rounded-2xl transition-all duration-300 group-hover:scale-105`}
+                          >
+                            {user.role === 'admin' ? (
+                              <Crown className="h-4 w-4 mr-2" />
+                            ) : (
+                              <User className="h-4 w-4 mr-2" />
+                            )}
+                            <span className="uppercase tracking-wide text-sm">
+                              {user.role}
+                            </span>
+                          </Badge>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={`${getRankColor(user.rating)} border-current font-medium rounded-2xl`}>
-                          {getRankFromRating(user.rating)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          <span>{formatDate(user.createdAt)}</span>
+                      <TableCell className="px-6 py-5">
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <div className="p-1 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl">
+                              <Star className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                            </div>
+                            <span className="font-bold text-lg text-foreground">
+                              {user.rating || 'Unrated'}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Badge
+                              variant="outline"
+                              className={`${getRankColor(user.rating)} border-current font-bold px-3 py-1 rounded-2xl bg-background/50 backdrop-blur-sm text-sm`}
+                            >
+                              <Shield className="h-3 w-3 mr-1.5" />
+                              {getRankFromRating(user.rating)}
+                            </Badge>
+                          </div>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex justify-end">
+                      <TableCell className="px-6 py-5">
+                        <div className="flex justify-center">
                           {user.role === 'user' ? (
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => updateUserRole(user._id, 'admin')}
                               disabled={updating === user._id}
-                              className="bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-xl"
+                              className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
                             >
                               {updating === user._id ? (
                                 <>
-                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                                  Updating...
+                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  <span>Promoting...</span>
                                 </>
                               ) : (
                                 <>
-                                  <Crown className="h-3 w-3 mr-1" />
-                                  Make Admin
+                                  <Crown className="h-4 w-4 mr-2" />
+                                  <span>Promote</span>
                                 </>
                               )}
                             </Button>
@@ -437,17 +457,17 @@ export default function AdminUserManagement() {
                               variant="outline"
                               onClick={() => updateUserRole(user._id, 'user')}
                               disabled={updating === user._id}
-                              className="bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-xl"
+                              className="bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
                             >
                               {updating === user._id ? (
                                 <>
-                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                                  Updating...
+                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  <span>Demoting...</span>
                                 </>
                               ) : (
                                 <>
-                                  <User className="h-3 w-3 mr-1" />
-                                  Make User
+                                  <User className="h-4 w-4 mr-2" />
+                                  <span>Demote</span>
                                 </>
                               )}
                             </Button>
@@ -489,9 +509,6 @@ export default function AdminUserManagement() {
                           ) : (
                             <span className="text-muted-foreground text-sm sm:text-base">No handle</span>
                           )}
-                          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                            Joined: {formatDate(user.createdAt)}
-                          </p>
                         </div>
                       </div>
 

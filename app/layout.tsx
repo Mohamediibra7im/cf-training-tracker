@@ -11,7 +11,7 @@ import { Analytics } from "@vercel/analytics/next";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Training-Tracker - Codeforces Virtual Contest Practice Platform",
+  title: "CF-Training Tracker - Codeforces Virtual Contest Practice Platform",
   description:
     "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills. Create custom training sessions with problem ratings and tags.",
   icons: {
@@ -49,30 +49,30 @@ export const metadata: Metadata = {
     "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces",
     "CF-Training-Tracker-Codeforces-Virtual-Contest-Practice-Platform-Codeforces-Virtual-Contest",
   ],
-  authors: [{ name: "Training-Tracker Team" }],
-  creator: "Training-Tracker",
-  publisher: "Training-Tracker",
+  authors: [{ name: "Mohammed Ibrahim" }],
+  creator: "CF-Training Tracker",
+  publisher: "CF-Training Tracker",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://cp-training-tracker.vercel.app"),
+  metadataBase: new URL("https://cf-training-tracker.vercel.app"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "CF - Training Tracker - Codeforces Virtual Contest Practice Platform",
+    title: "CF-Training Tracker - Codeforces Virtual Contest Practice Platform",
     description:
       "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills.",
-    url: "https://cp-training-tracker.vercel.app",
-    siteName: "Training-Tracker",
+    url: "https://cf-training-tracker.vercel.app",
+    siteName: "CF-Training Tracker",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://d3moma7wl9.ufs.sh/f/xRZhVxWEJbFMus29DenxT5WwkRzQNM4V8v2dhSnslabDi1c0",
         width: 1200,
         height: 630,
-        alt: "CF - Training-Tracker - Codeforces Practice Platform",
+        alt: "CF-Training Tracker - Codeforces Practice Platform",
       },
     ],
     locale: "en_US",
@@ -80,10 +80,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CF-Training-Tracker - Codeforces Virtual Contest Practice Platform",
+    title: "CF-Training Tracker - Codeforces Virtual Contest Practice Platform",
     description:
       "Practice Codeforces problems with virtual contests, track your progress, and improve your competitive programming skills.",
-    images: ["/og-image.png"],
+    images: ["https://d3moma7wl9.ufs.sh/f/xRZhVxWEJbFMus29DenxT5WwkRzQNM4V8v2dhSnslabDi1c0"],
   },
   robots: {
     index: true,
@@ -96,9 +96,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code", // Replace with actual verification code
-  },
 };
 
 export default function RootLayout({
@@ -109,10 +106,10 @@ export default function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "CF-Training-Tracker",
+    name: "CF-Training Tracker",
     description:
       "A Codeforces virtual contest practice platform for competitive programming",
-    url: "https://cp-training-tracker.vercel.app",
+    url: "https://cf-training-tracker.vercel.app",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web Browser",
     offers: {
@@ -121,7 +118,7 @@ export default function RootLayout({
       priceCurrency: "USD",
     },
     author: {
-      "@type": "Organization",
+      "@type": "Person",
       name: "Mohammed Ibrahim",
     },
     keywords:

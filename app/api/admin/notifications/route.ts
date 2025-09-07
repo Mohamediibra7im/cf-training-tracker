@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       .populate("createdBy", "codeforcesHandle")
       .sort({ createdAt: -1 });
 
-    return NextResponse.json(notifications);
+    return NextResponse.json({ notifications });
   } catch (error) {
     console.error("Error fetching admin notifications:", error);
     return NextResponse.json(

@@ -28,7 +28,7 @@ const links = [
 ];
 
 const adminLinks = [
-  { href: "/admin/notifications", label: "Admin" },
+  { href: "/admin", label: "Admin" },
 ];
 
 const NavBar = () => {

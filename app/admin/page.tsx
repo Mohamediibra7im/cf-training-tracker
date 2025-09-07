@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import AdminNotificationPanel from "@/components/AdminNotificationPanel";
 import AdminUserManagement from "@/components/AdminUserManagement";
 import useUser from "@/hooks/useUser";
+import { useAdminStats } from "@/hooks/useAdminStats";
 import Loader from "@/components/Loader";
 import {
   Shield,
@@ -15,58 +16,19 @@ import {
   Bell,
   Settings,
   Crown,
-  Activity
+  Activity,
+  RefreshCw
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [activeTab, setActiveTab] = useState("notifications");
-  const [stats, setStats] = useState({
-    activeNotifications: 0,
-    totalUsers: 0,
-    loading: true
-  });
 
-  // Fetch admin statistics
-  const fetchStats = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      // Fetch notifications count
-      const notificationsResponse = await fetch('/api/admin/notifications', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      // Fetch users count
-      const usersResponse = await fetch('/api/admin/users', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (notificationsResponse.ok && usersResponse.ok) {
-        const notificationsData = await notificationsResponse.json();
-        const usersData = await usersResponse.json();
-
-        const activeNotifications = notificationsData.notifications?.filter((n: { isActive: boolean }) => n.isActive).length || 0;
-        const totalUsers = usersData.users?.length || 0;
-
-        setStats({
-          activeNotifications,
-          totalUsers,
-          loading: false
-        });
-      }
-    } catch (error) {
-      console.error('Failed to fetch admin stats:', error);
-      setStats(prev => ({ ...prev, loading: false }));
-    }
-  }, []);
-
-  const refreshStats = useCallback(() => {
-    fetchStats();
-  }, [fetchStats]);
+  // Use the optimized stats hook instead of manual fetching
+  const { stats, isLoading: statsLoading, mutate: refreshStats } = useAdminStats();
 
   useEffect(() => {
     if (!isLoading) {
@@ -81,10 +43,8 @@ export default function AdminPage() {
       }
 
       setIsAuthorized(true);
-      // Fetch stats once authorized
-      fetchStats();
     }
-  }, [user, isLoading, router, fetchStats]);
+  }, [user, isLoading, router]);
 
   // Refresh stats when tab changes
   useEffect(() => {
@@ -134,6 +94,16 @@ export default function AdminPage() {
                     <Crown className="h-3 w-3 mr-1" />
                     Administrator
                   </Badge>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => refreshStats()}
+                    disabled={statsLoading}
+                    className="flex items-center gap-2"
+                  >
+                    <RefreshCw className={`h-3 w-3 ${statsLoading ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </Button>
                   <div className="text-sm text-muted-foreground">
                     Welcome, <span className="font-medium text-foreground">{user?.codeforcesHandle}</span>
                   </div>
@@ -143,14 +113,14 @@ export default function AdminPage() {
           </div>
 
           {/* Stats Overview Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Card className="relative overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Active Notifications</p>
                     <p className="text-2xl sm:text-3xl font-bold text-foreground">
-                      {stats.loading ? (
+                      {statsLoading ? (
                         <span className="animate-pulse">—</span>
                       ) : (
                         stats.activeNotifications
@@ -168,7 +138,7 @@ export default function AdminPage() {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Total Users</p>
                     <p className="text-2xl sm:text-3xl font-bold text-foreground">
-                      {stats.loading ? (
+                      {statsLoading ? (
                         <span className="animate-pulse">—</span>
                       ) : (
                         stats.totalUsers
@@ -180,7 +150,25 @@ export default function AdminPage() {
               </CardContent>
             </Card>
 
-            <Card className="relative overflow-hidden bg-gradient-to-br from-green-500/5 to-green-500/10 border-green-500/20 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] sm:col-span-2 lg:col-span-1">
+            <Card className="relative overflow-hidden bg-gradient-to-br from-orange-500/5 to-orange-500/10 border-orange-500/20 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Admin Users</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-foreground">
+                      {statsLoading ? (
+                        <span className="animate-pulse">—</span>
+                      ) : (
+                        stats.adminUsers
+                      )}
+                    </p>
+                  </div>
+                  <Shield className="h-8 w-8 text-orange-500" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="relative overflow-hidden bg-gradient-to-br from-green-500/5 to-green-500/10 border-green-500/20 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -197,6 +185,23 @@ export default function AdminPage() {
           <div className="relative">
             <div className="absolute -inset-2 bg-gradient-to-r from-muted/50 via-transparent to-muted/50 rounded-2xl blur-xl opacity-30" />
             <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-4 sm:p-6 shadow-xl">
+              <div className="flex justify-between items-center mb-6 sm:mb-8">
+                <div className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl sm:text-2xl font-semibold">Management Console</h2>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => refreshStats()}
+                  disabled={statsLoading}
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${statsLoading ? 'animate-spin' : ''}`} />
+                  <span className="hidden sm:inline">Refresh Data</span>
+                </Button>
+              </div>
+
               <Tabs defaultValue="notifications" value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 h-12 sm:h-14 mb-6 sm:mb-8 bg-muted/50 p-1">
                   <TabsTrigger
@@ -218,14 +223,16 @@ export default function AdminPage() {
                 </TabsList>
 
                 <TabsContent value="notifications" className="mt-0 space-y-4">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Settings className="h-5 w-5 text-primary" />
-                      <h2 className="text-xl sm:text-2xl font-semibold">Notification Management</h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Settings className="h-5 w-5 text-primary" />
+                        <h2 className="text-xl sm:text-2xl font-semibold">Notification Management</h2>
+                      </div>
+                      <p className="text-sm sm:text-base text-muted-foreground">
+                        Create, edit, and manage system-wide notifications for users.
+                      </p>
                     </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">
-                      Create, edit, and manage system-wide notifications for users.
-                    </p>
                   </div>
                   <AdminNotificationPanel key="notifications" />
                 </TabsContent>

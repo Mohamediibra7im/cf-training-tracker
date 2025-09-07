@@ -22,8 +22,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Crown, Shield, User, Calendar, Star, ExternalLink, Loader2, Search } from 'lucide-react';
+import { Crown, Shield, User, Calendar, Star, ExternalLink, Loader2, Search, RefreshCw } from 'lucide-react';
 import { useToast } from '@/components/Toast';
+import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
 import getRankFromRating from '@/utils/getRankFromRating';
 
 const getRankColor = (rating: number): string => {
@@ -56,9 +57,7 @@ interface ConfirmationDialog {
 }
 
 export default function AdminUserManagement() {
-  const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [updating, setUpdating] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<ConfirmationDialog>({
@@ -68,68 +67,34 @@ export default function AdminUserManagement() {
   });
   const { toast } = useToast();
 
+  // Use the optimized hook instead of manual fetching
+  const { users, isLoading, isError, mutate } = useAdminUsers();
+
+  // Handle error state
   useEffect(() => {
-    const fetchUsersOnMount = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          return;
-        }
-
-        const response = await fetch('/api/admin/users', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUsers(data.users);
-        } else if (response.status === 403) {
-          toast({
-            title: "🚫 Access Denied",
-            description: "Admin access required to view user management.",
-            variant: "destructive",
-            durationMs: 4000
-          });
-        } else {
-          console.error('Failed to fetch users');
-          toast({
-            title: "❌ Failed to Load Users",
-            description: "Unable to fetch user data. Please try refreshing the page.",
-            variant: "destructive",
-            durationMs: 4000
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching users:', error);
-        toast({
-          title: "❌ Failed to Load Users",
-          description: "An unexpected error occurred while loading user data.",
-          variant: "destructive",
-          durationMs: 4000
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsersOnMount();
-  }, [toast]);
+    if (isError) {
+      toast({
+        title: "❌ Failed to Load Users",
+        description: "Unable to fetch user data. Please try refreshing the page.",
+        variant: "destructive",
+        durationMs: 4000
+      });
+    }
+  }, [isError, toast]);
 
   useEffect(() => {
     // Filter users based on search term
-    const filtered = users.filter(user => {
+    const filtered = users.filter((user: User) => {
       const handle = user.codeforcesHandle || '';
       return handle.toLowerCase().includes(searchTerm.toLowerCase());
     });
     setFilteredUsers(filtered);
   }, [users, searchTerm]);
 
-  const updateUserRole = async (userId: string, newRole: 'admin' | 'user') => {
+  const handleUserRoleUpdate = async (userId: string, newRole: 'admin' | 'user') => {
     if (updating) return;
 
-    const user = users.find(u => u._id === userId);
+    const user = users.find((u: User) => u._id === userId);
     if (!user) return;
 
     // Open confirmation dialog instead of using browser confirm
@@ -148,46 +113,26 @@ export default function AdminUserManagement() {
     setConfirmDialog({ open: false, user: null, newRole: null });
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/admin/users', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ userId: user._id, role: newRole }),
+      await updateUserRole(user._id, newRole);
+
+      // Refresh the data using SWR mutate
+      await mutate();
+
+      // Beautiful success toast
+      const isPromotion = newRole === 'admin';
+      toast({
+        title: isPromotion ? "🎉 User Promoted Successfully!" : "✅ User Role Updated!",
+        description: isPromotion
+          ? `${user.codeforcesHandle} is now an administrator with full access to admin features.`
+          : `${user.codeforcesHandle} has been demoted to a regular user account.`,
+        variant: "success",
+        durationMs: 5000
       });
-
-      if (response.ok) {
-        // Update the user in the local state
-        setUsers(prev => prev.map(u =>
-          u._id === user._id ? { ...u, role: newRole } : u
-        ));
-
-        // Beautiful success toast
-        const isPromotion = newRole === 'admin';
-        toast({
-          title: isPromotion ? "🎉 User Promoted Successfully!" : "✅ User Role Updated!",
-          description: isPromotion
-            ? `${user.codeforcesHandle} is now an administrator with full access to admin features.`
-            : `${user.codeforcesHandle} has been demoted to a regular user account.`,
-          variant: "success",
-          durationMs: 5000
-        });
-      } else {
-        const error = await response.json();
-        toast({
-          title: "❌ Role Update Failed",
-          description: error.error || 'Failed to update user role. Please try again.',
-          variant: "destructive",
-          durationMs: 4000
-        });
-      }
     } catch (error) {
       console.error('Error updating user role:', error);
       toast({
-        title: "🔧 Connection Error",
-        description: "Unable to connect to the server. Please check your connection and try again.",
+        title: "❌ Role Update Failed",
+        description: error instanceof Error ? error.message : 'Failed to update user role. Please try again.',
         variant: "destructive",
         durationMs: 4000
       });
@@ -196,7 +141,7 @@ export default function AdminUserManagement() {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-center min-h-64">
@@ -240,7 +185,7 @@ export default function AdminUserManagement() {
             </Badge>
             <Badge variant="outline" className="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 px-3 sm:px-4 py-2 rounded-2xl">
               <Crown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              <span className="font-semibold text-sm sm:text-base">{users.filter(u => u.role === 'admin').length}</span>
+              <span className="font-semibold text-sm sm:text-base">{users.filter((u: User) => u.role === 'admin').length}</span>
               <span className="ml-1 text-xs sm:text-sm">admins</span>
             </Badge>
           </div>
@@ -435,7 +380,7 @@ export default function AdminUserManagement() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateUserRole(user._id, 'admin')}
+                              onClick={() => handleUserRoleUpdate(user._id, 'admin')}
                               disabled={updating === user._id}
                               className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
                             >
@@ -455,7 +400,7 @@ export default function AdminUserManagement() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => updateUserRole(user._id, 'user')}
+                              onClick={() => handleUserRoleUpdate(user._id, 'user')}
                               disabled={updating === user._id}
                               className="bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
                             >
@@ -518,7 +463,7 @@ export default function AdminUserManagement() {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateUserRole(user._id, 'admin')}
+                            onClick={() => handleUserRoleUpdate(user._id, 'admin')}
                             disabled={updating === user._id}
                             className="bg-green-50 hover:bg-green-100 border-green-200 text-green-700 hover:text-green-800 transition-all text-xs sm:text-sm rounded-xl"
                           >
@@ -536,7 +481,7 @@ export default function AdminUserManagement() {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateUserRole(user._id, 'user')}
+                            onClick={() => handleUserRoleUpdate(user._id, 'user')}
                             disabled={updating === user._id}
                             className="bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all text-xs sm:text-sm rounded-xl"
                           >
@@ -588,7 +533,7 @@ export default function AdminUserManagement() {
           </div>
 
           {/* Empty State */}
-          {filteredUsers.length === 0 && !loading && (
+          {filteredUsers.length === 0 && !isLoading && (
             <div className="text-center py-12 sm:py-16 px-4">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-muted/20 to-muted/20 rounded-2xl opacity-50"></div>

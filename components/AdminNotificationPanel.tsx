@@ -235,328 +235,426 @@ export default function AdminNotificationPanel() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Notification Management
-          </h1>
-          <p className="text-sm sm:text-base text-muted-foreground">
-            Create and manage system notifications
-          </p>
-        </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} >
-          <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Create Notification</span>
-              <span className="sm:hidden">Create</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] max-w-[600px] mx-auto sm:w-full max-h-[95vh] overflow-y-auto rounded-xl">
-            <form onSubmit={handleSubmit}>
-              <DialogHeader className="space-y-2 sm:space-y-3 pb-4">
-                <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-bold flex items-center gap-2">
-                  <div className="p-1 sm:p-1.5 bg-primary/10 rounded-lg">
-                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                  </div>
-                  <span className="text-base sm:text-xl lg:text-2xl">Create New Notification</span>
-                </DialogTitle>
-                <DialogDescription className="text-xs sm:text-sm lg:text-base text-muted-foreground">
-                  Create a new system notification that will be visible to your selected audience.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4 lg:py-6">
-                <div className="space-y-1.5 sm:space-y-2">
-                  <Label htmlFor="title" className="text-xs sm:text-sm font-medium">Title</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Enter notification title..."
-                    className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5 sm:space-y-2">
-                  <MarkdownEditor
-                    value={formData.message}
-                    onChange={(value) => setFormData(prev => ({ ...prev, message: value }))}
-                    label="Message"
-                    placeholder="Enter detailed notification message with Markdown support..."
-                    rows={4}
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="space-y-1.5 sm:space-y-2">
-                    <Label htmlFor="type" className="text-xs sm:text-sm font-medium">Type</Label>
-                    <Select
-                      value={formData.type}
-                      onValueChange={(value: "announcement" | "new_feature" | "maintenance" | "update" | "alert") =>
-                        setFormData(prev => ({ ...prev, type: value }))
-                      }
-                    >
-                      <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="announcement" className="text-sm">📢 Announcement</SelectItem>
-                        <SelectItem value="new_feature" className="text-sm">✨ New Feature</SelectItem>
-                        <SelectItem value="maintenance" className="text-sm">🔧 Maintenance</SelectItem>
-                        <SelectItem value="update" className="text-sm">🔄 Update</SelectItem>
-                        <SelectItem value="alert" className="text-sm">🚨 Alert</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    <Label htmlFor="priority" className="text-xs sm:text-sm font-medium">Priority</Label>
-                    <Select
-                      value={formData.priority}
-                      onValueChange={(value: "low" | "medium" | "high") =>
-                        setFormData(prev => ({ ...prev, priority: value }))
-                      }
-                    >
-                      <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low" className="text-sm">🟢 Low</SelectItem>
-                        <SelectItem value="medium" className="text-sm">🟡 Medium</SelectItem>
-                        <SelectItem value="high" className="text-sm">🔴 High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="space-y-1.5 sm:space-y-2">
-                  <Label htmlFor="targetAudience" className="text-xs sm:text-sm font-medium">Target Audience</Label>
-                  <Select
-                    value={formData.targetAudience}
-                    onValueChange={(value: "all" | "admins" | "users") =>
-                      setFormData(prev => ({ ...prev, targetAudience: value }))
-                    }
-                  >
-                    <SelectTrigger className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all" className="text-sm">👥 All Users</SelectItem>
-                      <SelectItem value="users" className="text-sm">👤 Users Only</SelectItem>
-                      <SelectItem value="admins" className="text-sm">👑 Admins Only</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1.5 sm:space-y-2">
-                  <Label htmlFor="expiresAt" className="text-xs sm:text-sm font-medium">Expires At (Optional)</Label>
-                  <Input
-                    id="expiresAt"
-                    type="date"
-                    value={formData.expiresAt}
-                    onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
-                    className="h-9 sm:h-10 lg:h-11 text-sm sm:text-base"
-                  />
-                </div>
-              </div>
-              <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsCreateDialogOpen(false)}
-                  className="w-full sm:w-auto order-2 sm:order-1 text-sm sm:text-base h-9 sm:h-10"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full sm:w-auto order-1 sm:order-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-sm sm:text-base h-9 sm:h-10"
-                >
-                  {isLoading ? (
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
-                      <span>Creating...</span>
-                    </div>
-                  ) : (
-                    <span>Create Notification</span>
-                  )}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
       {/* Notifications Table/Cards */}
-      <Card className="border-border/50 shadow-lg bg-card/50 backdrop-blur-sm">
-        <CardHeader className="space-y-1 pb-4">
-          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <Bell className="h-5 w-5 text-primary" />
-            All Notifications
-          </CardTitle>
-          <CardDescription className="text-sm sm:text-base">
-            Manage all system notifications and their visibility
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0 sm:p-6">
-          {/* Desktop Table View */}
-          <div className="hidden lg:block">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-border/50 bg-muted/30">
-                    <TableHead className="font-semibold text-foreground">Title</TableHead>
-                    <TableHead className="font-semibold text-foreground">Type</TableHead>
-                    <TableHead className="font-semibold text-foreground">Priority</TableHead>
-                    <TableHead className="font-semibold text-foreground">Audience</TableHead>
-                    <TableHead className="font-semibold text-foreground">Status</TableHead>
-                    <TableHead className="font-semibold text-foreground">Created</TableHead>
-                    <TableHead className="font-semibold text-foreground text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {notifications.map((notification: NotificationData) => (
-                    <TableRow key={notification._id} className="border-border/50 hover:bg-muted/20 transition-colors">
-                      <TableCell className="font-medium max-w-xs">
-                        <div className="truncate" title={notification.title}>
-                          {notification.title}
+      <Card className="shadow-2xl bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-lg border border-border/20">
+        <CardHeader className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border/30 rounded-t-lg">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg">
+                  <Bell className="h-6 w-6 text-primary" />
+                </div>
+                All Notifications
+              </CardTitle>
+              <CardDescription className="text-sm sm:text-base text-muted-foreground/80">
+                Manage all system notifications and their visibility
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 text-primary font-medium px-3 py-1"
+                >
+                  {notifications.length} Total
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 text-green-700 dark:text-green-400 font-medium px-3 py-1"
+                >
+                  {notifications.filter((n: NotificationData) => n.isActive).length} Active
+                </Badge>
+              </div>
+              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Plus className="h-4 w-4 mr-2" />
+                    <span className="hidden sm:inline">Create Notification</span>
+                    <span className="sm:hidden">Create</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[525px]">
+                  <form onSubmit={handleSubmit}>
+                    <DialogHeader>
+                      <DialogTitle>Create New Notification</DialogTitle>
+                      <DialogDescription>
+                        Send a notification to users
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="create-title">Title</Label>
+                        <Input
+                          id="create-title"
+                          value={formData.title}
+                          onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                          placeholder="Notification title"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <MarkdownEditor
+                          value={formData.message}
+                          onChange={(value) => setFormData(prev => ({ ...prev, message: value }))}
+                          label="Message"
+                          placeholder="Notification message with Markdown support..."
+                          rows={4}
+                          required
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="create-type">Type</Label>
+                          <Select value={formData.type} onValueChange={(value: "announcement" | "new_feature" | "maintenance" | "update" | "alert") => setFormData(prev => ({ ...prev, type: value }))}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="announcement">📢 Announcement</SelectItem>
+                              <SelectItem value="new_feature">✨ New Feature</SelectItem>
+                              <SelectItem value="maintenance">🔧 Maintenance</SelectItem>
+                              <SelectItem value="update">🔄 Update</SelectItem>
+                              <SelectItem value="alert">🚨 Alert</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={`${getTypeColor(notification.type)} font-medium`} variant="secondary">
-                          {notification.type.replace('_', ' ')}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={`${getPriorityColor(notification.priority)} font-medium`} variant="secondary">
-                          {notification.priority}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="capitalize">{notification.targetAudience}</TableCell>
-                      <TableCell>
-                        <Badge variant={notification.isActive ? "default" : "secondary"} className="font-medium">
-                          {notification.isActive ? "🟢 Active" : "🔴 Inactive"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {new Date(notification.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
-                            className={`${notification.isActive ? "text-orange-600 hover:text-orange-700 hover:bg-orange-50" : "text-green-600 hover:text-green-700 hover:bg-green-50"} transition-colors`}
-                            title={`${notification.isActive ? "Deactivate" : "Activate"} "${notification.title}"`}
-                          >
-                            {notification.isActive ? (
-                              <EyeOff className="h-4 w-4" />
-                            ) : (
-                              <Eye className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(notification)}
-                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(notification._id, notification.title)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
-                            title={`Delete "${notification.title}"`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <div className="space-y-2">
+                          <Label htmlFor="create-priority">Priority</Label>
+                          <Select value={formData.priority} onValueChange={(value: "low" | "medium" | "high") => setFormData(prev => ({ ...prev, priority: value }))}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="low">Low</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="high">High</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="create-targetAudience">Target Audience</Label>
+                        <Select value={formData.targetAudience} onValueChange={(value: "all" | "admins" | "users") => setFormData(prev => ({ ...prev, targetAudience: value }))}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Users</SelectItem>
+                            <SelectItem value="users">Users Only</SelectItem>
+                            <SelectItem value="admins">Admins Only</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="create-expiresAt">Expires At (Optional)</Label>
+                        <Input
+                          id="create-expiresAt"
+                          type="date"
+                          value={formData.expiresAt}
+                          onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? "Creating..." : "Create Notification"}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
+        </CardHeader>
 
-          {/* Mobile/Tablet Card View */}
-          <div className="lg:hidden space-y-4 p-4">
-            {notifications.map((notification: NotificationData) => (
-              <Card key={notification._id} className="border-border/50 hover:shadow-md transition-all duration-300 hover:scale-[1.01] bg-gradient-to-r from-card to-muted/10">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="space-y-4">
-                    {/* Header */}
-                    <div className="flex justify-between items-start gap-3">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground text-sm sm:text-base truncate" title={notification.title}>
-                          {notification.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                          Created: {new Date(notification.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
-                          className={`${notification.isActive ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"} transition-colors p-2`}
+        <CardContent className="p-0">
+          {notifications.length === 0 ? (
+            // Empty State
+            <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-xl scale-150"></div>
+                <div className="relative p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full">
+                  <Bell className="h-12 w-12 text-primary/60" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-foreground/80 mb-3">No Notifications Yet</h3>
+              <p className="text-muted-foreground max-w-md leading-relaxed mb-6">
+                Create your first notification to start communicating with your users.
+                Notifications help keep everyone informed about important updates and announcements.
+              </p>
+              <Button
+                onClick={() => setIsCreateDialogOpen(true)}
+                className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create First Notification
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block">
+                <div className="overflow-hidden rounded-b-lg">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-none bg-gradient-to-r from-muted/40 via-muted/60 to-muted/40 hover:from-muted/50 hover:via-muted/70 hover:to-muted/50 transition-all duration-300">
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">
+                          <div className="flex items-center gap-2">
+                            <div className="w-1 h-4 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                            Title
+                          </div>
+                        </TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">Type</TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">Priority</TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">Audience</TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">Status</TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide">Created</TableHead>
+                        <TableHead className="font-bold text-foreground/90 py-4 px-6 text-sm tracking-wide text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {notifications.map((notification: NotificationData, index: number) => (
+                        <TableRow
+                          key={notification._id}
+                          className={`border-border/30 hover:bg-gradient-to-r hover:from-primary/5 hover:via-accent/5 hover:to-primary/5 transition-all duration-300 group ${index % 2 === 0 ? 'bg-background/50' : 'bg-muted/20'
+                          }`}
                         >
-                          {notification.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(notification)}
-                          className="text-blue-600 hover:bg-blue-50 transition-colors p-2"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDelete(notification._id, notification.title)}
-                          className="text-red-600 hover:bg-red-50 transition-colors p-2"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
+                          <TableCell className="font-semibold max-w-xs py-4 px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-2 h-2 bg-gradient-to-r from-primary to-accent rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                              <div className="truncate text-sm" title={notification.title}>
+                                {notification.title}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg">
+                                {notification.type === 'new_feature' ? '✨' :
+                                  notification.type === 'maintenance' ? '🔧' :
+                                    notification.type === 'update' ? '🔄' :
+                                      notification.type === 'alert' ? '🚨' : '📢'}
+                              </span>
+                              <Badge className={`${getTypeColor(notification.type)} font-medium px-3 py-1 text-xs rounded-full shadow-sm border-0`}>
+                                {notification.type.replace('_', ' ').toUpperCase()}
+                              </Badge>
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <Badge className={`${getPriorityColor(notification.priority)} font-bold px-3 py-1 text-xs rounded-full shadow-sm border-0 flex items-center gap-1 w-fit`}>
+                              <div className={`w-2 h-2 rounded-full ${notification.priority === 'high' ? 'bg-red-500' :
+                                notification.priority === 'medium' ? 'bg-yellow-500' : 'bg-gray-500'
+                              }`}></div>
+                              {notification.priority.toUpperCase()}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm">
+                                {notification.targetAudience === 'all' ? '👥' :
+                                  notification.targetAudience === 'admins' ? '👑' : '👤'}
+                              </span>
+                              <span className="capitalize text-sm font-medium text-muted-foreground">
+                                {notification.targetAudience}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <Badge
+                              variant={notification.isActive ? "default" : "secondary"}
+                              className={`font-bold px-3 py-1 text-xs rounded-full shadow-sm border-0 ${notification.isActive
+                                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
+                                : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
+                              }`}
+                            >
+                              <div className={`w-2 h-2 rounded-full mr-2 ${notification.isActive ? 'bg-white/90' : 'bg-gray-200'
+                              }`}></div>
+                              {notification.isActive ? "ACTIVE" : "INACTIVE"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <div className="text-sm text-muted-foreground font-medium">
+                              {new Date(notification.createdAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                              })}
+                            </div>
+                          </TableCell>
+                          <TableCell className="py-4 px-6">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
+                                className={`${notification.isActive
+                                  ? "text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950"
+                                  : "text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950"
+                                } transition-all duration-200 hover:scale-105 rounded-lg p-2 shadow-sm hover:shadow-md`}
+                                title={`${notification.isActive ? "Deactivate" : "Activate"} "${notification.title}"`}
+                              >
+                                {notification.isActive ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEdit(notification)}
+                                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200 hover:scale-105 rounded-lg p-2 shadow-sm hover:shadow-md"
+                                title={`Edit "${notification.title}"`}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDelete(notification._id, notification.title)}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-200 hover:scale-105 rounded-lg p-2 shadow-sm hover:shadow-md"
+                                title={`Delete "${notification.title}"`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
 
-                    {/* Badges */}
-                    <div className="flex flex-wrap gap-2">
-                      <Badge className={`${getTypeColor(notification.type)} text-xs`} variant="secondary">
-                        {notification.type.replace('_', ' ')}
-                      </Badge>
-                      <Badge className={`${getPriorityColor(notification.priority)} text-xs`} variant="secondary">
-                        {notification.priority}
-                      </Badge>
-                      <Badge variant={notification.isActive ? "default" : "secondary"} className="text-xs">
-                        {notification.isActive ? "🟢 Active" : "🔴 Inactive"}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs capitalize">
-                        👥 {notification.targetAudience}
-                      </Badge>
-                    </div>
+              {/* Mobile/Tablet Card View */}
+              <div className="lg:hidden space-y-4 p-6">
+                {notifications.map((notification: NotificationData) => (
+                  <Card
+                    key={notification._id}
+                    className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-muted/10 group overflow-hidden relative"
+                  >
+                    {/* Animated border gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-60"></div>
 
-                    {/* Message Preview */}
-                    <div className="pt-2 border-t border-border/50">
-                      <div className="text-xs sm:text-sm text-muted-foreground line-clamp-3 prose prose-xs max-w-none dark:prose-invert prose-p:m-0 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0">
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          rehypePlugins={[rehypeRaw]}
-                        >
-                          {notification.message}
-                        </ReactMarkdown>
+                    <CardContent className="p-6 relative z-10">
+                      <div className="space-y-5">
+                        {/* Header */}
+                        <div className="flex justify-between items-start gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-2 h-2 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+                              <h3 className="font-bold text-foreground text-base sm:text-lg truncate leading-tight" title={notification.title}>
+                                {notification.title}
+                              </h3>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <span>📅</span>
+                                <span className="font-medium">
+                                  {new Date(notification.createdAt).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              </div>
+                              <span className="text-muted-foreground/60">•</span>
+                              <span className="text-muted-foreground/80 font-medium">
+                                {notification.createdBy.codeforcesHandle}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 bg-background/50 rounded-lg p-1 backdrop-blur-sm">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleToggleActive(notification._id, notification.isActive, notification.title)}
+                              className={`${notification.isActive
+                                ? "text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-950"
+                                : "text-green-600 hover:bg-green-100 dark:hover:bg-green-950"
+                              } transition-all duration-200 hover:scale-105 rounded-md p-2`}
+                            >
+                              {notification.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEdit(notification)}
+                              className="text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950 transition-all duration-200 hover:scale-105 rounded-md p-2"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(notification._id, notification.title)}
+                              className="text-red-600 hover:bg-red-100 dark:hover:bg-red-950 transition-all duration-200 hover:scale-105 rounded-md p-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Enhanced Badges */}
+                        <div className="flex flex-wrap gap-2">
+                          <Badge className={`${getTypeColor(notification.type)} text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2`}>
+                            <span className="text-sm">
+                              {notification.type === 'new_feature' ? '✨' :
+                                notification.type === 'maintenance' ? '🔧' :
+                                  notification.type === 'update' ? '🔄' :
+                                    notification.type === 'alert' ? '🚨' : '📢'}
+                            </span>
+                            {notification.type.replace('_', ' ').toUpperCase()}
+                          </Badge>
+                          <Badge className={`${getPriorityColor(notification.priority)} text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2`}>
+                            <div className={`w-2 h-2 rounded-full ${notification.priority === 'high' ? 'bg-white' :
+                              notification.priority === 'medium' ? 'bg-white' : 'bg-white'
+                            }`}></div>
+                            {notification.priority.toUpperCase()}
+                          </Badge>
+                          <Badge
+                            className={`text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2 ${notification.isActive
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                              : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
+                            }`}
+                          >
+                            <div className={`w-2 h-2 rounded-full ${notification.isActive ? 'bg-white/90' : 'bg-gray-200'
+                            }`}></div>
+                            {notification.isActive ? "ACTIVE" : "INACTIVE"}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-muted/50 to-muted/30 border-border/50 flex items-center gap-2">
+                            <span>
+                              {notification.targetAudience === 'all' ? '👥' :
+                                notification.targetAudience === 'admins' ? '👑' : '👤'}
+                            </span>
+                            {notification.targetAudience.toUpperCase()}
+                          </Badge>
+                        </div>
+
+                        {/* Enhanced Message Preview */}
+                        <div className="relative">
+                          <div className="absolute -left-2 top-0 w-1 h-full bg-gradient-to-b from-primary/60 to-accent/60 rounded-full"></div>
+                          <div className="pl-4 py-3 bg-gradient-to-r from-muted/30 to-muted/10 rounded-lg border-l-4 border-gradient-to-b border-primary/30">
+                            <div className="text-xs sm:text-sm text-muted-foreground line-clamp-3 prose prose-xs max-w-none dark:prose-invert prose-p:m-0 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0 leading-relaxed">
+                              <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeRaw]}
+                              >
+                                {notification.message}
+                              </ReactMarkdown>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 

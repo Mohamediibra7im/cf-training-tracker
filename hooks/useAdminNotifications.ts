@@ -18,10 +18,20 @@ const fetcher = async (url: string) => {
 };
 
 export function useAdminNotifications() {
-  const { data, error, mutate } = useSWR("/api/admin/notifications", fetcher);
+  const { data, error, mutate } = useSWR("/api/admin/notifications", fetcher, {
+    // Optimize for fast loading and better UX
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    dedupingInterval: 60000, // 1 minute
+    refreshInterval: 300000, // 5 minutes
+    errorRetryInterval: 5000, // 5 seconds
+    errorRetryCount: 3,
+  });
 
   return {
-    notifications: data || [],
+    notifications: data?.notifications || [],
+    totalNotifications: data?.notifications?.length || 0,
+    activeNotifications: data?.notifications?.filter((n: { isActive: boolean }) => n.isActive).length || 0,
     isLoading: !error && !data,
     isError: error,
     mutate,

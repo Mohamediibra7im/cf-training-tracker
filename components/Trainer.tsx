@@ -100,9 +100,9 @@ const ProblemRow = ({
 
   const content = (
     <div
-      className={`group relative overflow-hidden rounded-xl border-2 transition-all duration-300 ${isPreContestPeriod
+      className={`group relative overflow-hidden rounded-lg sm:rounded-xl border transition-all duration-300 ${isPreContestPeriod
         ? "bg-muted/50 cursor-not-allowed opacity-70 border-muted"
-        : overlayClass || "bg-card/80 hover:bg-card border-border/50 hover:border-primary/30 hover:shadow-lg"
+        : overlayClass || "bg-card/80 hover:bg-card border-border/50 hover:border-primary/30 hover:shadow-lg hover:scale-[1.02]"
       }`}
     >
       {/* Gradient overlay on hover */}
@@ -110,31 +110,31 @@ const ProblemRow = ({
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       )}
 
-      {/* Mobile Layout */}
-      <div className="block sm:hidden relative p-3">
-        <div className="flex items-start gap-3">
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0 transition-colors duration-300 ${isPreContestPeriod
+      {/* Mobile Layout (xs to sm) */}
+      <div className="block md:hidden relative p-3 sm:p-4">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center font-bold text-xs sm:text-sm flex-shrink-0 transition-colors duration-300 ${isPreContestPeriod
             ? "bg-muted text-muted-foreground"
             : "bg-gradient-to-br from-primary to-accent text-primary-foreground"
           }`}>
             {problemLabels[index]}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-semibold text-foreground text-base truncate mb-1">
+            <div className="font-semibold text-foreground text-sm sm:text-base truncate mb-1 leading-tight">
               {problem.name}
             </div>
-            <div className="flex items-center justify-between">
-              <div className="text-muted-foreground text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-muted-foreground text-xs sm:text-sm">
                 {problem.contestId}-{problem.index}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                 {isTraining && (
-                  <div className="text-sm font-medium">
+                  <div className="text-xs sm:text-sm font-medium">
                     {getSolvedStatus()}
                   </div>
                 )}
                 {isPreContestPeriod && (
-                  <Lock className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <Lock className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
                 )}
               </div>
             </div>
@@ -142,12 +142,44 @@ const ProblemRow = ({
         </div>
       </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden sm:block relative p-4">
+      {/* Tablet Layout (md to lg) */}
+      <div className="hidden md:block lg:hidden relative p-4">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-base transition-colors duration-300 ${isPreContestPeriod
+            ? "bg-muted text-muted-foreground"
+            : "bg-gradient-to-br from-primary to-accent text-primary-foreground group-hover:shadow-lg"
+          }`}>
+            {problemLabels[index]}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-foreground text-base truncate group-hover:text-primary transition-colors duration-300 mb-1">
+              {problem.name}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-muted-foreground text-sm">
+                Contest {problem.contestId} • Problem {problem.index}
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                {isTraining && (
+                  <div className="text-base font-medium">
+                    {getSolvedStatus()}
+                  </div>
+                )}
+                {isPreContestPeriod && (
+                  <Lock className="h-4 w-4 text-muted-foreground" />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout (lg+) */}
+      <div className="hidden lg:block relative p-4 lg:p-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 flex-1">
+          <div className="flex items-center gap-4 lg:gap-5 flex-1">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-colors duration-300 ${isPreContestPeriod
+              <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-lg flex items-center justify-center font-bold text-lg lg:text-xl transition-colors duration-300 ${isPreContestPeriod
                 ? "bg-muted text-muted-foreground"
                 : "bg-gradient-to-br from-primary to-accent text-primary-foreground group-hover:shadow-lg"
               }`}>
@@ -158,17 +190,19 @@ const ProblemRow = ({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-foreground text-lg truncate group-hover:text-primary transition-colors duration-300">
+              <div className="font-semibold text-foreground text-lg lg:text-xl truncate group-hover:text-primary transition-colors duration-300 mb-1">
                 {problem.name}
               </div>
-              <div className="text-muted-foreground text-sm">
-                Contest {problem.contestId} • Problem {problem.index}
+              <div className="flex items-center gap-3 text-muted-foreground text-sm lg:text-base">
+                <span>Contest {problem.contestId}</span>
+                <span>•</span>
+                <span>Problem {problem.index}</span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4 shrink-0">
             {isTraining && (
-              <div className="text-lg font-medium min-w-[120px] text-right">
+              <div className="text-lg lg:text-xl font-medium min-w-[120px] lg:min-w-[140px] text-right">
                 {getSolvedStatus()}
               </div>
             )}
@@ -329,17 +363,17 @@ const Trainer = ({
 
         {/* Problems Section */}
         {currentProblems && currentProblems.length > 0 && (
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-0.5 sm:w-1 h-6 sm:h-8 bg-gradient-to-b from-primary to-accent rounded-full flex-shrink-0"></div>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
                 Problems
               </h3>
-              <div className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
-                {currentProblems.length} problems
+              <div className="px-2 sm:px-3 py-1 bg-muted rounded-full text-xs sm:text-sm text-muted-foreground flex-shrink-0">
+                {currentProblems.length} problem{currentProblems.length !== 1 ? 's' : ''}
               </div>
             </div>
-            <div className="grid gap-4">
+            <div className="grid gap-3 sm:gap-4 lg:gap-5">
               {currentProblems.map((problem, index) => {
                 const problemId = `${problem.contestId}_${problem.index}`;
                 const submissionStatus = submissionStatuses.find(

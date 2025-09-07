@@ -234,65 +234,66 @@ export default function AdminNotificationPanel() {
   };
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8 w-full">
       {/* Notifications Table/Cards */}
-      <Card className="shadow-2xl bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-lg border border-border/20">
+      <Card className="shadow-2xl bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-lg border border-border/20 w-full overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border/30 rounded-t-lg">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg">
-                  <Bell className="h-6 w-6 text-primary" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+              <CardTitle className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2 sm:gap-3">
+                <div className="p-1.5 sm:p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex-shrink-0">
+                  <Bell className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-primary" />
                 </div>
-                All Notifications
+                <span className="truncate">All Notifications</span>
               </CardTitle>
-              <CardDescription className="text-sm sm:text-base text-muted-foreground/80">
+              <CardDescription className="text-xs sm:text-sm lg:text-base text-muted-foreground/80 leading-relaxed">
                 Manage all system notifications and their visibility
               </CardDescription>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col xs:flex-row items-start xs:items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <Badge
                   variant="outline"
-                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 text-primary font-medium px-3 py-1"
+                  className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30 text-primary font-medium px-2 sm:px-3 py-1 text-xs"
                 >
                   {notifications.length} Total
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 text-green-700 dark:text-green-400 font-medium px-3 py-1"
+                  className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 text-green-700 dark:text-green-400 font-medium px-2 sm:px-3 py-1 text-xs"
                 >
                   {notifications.filter((n: NotificationData) => n.isActive).length} Active
                 </Badge>
               </div>
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300">
-                    <Plus className="h-4 w-4 mr-2" />
-                    <span className="hidden sm:inline">Create Notification</span>
-                    <span className="sm:hidden">Create</span>
+                  <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm px-3 py-2 h-8 sm:h-9">
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden xs:inline sm:inline">Create Notification</span>
+                    <span className="xs:hidden sm:hidden">Create</span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[525px]">
+                <DialogContent className="sm:max-w-[525px] max-h-[90vh] overflow-y-auto mx-4">
                   <form onSubmit={handleSubmit}>
                     <DialogHeader>
-                      <DialogTitle>Create New Notification</DialogTitle>
-                      <DialogDescription>
+                      <DialogTitle className="text-lg sm:text-xl">Create New Notification</DialogTitle>
+                      <DialogDescription className="text-sm sm:text-base">
                         Send a notification to users
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="create-title">Title</Label>
+                    <div className="grid gap-3 sm:gap-4 py-4">
+                      <div className="space-y-1.5 sm:space-y-2">
+                        <Label htmlFor="create-title" className="text-sm">Title</Label>
                         <Input
                           id="create-title"
                           value={formData.title}
                           onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                           placeholder="Notification title"
                           required
+                          className="text-sm"
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-1.5 sm:space-y-2">
                         <MarkdownEditor
                           value={formData.message}
                           onChange={(value) => setFormData(prev => ({ ...prev, message: value }))}
@@ -302,11 +303,11 @@ export default function AdminNotificationPanel() {
                           required
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="create-type">Type</Label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="space-y-1.5 sm:space-y-2">
+                          <Label htmlFor="create-type" className="text-sm">Type</Label>
                           <Select value={formData.type} onValueChange={(value: "announcement" | "new_feature" | "maintenance" | "update" | "alert") => setFormData(prev => ({ ...prev, type: value }))}>
-                            <SelectTrigger>
+                            <SelectTrigger className="text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -318,10 +319,10 @@ export default function AdminNotificationPanel() {
                             </SelectContent>
                           </Select>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="create-priority">Priority</Label>
+                        <div className="space-y-1.5 sm:space-y-2">
+                          <Label htmlFor="create-priority" className="text-sm">Priority</Label>
                           <Select value={formData.priority} onValueChange={(value: "low" | "medium" | "high") => setFormData(prev => ({ ...prev, priority: value }))}>
-                            <SelectTrigger>
+                            <SelectTrigger className="text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -332,10 +333,10 @@ export default function AdminNotificationPanel() {
                           </Select>
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="create-targetAudience">Target Audience</Label>
+                      <div className="space-y-1.5 sm:space-y-2">
+                        <Label htmlFor="create-targetAudience" className="text-sm">Target Audience</Label>
                         <Select value={formData.targetAudience} onValueChange={(value: "all" | "admins" | "users") => setFormData(prev => ({ ...prev, targetAudience: value }))}>
-                          <SelectTrigger>
+                          <SelectTrigger className="text-sm">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -345,18 +346,19 @@ export default function AdminNotificationPanel() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="create-expiresAt">Expires At (Optional)</Label>
+                      <div className="space-y-1.5 sm:space-y-2">
+                        <Label htmlFor="create-expiresAt" className="text-sm">Expires At (Optional)</Label>
                         <Input
                           id="create-expiresAt"
                           type="date"
                           value={formData.expiresAt}
                           onChange={(e) => setFormData(prev => ({ ...prev, expiresAt: e.target.value }))}
+                          className="text-sm"
                         />
                       </div>
                     </div>
-                    <DialogFooter>
-                      <Button type="submit" disabled={isLoading}>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                      <Button type="submit" disabled={isLoading} className="text-sm">
                         {isLoading ? "Creating..." : "Create Notification"}
                       </Button>
                     </DialogFooter>
@@ -527,7 +529,7 @@ export default function AdminNotificationPanel() {
               </div>
 
               {/* Mobile/Tablet Card View */}
-              <div className="lg:hidden space-y-4 p-6">
+              <div className="lg:hidden space-y-3 sm:space-y-4 p-3 sm:p-4 lg:p-6">
                 {notifications.map((notification: NotificationData) => (
                   <Card
                     key={notification._id}
@@ -537,18 +539,18 @@ export default function AdminNotificationPanel() {
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-60"></div>
 
-                    <CardContent className="p-6 relative z-10">
-                      <div className="space-y-5">
+                    <CardContent className="p-4 sm:p-5 lg:p-6 relative z-10">
+                      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
                         {/* Header */}
-                        <div className="flex justify-between items-start gap-4">
+                        <div className="flex justify-between items-start gap-3 sm:gap-4">
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-2">
-                              <div className="w-2 h-2 bg-gradient-to-r from-primary to-accent rounded-full"></div>
-                              <h3 className="font-bold text-foreground text-base sm:text-lg truncate leading-tight" title={notification.title}>
+                            <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
+                              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-primary to-accent rounded-full flex-shrink-0"></div>
+                              <h3 className="font-bold text-foreground text-sm sm:text-base lg:text-lg truncate leading-tight" title={notification.title}>
                                 {notification.title}
                               </h3>
                             </div>
-                            <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <span>📅</span>
                                 <span className="font-medium">
@@ -562,12 +564,12 @@ export default function AdminNotificationPanel() {
                                 </span>
                               </div>
                               <span className="text-muted-foreground/60">•</span>
-                              <span className="text-muted-foreground/80 font-medium">
+                              <span className="text-muted-foreground/80 font-medium truncate">
                                 {notification.createdBy.codeforcesHandle}
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-1 bg-background/50 rounded-lg p-1 backdrop-blur-sm">
+                          <div className="flex items-center gap-0.5 sm:gap-1 bg-background/50 rounded-lg p-1 backdrop-blur-sm flex-shrink-0">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -575,70 +577,78 @@ export default function AdminNotificationPanel() {
                               className={`${notification.isActive
                                 ? "text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-950"
                                 : "text-green-600 hover:bg-green-100 dark:hover:bg-green-950"
-                              } transition-all duration-200 hover:scale-105 rounded-md p-2`}
+                              } transition-all duration-200 hover:scale-105 rounded-md p-1.5 sm:p-2 h-7 w-7 sm:h-8 sm:w-8`}
                             >
-                              {notification.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              {notification.isActive ? <EyeOff className="h-3 w-3 sm:h-4 sm:w-4" /> : <Eye className="h-3 w-3 sm:h-4 sm:w-4" />}
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleEdit(notification)}
-                              className="text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950 transition-all duration-200 hover:scale-105 rounded-md p-2"
+                              className="text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950 transition-all duration-200 hover:scale-105 rounded-md p-1.5 sm:p-2 h-7 w-7 sm:h-8 sm:w-8"
                             >
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleDelete(notification._id, notification.title)}
-                              className="text-red-600 hover:bg-red-100 dark:hover:bg-red-950 transition-all duration-200 hover:scale-105 rounded-md p-2"
+                              className="text-red-600 hover:bg-red-100 dark:hover:bg-red-950 transition-all duration-200 hover:scale-105 rounded-md p-1.5 sm:p-2 h-7 w-7 sm:h-8 sm:w-8"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
                           </div>
                         </div>
 
                         {/* Enhanced Badges */}
-                        <div className="flex flex-wrap gap-2">
-                          <Badge className={`${getTypeColor(notification.type)} text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2`}>
-                            <span className="text-sm">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                          <Badge className={`${getTypeColor(notification.type)} text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-1 sm:gap-2`}>
+                            <span className="text-xs sm:text-sm">
                               {notification.type === 'new_feature' ? '✨' :
                                 notification.type === 'maintenance' ? '🔧' :
                                   notification.type === 'update' ? '🔄' :
                                     notification.type === 'alert' ? '🚨' : '📢'}
                             </span>
-                            {notification.type.replace('_', ' ').toUpperCase()}
+                            <span className="hidden xs:inline">
+                              {notification.type.replace('_', ' ').toUpperCase()}
+                            </span>
                           </Badge>
-                          <Badge className={`${getPriorityColor(notification.priority)} text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2`}>
-                            <div className={`w-2 h-2 rounded-full ${notification.priority === 'high' ? 'bg-white' :
+                          <Badge className={`${getPriorityColor(notification.priority)} text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-1 sm:gap-2`}>
+                            <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${notification.priority === 'high' ? 'bg-white' :
                               notification.priority === 'medium' ? 'bg-white' : 'bg-white'
                             }`}></div>
-                            {notification.priority.toUpperCase()}
+                            <span className="hidden xs:inline">
+                              {notification.priority.toUpperCase()}
+                            </span>
                           </Badge>
                           <Badge
-                            className={`text-xs font-bold px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-2 ${notification.isActive
+                            className={`text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-1 sm:gap-2 ${notification.isActive
                               ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
                               : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
                             }`}
                           >
-                            <div className={`w-2 h-2 rounded-full ${notification.isActive ? 'bg-white/90' : 'bg-gray-200'
+                            <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${notification.isActive ? 'bg-white/90' : 'bg-gray-200'
                             }`}></div>
-                            {notification.isActive ? "ACTIVE" : "INACTIVE"}
+                            <span className="hidden xs:inline">
+                              {notification.isActive ? "ACTIVE" : "INACTIVE"}
+                            </span>
                           </Badge>
-                          <Badge variant="outline" className="text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-muted/50 to-muted/30 border-border/50 flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs font-medium px-2 sm:px-3 py-1 rounded-full bg-gradient-to-r from-muted/50 to-muted/30 border-border/50 flex items-center gap-1 sm:gap-2">
                             <span>
                               {notification.targetAudience === 'all' ? '👥' :
                                 notification.targetAudience === 'admins' ? '👑' : '👤'}
                             </span>
-                            {notification.targetAudience.toUpperCase()}
+                            <span className="hidden xs:inline">
+                              {notification.targetAudience.toUpperCase()}
+                            </span>
                           </Badge>
                         </div>
 
                         {/* Enhanced Message Preview */}
                         <div className="relative">
-                          <div className="absolute -left-2 top-0 w-1 h-full bg-gradient-to-b from-primary/60 to-accent/60 rounded-full"></div>
-                          <div className="pl-4 py-3 bg-gradient-to-r from-muted/30 to-muted/10 rounded-lg border-l-4 border-gradient-to-b border-primary/30">
-                            <div className="text-xs sm:text-sm text-muted-foreground line-clamp-3 prose prose-xs max-w-none dark:prose-invert prose-p:m-0 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0 leading-relaxed">
+                          <div className="absolute -left-1 sm:-left-2 top-0 w-0.5 sm:w-1 h-full bg-gradient-to-b from-primary/60 to-accent/60 rounded-full"></div>
+                          <div className="pl-3 sm:pl-4 py-2 sm:py-3 bg-gradient-to-r from-muted/30 to-muted/10 rounded-lg border-l-2 sm:border-l-4 border-gradient-to-b border-primary/30">
+                            <div className="text-xs sm:text-sm text-muted-foreground line-clamp-2 sm:line-clamp-3 prose prose-xs max-w-none dark:prose-invert prose-p:m-0 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0 leading-relaxed">
                               <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}

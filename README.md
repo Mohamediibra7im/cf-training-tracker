@@ -1,4 +1,9 @@
-# 🚀 CP - Training Tracker
+# 🚀 CF-Training Tracker
+
+<p align="center">
+    <img src="https://d3moma7wl9.ufs.sh/f/xRZhVxWEJbFMus29DenxT5WwkRzQNM4V8v2dhSnslabDi1c0" alt="CF-Training Tracker Banner" width="600"/>
+</p>
+
 
 > **Master competitive programming with intelligent practice sessions, track your progress, and climb the Codeforces ladder.**
 
@@ -200,4 +205,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <p>Made with ❤️ for the competitive programming community</p>
   <p>⭐ Star this repository if you find it helpful!</p>
 </div>
+
 

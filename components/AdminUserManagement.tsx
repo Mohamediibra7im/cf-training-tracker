@@ -22,7 +22,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Crown, Shield, User, Calendar, Star, ExternalLink, Loader2, Search, RefreshCw } from 'lucide-react';
+import { Crown, Shield, User, Star, ExternalLink, Loader2, Search } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
 import getRankFromRating from '@/utils/getRankFromRating';

@@ -101,7 +101,7 @@ const useUpsolvedProblems = () => {
       console.error("Failed to update solved status:", error);
       mutate(); // Rollback on error
     }
-  }, [upsolvedProblems, solvedProblems, mutate]);
+  }, [upsolvedProblems, solvedProblems, mutate, toast]);
 
   useEffect(() => {
     if (solvedProblems?.length > 0) {

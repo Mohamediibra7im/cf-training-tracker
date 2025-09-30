@@ -4,11 +4,6 @@ import { Training } from "@/types/Training";
 import { getAccuratePerformance } from "@/utils/getPerformance";
 import useUser from "@/hooks/useUser";
 
-// Define a custom error type
-interface FetchError extends Error {
-  info?: unknown;
-  status?: number;
-}
 
 const fetcher = async (url: string) => {
   if (typeof window === "undefined") return [];

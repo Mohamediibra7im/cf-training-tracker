@@ -261,7 +261,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative z-10 px-3 sm:px-6 pb-4 sm:pb-6">
                 <p className="text-muted-foreground/90 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
-                  🎯 create a personalized training session tailored to your skill level and push your limits!
+                  🎯 Create a personalized training session tailored to your skill level and push your limits!
                 </p>
                 <Button
                   asChild

@@ -5,6 +5,9 @@ import UserNotification from "@/models/UserNotification";
 import { verifyAuth } from "@/lib/auth";
 import User from "@/models/User";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getUserFromToken(request: NextRequest) {
   const token = request.headers.get("authorization")?.split(" ")[1];
   if (!token) {

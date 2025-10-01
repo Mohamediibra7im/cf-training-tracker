@@ -4,6 +4,9 @@ import Notification from "@/models/Notification";
 import User from "@/models/User";
 import { verifyAdmin } from "@/lib/adminAuth";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET - Fetch admin dashboard statistics (optimized)
 export async function GET(request: NextRequest) {
   try {

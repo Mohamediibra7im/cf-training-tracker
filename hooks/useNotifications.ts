@@ -1,6 +1,7 @@
 import useSWR from "swr";
 
 const fetcher = async (url: string) => {
+  if (typeof window === 'undefined') return null;
   const token = localStorage.getItem("token");
   if (!token) throw new Error("No token found");
 

@@ -139,7 +139,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }: Notification
                     day: "numeric"
                   })}</span>
                   <span>•</span>
-                  <span>By {notification.createdBy.codeforcesHandle}</span>
+                  <span>By {notification.createdBy?.codeforcesHandle || 'System'}</span>
                 </div>
               </div>
 
@@ -150,7 +150,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }: Notification
                   day: "numeric"
                 })}</span>
                 <span>•</span>
-                <span>By {notification.createdBy.codeforcesHandle}</span>
+                <span>By {notification.createdBy?.codeforcesHandle || 'System'}</span>
               </div>
             </div>
           </div>

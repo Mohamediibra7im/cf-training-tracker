@@ -151,7 +151,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }: Notification
           </ReactMarkdown>
         </div>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>By {notification.createdBy.codeforcesHandle}</span>
+          <span>By {notification.createdBy?.codeforcesHandle || 'System'}</span>
           <span>{new Date(notification.createdAt).toLocaleDateString()}</span>
         </div>
         {notification.expiresAt && (

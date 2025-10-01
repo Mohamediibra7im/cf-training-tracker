@@ -565,7 +565,7 @@ export default function AdminNotificationPanel() {
                               </div>
                               <span className="text-muted-foreground/60">•</span>
                               <span className="text-muted-foreground/80 font-medium truncate">
-                                {notification.createdBy.codeforcesHandle}
+                                {notification.createdBy?.codeforcesHandle || 'System'}
                               </span>
                             </div>
                           </div>

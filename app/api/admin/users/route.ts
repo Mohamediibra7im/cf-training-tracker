@@ -10,7 +10,7 @@ export const revalidate = 0;
 export async function GET(request: NextRequest) {
   try {
     console.log('🔍 Admin users API called');
-    
+
     const token = request.headers.get('authorization')?.replace('Bearer ', '');
     console.log('Token exists:', !!token);
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     console.log('Connecting to database...');
     await dbConnect();
     console.log('✅ Database connected');
-    
+
     const currentUser = await User.findById(decoded.userId);
     console.log('Current user:', currentUser?.codeforcesHandle, 'Role:', currentUser?.role);
 
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       console.error('Error stack:', error.stack);
     }
     // Return only generic error message to client
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: 'Internal server error'
     }, { status: 500 });
   }

@@ -183,7 +183,7 @@ export default function AdminUserManagement() {
       const data = await response.json();
       setUserStats(data);
       setStatsDialog({ open: true, userId });
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "❌ Failed to Load Statistics",
         description: "Unable to fetch user statistics. Please try again.",

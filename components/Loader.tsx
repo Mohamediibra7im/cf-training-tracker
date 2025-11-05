@@ -47,7 +47,7 @@ const Loader = ({ fullScreen = true, message = "Loading...", size = "md" }: Load
               
               {/* Middle rotating ring (reverse direction) */}
               <div className="absolute inset-2 rounded-full">
-                <div className="absolute inset-0 rounded-full border-3 border-transparent border-b-accent border-l-primary animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-b-accent border-l-primary animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
               </div>
 
               {/* Inner ring */}

@@ -18,7 +18,7 @@ const RefreshTokenSchema: Schema = new Schema({
   jti: { type: String, required: true, unique: true, index: true },
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
   token: { type: String, required: true }, // Hashed token
-  expiresAt: { type: Date, required: true, index: true },
+  expiresAt: { type: Date, required: true },
   deviceInfo: { type: String },
   ipAddress: { type: String },
   revoked: { type: Boolean, default: false, index: true },

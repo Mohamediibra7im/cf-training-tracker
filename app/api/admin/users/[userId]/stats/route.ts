@@ -4,6 +4,7 @@ import User from '@/models/User';
 import Training from '@/models/Training';
 import UpsolvedProblem from '@/models/UpsolvedProblem';
 import { verifyAuth } from '@/lib/auth';
+import { TrainingProblem } from '@/types/TrainingProblem';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -52,10 +53,10 @@ export async function GET(
     const totalSessions = trainings.length;
     const totalProblems = trainings.reduce((acc, session) => acc + session.problems.length, 0);
     const solvedProblems = trainings.reduce((acc, session) =>
-      acc + session.problems.filter((p: any) => p.solvedTime).length, 0
+      acc + session.problems.filter((p: TrainingProblem) => p.solvedTime !== null && p.solvedTime !== undefined).length, 0
     );
     const upsolvedCount = upsolvedProblems.length;
-    const upsolvedSolvedCount = upsolvedProblems.filter((p: any) => p.solvedTime).length;
+    const upsolvedSolvedCount = upsolvedProblems.filter((p) => p.solvedTime !== null && p.solvedTime !== undefined).length;
 
     const averagePerformance = totalSessions > 0
       ? Math.round(trainings.reduce((acc, session) => acc + session.performance, 0) / totalSessions)
@@ -75,10 +76,12 @@ export async function GET(
 
     const averageRating = totalSessions > 0
       ? Math.round(trainings.reduce((acc, session) => {
-          const sessionRatings = Object.values(session.customRatings);
-          const sessionAvg = sessionRatings.reduce((sum: number, rating: number) => sum + rating, 0) / sessionRatings.length;
-          return acc + sessionAvg;
-        }, 0) / totalSessions)
+        const sessionRatings = Object.values(session.customRatings) as number[];
+        const sessionAvg = sessionRatings.length > 0
+          ? sessionRatings.reduce((sum: number, rating: number) => sum + rating, 0) / sessionRatings.length
+          : 0;
+        return acc + sessionAvg;
+      }, 0) / totalSessions)
       : 0;
 
     const recentTrend = totalSessions >= 2
@@ -112,12 +115,12 @@ export async function GET(
         recentSessions,
       },
       trainings: trainings.slice(0, 10).map(t => ({
-        id: t._id,
+        id: t._id.toString(),
         startTime: t.startTime,
         endTime: t.endTime,
         performance: t.performance,
         problemsCount: t.problems.length,
-        solvedCount: t.problems.filter((p: any) => p.solvedTime).length,
+        solvedCount: t.problems.filter((p: TrainingProblem) => p.solvedTime !== null && p.solvedTime !== undefined).length,
       })),
     }, { status: 200 });
 

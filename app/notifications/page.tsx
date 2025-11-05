@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, AlertCircle, Megaphone, Sparkles, Settings, RefreshCw, Check, X, Search } from "lucide-react";
+import { Bell, AlertCircle, Megaphone, Sparkles, Settings, RefreshCw, Check, X, Search, Wrench, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -392,11 +392,36 @@ export default function NotificationsPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="announcement">🔔 Announcement</SelectItem>
-                      <SelectItem value="new_feature">✨ New Feature</SelectItem>
-                      <SelectItem value="maintenance">🔧 Maintenance</SelectItem>
-                      <SelectItem value="update">🔄 Update</SelectItem>
-                      <SelectItem value="alert">⚠️ Alert</SelectItem>
+                      <SelectItem value="announcement">
+                        <div className="flex items-center gap-2">
+                          <Megaphone className="h-4 w-4" />
+                          Announcement
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="new_feature">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4" />
+                          New Feature
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="maintenance">
+                        <div className="flex items-center gap-2">
+                          <Wrench className="h-4 w-4" />
+                          Maintenance
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="update">
+                        <div className="flex items-center gap-2">
+                          <RefreshCw className="h-4 w-4" />
+                          Update
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="alert">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          Alert
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

@@ -5,7 +5,7 @@ import CountDown from "@/components/CountDown";
 import { ProblemTag } from "@/types/Codeforces";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, Lock, CheckCircle2, XCircle, Loader2, Trophy } from "lucide-react";
+import { RefreshCw, Lock, CheckCircle2, XCircle, Loader2, Trophy, Sparkles, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SubmissionStatus } from "@/utils/codeforces/getTrainingSubmissionStatus";
 
@@ -407,9 +407,17 @@ const Trainer = ({
                   size="lg"
                   className="flex-1 h-10 xs:h-11 sm:h-12 text-sm xs:text-base sm:text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  {problems && problems.length > 0
-                    ? "🔄 Regenerate Problems"
-                    : "✨ Generate Problems"}
+                  {problems && problems.length > 0 ? (
+                    <>
+                      <RefreshCw className="h-4 w-4" />
+                      Regenerate Problems
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      Generate Problems
+                    </>
+                  )}
                 </Button>
                 {problems && problems.length > 0 && (
                   <Button
@@ -417,7 +425,8 @@ const Trainer = ({
                     size="lg"
                     className="flex-1 h-10 xs:h-11 sm:h-12 text-sm xs:text-base sm:text-lg font-semibold bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    🚀 Start Training
+                    <Play className="h-4 w-4" />
+                    Start Training
                   </Button>
                 )}
               </div>

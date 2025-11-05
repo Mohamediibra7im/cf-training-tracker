@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Plus, Edit, Trash2, Eye, EyeOff, RefreshCw, Bell } from "lucide-react";
+import React, { useState } from "react";
+import { Plus, Edit, Trash2, Eye, EyeOff, RefreshCw, Bell, Megaphone, Sparkles, Wrench, AlertTriangle, CheckCircle, XCircle, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +95,7 @@ export default function AdminNotificationPanel() {
           expiresAt: formData.expiresAt || undefined,
         });
         toast({
-          title: "✨ Notification Updated!",
+          title: "Notification Updated!",
           description: `"${formData.title}" has been successfully updated and is now live.`,
           variant: "success",
           durationMs: 4000
@@ -120,7 +120,7 @@ export default function AdminNotificationPanel() {
       setEditingId(null);
     } catch (error) {
       toast({
-        title: "❌ Operation Failed",
+        title: "Operation Failed",
         description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
         variant: "destructive",
         durationMs: 5000
@@ -148,16 +148,15 @@ export default function AdminNotificationPanel() {
       await updateNotification(id, { isActive: !isActive });
       mutate();
       const action = !isActive ? "activated" : "deactivated";
-      const icon = !isActive ? "🟢" : "🔴";
       toast({
-        title: `${icon} Notification ${action.charAt(0).toUpperCase() + action.slice(1)}`,
+        title: `Notification ${action.charAt(0).toUpperCase() + action.slice(1)}`,
         description: `"${title}" has been ${action} and is ${!isActive ? "now visible to users" : "no longer visible to users"}.`,
         variant: "success",
         durationMs: 4000
       });
     } catch (error) {
       toast({
-        title: "❌ Toggle Failed",
+        title: "Toggle Failed",
         description: error instanceof Error ? error.message : "Failed to update notification status. Please try again.",
         variant: "destructive",
         durationMs: 5000
@@ -181,7 +180,7 @@ export default function AdminNotificationPanel() {
 
       // Enhanced success message with icon and better description
       toast({
-        title: "🎉 Notification Deleted Successfully!",
+        title: "Notification Deleted Successfully!",
         description: `"${deletingNotification.title}" has been permanently removed from the system.`,
         variant: "success",
         durationMs: 4000 // Show longer for better visibility
@@ -189,7 +188,7 @@ export default function AdminNotificationPanel() {
     } catch (error) {
       // Enhanced error message
       toast({
-        title: "❌ Deletion Failed",
+        title: "Deletion Failed",
         description: error instanceof Error ? error.message : "Failed to delete notification. Please try again.",
         variant: "destructive",
         durationMs: 5000
@@ -219,6 +218,22 @@ export default function AdminNotificationPanel() {
       case "announcement":
       default:
         return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+    }
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "new_feature":
+        return Sparkles;
+      case "maintenance":
+        return Wrench;
+      case "update":
+        return RefreshCw;
+      case "alert":
+        return AlertTriangle;
+      case "announcement":
+      default:
+        return Megaphone;
     }
   };
 
@@ -311,11 +326,36 @@ export default function AdminNotificationPanel() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="announcement">📢 Announcement</SelectItem>
-                              <SelectItem value="new_feature">✨ New Feature</SelectItem>
-                              <SelectItem value="maintenance">🔧 Maintenance</SelectItem>
-                              <SelectItem value="update">🔄 Update</SelectItem>
-                              <SelectItem value="alert">🚨 Alert</SelectItem>
+                              <SelectItem value="announcement">
+                                <div className="flex items-center gap-2">
+                                  <Megaphone className="h-4 w-4" />
+                                  Announcement
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="new_feature">
+                                <div className="flex items-center gap-2">
+                                  <Sparkles className="h-4 w-4" />
+                                  New Feature
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="maintenance">
+                                <div className="flex items-center gap-2">
+                                  <Wrench className="h-4 w-4" />
+                                  Maintenance
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="update">
+                                <div className="flex items-center gap-2">
+                                  <RefreshCw className="h-4 w-4" />
+                                  Update
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="alert">
+                                <div className="flex items-center gap-2">
+                                  <AlertTriangle className="h-4 w-4" />
+                                  Alert
+                                </div>
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -431,13 +471,8 @@ export default function AdminNotificationPanel() {
                           </TableCell>
                           <TableCell className="py-4 px-6">
                             <div className="flex items-center gap-2">
-                              <span className="text-lg">
-                                {notification.type === 'new_feature' ? '✨' :
-                                  notification.type === 'maintenance' ? '🔧' :
-                                    notification.type === 'update' ? '🔄' :
-                                      notification.type === 'alert' ? '🚨' : '📢'}
-                              </span>
-                              <Badge className={`${getTypeColor(notification.type)} font-medium px-3 py-1 text-xs rounded-full shadow-sm border-0`}>
+                              <Badge className={`${getTypeColor(notification.type)} font-medium px-3 py-1 text-xs rounded-full shadow-sm border-0 flex items-center gap-1.5`}>
+                                {React.createElement(getTypeIcon(notification.type), { className: "h-3 w-3" })}
                                 {notification.type.replace('_', ' ').toUpperCase()}
                               </Badge>
                             </div>
@@ -603,12 +638,7 @@ export default function AdminNotificationPanel() {
                         {/* Enhanced Badges */}
                         <div className="flex flex-wrap gap-1.5 sm:gap-2">
                           <Badge className={`${getTypeColor(notification.type)} text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-sm border-0 flex items-center gap-1 sm:gap-2`}>
-                            <span className="text-xs sm:text-sm">
-                              {notification.type === 'new_feature' ? '✨' :
-                                notification.type === 'maintenance' ? '🔧' :
-                                  notification.type === 'update' ? '🔄' :
-                                    notification.type === 'alert' ? '🚨' : '📢'}
-                            </span>
+                            {React.createElement(getTypeIcon(notification.type), { className: "h-3 w-3 sm:h-3.5 sm:w-3.5" })}
                             <span className="hidden xs:inline">
                               {notification.type.replace('_', ' ').toUpperCase()}
                             </span>
@@ -712,11 +742,36 @@ export default function AdminNotificationPanel() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="announcement">📢 Announcement</SelectItem>
-                      <SelectItem value="new_feature">✨ New Feature</SelectItem>
-                      <SelectItem value="maintenance">🔧 Maintenance</SelectItem>
-                      <SelectItem value="update">🔄 Update</SelectItem>
-                      <SelectItem value="alert">🚨 Alert</SelectItem>
+                      <SelectItem value="announcement">
+                        <div className="flex items-center gap-2">
+                          <Megaphone className="h-4 w-4" />
+                          Announcement
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="new_feature">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4" />
+                          New Feature
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="maintenance">
+                        <div className="flex items-center gap-2">
+                          <Wrench className="h-4 w-4" />
+                          Maintenance
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="update">
+                        <div className="flex items-center gap-2">
+                          <RefreshCw className="h-4 w-4" />
+                          Update
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="alert">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          Alert
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

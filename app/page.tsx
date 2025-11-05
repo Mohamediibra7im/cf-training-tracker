@@ -120,7 +120,7 @@ export default function Home() {
             <div className="absolute -top-4 -left-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-xl"></div>
             <div className="relative">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight gradient-text mb-2">
-                Welcome back, {user.codeforcesHandle}! 🚀
+                Welcome back, {user.codeforcesHandle}!
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground/80 font-medium">
                 Here&apos;s your programming journey so far
@@ -261,7 +261,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative z-10 px-3 sm:px-6 pb-4 sm:pb-6">
                 <p className="text-muted-foreground/90 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
-                  🎯 Create a personalized training session tailored to your skill level and push your limits!
+                  Create a personalized training session tailored to your skill level and push your limits!
                 </p>
                 <Button
                   asChild

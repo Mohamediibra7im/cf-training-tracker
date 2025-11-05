@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // Get all users with selected fields
     const users = await User.find({})
-      .select('codeforcesHandle role rating rank createdAt')
+      .select('codeforcesHandle role rating rank avatar createdAt')
       .sort({ createdAt: -1 });
 
     console.log(`✅ Successfully fetched ${users.length} users`);
@@ -100,7 +100,7 @@ export async function PATCH(request: NextRequest) {
       userId,
       { role },
       { new: true }
-    ).select('codeforcesHandle role rating rank createdAt');
+    ).select('codeforcesHandle role rating rank avatar createdAt');
 
     if (!updatedUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

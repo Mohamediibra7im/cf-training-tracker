@@ -26,25 +26,55 @@ export default function AdminPage() {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [activeTab, setActiveTab] = useState("notifications");
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
   // Use the optimized stats hook instead of manual fetching
   const { stats, isLoading: statsLoading, mutate: refreshStats } = useAdminStats();
 
   useEffect(() => {
+    // Add a timeout to prevent infinite loading (3 seconds)
+    const timeoutId = setTimeout(() => {
+      if (!hasCheckedAuth) {
+        setHasCheckedAuth(true);
+        // Check localStorage directly as fallback
+        try {
+          const storedUser = localStorage.getItem("user");
+          if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            if (parsedUser && parsedUser.role === "admin") {
+              setIsAuthorized(true);
+              return;
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing stored user:", e);
+        }
+        // If no valid admin user found, redirect
+        router.push("/");
+      }
+    }, 3000); // 3 second timeout
+
+    // Normal auth check when loading completes
     if (!isLoading) {
+      setHasCheckedAuth(true);
       if (!user) {
+        clearTimeout(timeoutId);
         router.push("/");
         return;
       }
 
       if (user.role !== "admin") {
+        clearTimeout(timeoutId);
         router.push("/");
         return;
       }
 
+      clearTimeout(timeoutId);
       setIsAuthorized(true);
     }
-  }, [user, isLoading, router]);
+
+    return () => clearTimeout(timeoutId);
+  }, [user, isLoading, router, hasCheckedAuth]);
 
   // Refresh stats when tab changes
   useEffect(() => {
@@ -53,17 +83,14 @@ export default function AdminPage() {
     }
   }, [activeTab, isAuthorized, refreshStats]);
 
-  if (isLoading || !isAuthorized) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-primary/20 rounded-full blur-xl scale-150" />
-          <div className="relative">
-            <Loader />
-          </div>
-        </div>
-      </div>
-    );
+  // Show loading only if we're still loading and haven't timed out
+  if ((isLoading && !hasCheckedAuth) || (!isAuthorized && !hasCheckedAuth)) {
+    return <Loader message="Loading Admin Panel..." />;
+  }
+
+  // If we've checked auth but user is not admin or doesn't exist, redirect
+  if (hasCheckedAuth && (!user || user.role !== "admin")) {
+    return null; // Will redirect via useEffect
   }
 
   return (

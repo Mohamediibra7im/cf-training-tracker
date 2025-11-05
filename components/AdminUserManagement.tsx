@@ -28,8 +28,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Crown, Shield, User, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Crown, Shield, User, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar, BarChart, TrendingUp, Target, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
 import getRankFromRating from '@/utils/getRankFromRating';
@@ -54,6 +54,7 @@ interface User {
   role: 'admin' | 'user';
   rating: number;
   rank: string;
+  avatar?: string;
   createdAt: string;
 }
 
@@ -61,6 +62,38 @@ interface ConfirmationDialog {
   open: boolean;
   user: User | null;
   newRole: 'admin' | 'user' | null;
+}
+
+interface UserStats {
+  user: {
+    codeforcesHandle: string;
+    rating: number;
+    rank: string;
+    maxRating: number;
+    maxRank: string;
+  };
+  stats: {
+    totalSessions: number;
+    totalProblems: number;
+    solvedProblems: number;
+    upsolvedCount: number;
+    upsolvedSolvedCount: number;
+    averagePerformance: number;
+    bestPerformance: number;
+    worstPerformance: number;
+    solvingRate: number;
+    averageRating: number;
+    recentTrend: number;
+    recentSessions: number;
+  };
+  trainings: Array<{
+    id: string;
+    startTime: number;
+    endTime: number;
+    performance: number;
+    problemsCount: number;
+    solvedCount: number;
+  }>;
 }
 
 type SortField = 'createdAt' | 'name';
@@ -77,6 +110,12 @@ export default function AdminUserManagement() {
     user: null,
     newRole: null
   });
+  const [statsDialog, setStatsDialog] = useState<{ open: boolean; userId: string | null }>({
+    open: false,
+    userId: null
+  });
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(false);
   const { toast } = useToast();
 
   // Use the optimized hook instead of manual fetching
@@ -126,6 +165,35 @@ export default function AdminUserManagement() {
 
     setFilteredUsers(filtered);
   }, [users, searchTerm, sortBy, sortOrder]);
+
+  const fetchUserStats = async (userId: string) => {
+    setLoadingStats(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/admin/users/${userId}/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user statistics');
+      }
+
+      const data = await response.json();
+      setUserStats(data);
+      setStatsDialog({ open: true, userId });
+    } catch (error) {
+      toast({
+        title: "❌ Failed to Load Statistics",
+        description: "Unable to fetch user statistics. Please try again.",
+        variant: "destructive",
+        durationMs: 4000
+      });
+    } finally {
+      setLoadingStats(false);
+    }
+  };
 
   const handleUserRoleUpdate = async (userId: string, newRole: 'admin' | 'user') => {
     if (updating) return;
@@ -376,6 +444,7 @@ export default function AdminUserManagement() {
                         <div className="flex items-center space-x-4">
                           <div className="relative">
                             <Avatar className="h-12 w-12 rounded-2xl ring-2 ring-primary/10 transition-all duration-300 group-hover:ring-primary/20">
+                              <AvatarImage src={user.avatar} alt={user.codeforcesHandle} />
                               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-bold rounded-2xl">
                                 {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
                               </AvatarFallback>
@@ -473,14 +542,33 @@ export default function AdminUserManagement() {
                         </div>
                       </TableCell>
                       <TableCell className="px-6 py-5">
-                        <div className="flex justify-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => fetchUserStats(user._id)}
+                            disabled={loadingStats}
+                            className="bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border-blue-200 text-blue-700 hover:text-blue-800 transition-all rounded-2xl font-semibold px-4 py-2 shadow-sm hover:shadow-md disabled:opacity-50"
+                          >
+                            {loadingStats && statsDialog.userId === user._id ? (
+                              <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                <span>Loading...</span>
+                              </>
+                            ) : (
+                              <>
+                                <BarChart className="h-4 w-4 mr-2" />
+                                <span>Stats</span>
+                              </>
+                            )}
+                          </Button>
                           {user.role === 'user' ? (
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => handleUserRoleUpdate(user._id, 'admin')}
                               disabled={updating === user._id}
-                              className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
+                              className="bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200 text-green-700 hover:text-green-800 transition-all rounded-2xl font-semibold px-4 py-2 shadow-sm hover:shadow-md disabled:opacity-50"
                             >
                               {updating === user._id ? (
                                 <>
@@ -500,7 +588,7 @@ export default function AdminUserManagement() {
                               variant="outline"
                               onClick={() => handleUserRoleUpdate(user._id, 'user')}
                               disabled={updating === user._id}
-                              className="bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-2xl font-semibold px-6 py-2.5 shadow-sm hover:shadow-md group-hover:scale-105 disabled:opacity-50"
+                              className="bg-gradient-to-r from-gray-50 to-slate-50 hover:from-gray-100 hover:to-slate-100 border-gray-200 text-gray-700 hover:text-gray-800 transition-all rounded-2xl font-semibold px-4 py-2 shadow-sm hover:shadow-md disabled:opacity-50"
                             >
                               {updating === user._id ? (
                                 <>
@@ -531,9 +619,10 @@ export default function AdminUserManagement() {
                 <CardContent className="p-4 sm:p-6">
                   <div className="space-y-4">
                     {/* Header */}
-                    <div className="flex justify-between items-start gap-3">
-                      <div className="flex items-center space-x-3 flex-1 min-w-0">
-                        <Avatar className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl flex-shrink-0">
+                          <AvatarImage src={user.avatar} alt={user.codeforcesHandle} />
                           <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm rounded-2xl">
                             {user.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
                           </AvatarFallback>
@@ -544,19 +633,35 @@ export default function AdminUserManagement() {
                               href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors text-sm sm:text-base font-medium"
+                              className="text-blue-600 hover:text-blue-800 hover:underline flex items-center space-x-1 transition-colors text-base sm:text-lg font-semibold"
                             >
-                              <span className="truncate">{user.codeforcesHandle}</span>
-                              <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                              <span className="break-words">{user.codeforcesHandle}</span>
+                              <ExternalLink className="h-4 w-4 flex-shrink-0" />
                             </a>
                           ) : (
-                            <span className="text-muted-foreground text-sm sm:text-base">No handle</span>
+                            <span className="text-muted-foreground text-base sm:text-lg font-medium">No handle</span>
                           )}
                         </div>
                       </div>
 
-                      {/* Role Action Button */}
-                      <div className="flex-shrink-0">
+                      {/* Action Buttons */}
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => fetchUserStats(user._id)}
+                          disabled={loadingStats}
+                          className="bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700 hover:text-blue-800 transition-all text-xs sm:text-sm rounded-xl"
+                        >
+                          {loadingStats && statsDialog.userId === user._id ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <>
+                              <BarChart className="h-3 w-3 mr-1" />
+                              <span>Stats</span>
+                            </>
+                          )}
+                        </Button>
                         {user.role === 'user' ? (
                           <Button
                             size="sm"
@@ -699,6 +804,7 @@ export default function AdminUserManagement() {
               <div className="bg-muted/50 rounded-2xl p-3 sm:p-4">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
                   <Avatar className="h-8 w-8 sm:h-10 sm:w-10 rounded-2xl">
+                    <AvatarImage src={confirmDialog.user?.avatar} alt={confirmDialog.user?.codeforcesHandle} />
                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs sm:text-sm rounded-2xl">
                       {confirmDialog.user?.codeforcesHandle?.slice(0, 2).toUpperCase() || 'UN'}
                     </AvatarFallback>
@@ -777,6 +883,173 @@ export default function AdminUserManagement() {
                   </span>
                 </>
               )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* User Statistics Dialog */}
+      <Dialog open={statsDialog.open} onOpenChange={(open) => !open && setStatsDialog({ open: false, userId: null })}>
+        <DialogContent className="w-[95vw] max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl">
+          <DialogHeader className="space-y-3">
+            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+              <BarChart className="h-6 w-6 text-primary" />
+              User Statistics
+            </DialogTitle>
+            {userStats && (
+              <DialogDescription className="text-base">
+                Detailed statistics for <span className="font-semibold text-foreground">{userStats.user.codeforcesHandle}</span>
+              </DialogDescription>
+            )}
+          </DialogHeader>
+
+          {userStats ? (
+            <div className="space-y-6">
+              {/* User Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">User Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Current Rating</p>
+                      <p className="text-2xl font-bold text-primary">{userStats.user.rating || 0}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{userStats.user.rank || 'Unrated'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Max Rating</p>
+                      <p className="text-2xl font-bold text-primary">{userStats.user.maxRating || 0}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{userStats.user.maxRank || 'Unrated'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Sessions</p>
+                      <p className="text-2xl font-bold text-accent">{userStats.stats.totalSessions}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Recent Sessions</p>
+                      <p className="text-2xl font-bold text-accent">{userStats.stats.recentSessions}</p>
+                      <p className="text-xs text-muted-foreground">Last 30 days</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Training Statistics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="h-5 w-5 text-primary" />
+                    Training Statistics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="h-5 w-5 text-primary" />
+                        <p className="text-sm font-medium text-muted-foreground">Problems Solved</p>
+                      </div>
+                      <p className="text-3xl font-bold text-primary">{userStats.stats.solvedProblems}</p>
+                      <p className="text-xs text-muted-foreground mt-1">out of {userStats.stats.totalProblems}</p>
+                    </div>
+                    <div className="p-4 rounded-xl bg-accent/5 border border-accent/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className="h-5 w-5 text-accent" />
+                        <p className="text-sm font-medium text-muted-foreground">Upsolved</p>
+                      </div>
+                      <p className="text-3xl font-bold text-accent">{userStats.stats.upsolvedSolvedCount}</p>
+                      <p className="text-xs text-muted-foreground mt-1">out of {userStats.stats.upsolvedCount}</p>
+                    </div>
+                    <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="h-5 w-5 text-primary" />
+                        <p className="text-sm font-medium text-muted-foreground">Solving Rate</p>
+                      </div>
+                      <p className="text-3xl font-bold text-primary">{userStats.stats.solvingRate}%</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Performance Statistics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    Performance Metrics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Average Performance</p>
+                      <p className="text-2xl font-bold text-primary">{userStats.stats.averagePerformance}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Best Performance</p>
+                      <p className="text-2xl font-bold text-green-600">{userStats.stats.bestPerformance}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Worst Performance</p>
+                      <p className="text-2xl font-bold text-red-600">{userStats.stats.worstPerformance}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Recent Trend</p>
+                      <p className={`text-2xl font-bold ${userStats.stats.recentTrend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        {userStats.stats.recentTrend >= 0 ? '+' : ''}{userStats.stats.recentTrend}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Recent Training Sessions */}
+              {userStats.trainings.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Recent Training Sessions</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {userStats.trainings.map((training) => (
+                        <div key={training.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                          <div>
+                            <p className="text-sm font-medium">
+                              {new Date(training.startTime).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {training.solvedCount} / {training.problemsCount} problems solved
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-bold text-primary">Performance: {training.performance}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Duration: {Math.round((training.endTime - training.startTime) / 60000)} min
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button onClick={() => setStatsDialog({ open: false, userId: null })}>
+              Close
             </Button>
           </DialogFooter>
         </DialogContent>

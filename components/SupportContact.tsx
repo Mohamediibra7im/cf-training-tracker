@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/components/Toast';
 
 interface SupportContactProps {
   onBack: () => void;
@@ -43,6 +44,7 @@ const supportOptions = [
 ];
 
 export default function SupportContact({ onBack }: SupportContactProps) {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -69,6 +71,12 @@ export default function SupportContact({ onBack }: SupportContactProps) {
       const result = await response.json();
 
       if (response.ok && result.success) {
+        toast({
+          title: 'Message Sent Successfully!',
+          description: 'You will receive a confirmation email shortly. We will get back to you within 24-48 hours.',
+          variant: 'success',
+          durationMs: 5000,
+        });
         setSubmitted(true);
         // Reset form
         setFormData({
@@ -79,12 +87,22 @@ export default function SupportContact({ onBack }: SupportContactProps) {
           category: 'general',
         });
       } else {
-        // Show error message
-        alert(result.error || 'Failed to send message. Please try again.');
+        // Show error message using toast
+        toast({
+          title: 'Failed to Send Message',
+          description: result.error || 'Please try again later or contact us directly.',
+          variant: 'destructive',
+          durationMs: 5000,
+        });
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('Failed to send message. Please check your connection and try again.');
+      toast({
+        title: 'Connection Error',
+        description: 'Failed to send message. Please check your connection and try again.',
+        variant: 'destructive',
+        durationMs: 5000,
+      });
     } finally {
       setIsSubmitting(false);
     }

@@ -42,63 +42,115 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Email content that you will receive
+    // Email content that you will receive - Modern Beautiful Design
     const emailContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-          <h1 style="margin: 0; font-size: 28px;">📧 New Contact Form Submission</h1>
-          <p style="margin: 10px 0 0 0; opacity: 0.9;">CF Training Tracker</p>
-        </div>
-        
-        <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-          <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 20px;">👤 Contact Information</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold; color: #555; width: 30%;">Name:</td>
-                <td style="padding: 8px 0; color: #333;">${name}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold; color: #555;">Email:</td>
-                <td style="padding: 8px 0; color: #333;">
-                  <a href="mailto:${email}" style="color: #667eea; text-decoration: none;">${email}</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold; color: #555;">Category:</td>
-                <td style="padding: 8px 0;">
-                  <span style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
-                    ${category.charAt(0).toUpperCase() + category.slice(1)}
-                  </span>
-                </td>
-              </tr>
-            </table>
-          </div>
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 40px; text-align: center;">
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 30px; border: 1px solid rgba(255,255,255,0.2);">
+                      <h1 style="margin: 0; font-size: 32px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        New Contact Form Submission
+                      </h1>
+                      <p style="margin: 12px 0 0 0; font-size: 16px; color: rgba(255,255,255,0.95); font-weight: 400;">
+                        CF Training Tracker
+                      </p>
+                    </div>
+                  </td>
+                </tr>
 
-          <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4caf50;">
-            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 20px;">📝 Subject</h2>
-            <p style="margin: 0; font-size: 16px; color: #333; background: #f5f5f5; padding: 15px; border-radius: 5px;">
-              ${subject}
-            </p>
-          </div>
+                <!-- Contact Info Card -->
+                <tr>
+                  <td style="padding: 40px;">
+                    <div style="background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%); border-radius: 12px; padding: 30px; border: 2px solid #e8eaff; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);">
+                      <h2 style="margin: 0 0 24px 0; font-size: 20px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center;">
+                        <span style="display: inline-block; width: 4px; height: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 12px;"></span>
+                        Contact Information
+                      </h2>
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                          <td style="padding: 12px 0; font-weight: 600; color: #6b7280; width: 120px; font-size: 14px;">Name:</td>
+                          <td style="padding: 12px 0; color: #1a1a2e; font-size: 15px; font-weight: 500;">${name}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0; font-weight: 600; color: #6b7280; font-size: 14px;">Email:</td>
+                          <td style="padding: 12px 0;">
+                            <a href="mailto:${email}" style="color: #667eea; text-decoration: none; font-weight: 500; font-size: 15px; transition: color 0.2s;">${email}</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0; font-weight: 600; color: #6b7280; font-size: 14px;">Category:</td>
+                          <td style="padding: 12px 0;">
+                            <span style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                              ${category.charAt(0).toUpperCase() + category.slice(1)}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
 
-          <div style="background: white; padding: 25px; border-radius: 8px; border-left: 4px solid #ff9800;">
-            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 20px;">💬 Message</h2>
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #333;">
-${message}
-            </div>
-          </div>
+                    <!-- Subject Card -->
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-radius: 12px; padding: 30px; border: 2px solid #dcfce7; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.1);">
+                      <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center;">
+                        <span style="display: inline-block; width: 4px; height: 24px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border-radius: 2px; margin-right: 12px;"></span>
+                        Subject
+                      </h2>
+                      <p style="margin: 0; font-size: 16px; color: #1a1a2e; background: #ffffff; padding: 18px 20px; border-radius: 8px; border: 1px solid #e5e7eb; font-weight: 500; line-height: 1.6;">
+                        ${subject}
+                      </p>
+                    </div>
 
-          <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #c8e6c9;">
-            <p style="margin: 0; font-size: 14px; color: #2e7d32; text-align: center;">
-              <strong>📅 Received:</strong> ${new Date().toLocaleString()}
-            </p>
-            <p style="margin: 10px 0 0 0; font-size: 12px; color: #666; text-align: center;">
-              Click reply to respond directly to <strong>${name}</strong> at ${email}
-            </p>
-          </div>
-        </div>
-      </div>
+                    <!-- Message Card -->
+                    <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); border-radius: 12px; padding: 30px; border: 2px solid #fed7aa; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);">
+                      <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center;">
+                        <span style="display: inline-block; width: 4px; height: 24px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 2px; margin-right: 12px;"></span>
+                        Message
+                      </h2>
+                      <div style="background: #ffffff; padding: 24px; border-radius: 10px; border: 1px solid #e5e7eb; white-space: pre-wrap; font-size: 15px; line-height: 1.8; color: #374151; font-weight: 400; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+${message.replace(/\n/g, '<br>')}
+                      </div>
+                    </div>
+
+                    <!-- Footer Info -->
+                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-radius: 12px; padding: 24px; border: 2px solid #86efac; text-align: center; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.15);">
+                      <div style="margin-bottom: 12px;">
+                        <span style="display: inline-block; background: #22c55e; color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);">
+                          Received: ${new Date().toLocaleString()}
+                        </span>
+                      </div>
+                      <p style="margin: 16px 0 0 0; font-size: 14px; color: #065f46; line-height: 1.6;">
+                        <strong>Quick Reply:</strong> Click reply to respond directly to <strong style="color: #1a1a2e;">${name}</strong> at <a href="mailto:${email}" style="color: #667eea; text-decoration: none; font-weight: 600;">${email}</a>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Bottom Spacer -->
+                <tr>
+                  <td style="padding: 0 40px 40px 40px; text-align: center;">
+                    <p style="margin: 0; font-size: 12px; color: #9ca3af; line-height: 1.6;">
+                      This email was sent from the CF Training Tracker contact form.<br>
+                      <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://cf-training-tracker.vercel.app'}" style="color: #667eea; text-decoration: none;">Visit Website</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `;
 
     // Email options - the email you will receive
@@ -113,47 +165,137 @@ ${message}
     // Send email to you
     await transporter.sendMail(mailOptions);
 
-    // Optional: Send confirmation email to the user
+    // User Confirmation Email - Modern Beautiful Design
     const userConfirmationOptions = {
       from: process.env.SMTP_EMAIL,
       to: email,
-      subject: 'Thank you for contacting CF Training Tracker! 🎯',
+      subject: 'Thank you for contacting CF Training Tracker!',
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="margin: 0; font-size: 28px;">✅ Message Received!</h1>
-            <p style="margin: 10px 0 0 0; opacity: 0.9;">Thank you for reaching out</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <div style="background: white; padding: 25px; border-radius: 8px; text-align: center;">
-              <h2 style="color: #333; margin: 0 0 20px 0;">Hi ${name}! 👋</h2>
-              <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                We have successfully received your message and will get back to you within <strong>24-48 hours</strong>.
-              </p>
-              
-              <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2196f3;">
-                <h3 style="color: #1976d2; margin: 0 0 10px 0; font-size: 16px;">Your message summary:</h3>
-                <p style="margin: 0; color: #555;"><strong>Subject:</strong> ${subject}</p>
-                <p style="margin: 5px 0 0 0; color: #555;"><strong>Category:</strong> ${category.charAt(0).toUpperCase() + category.slice(1)}</p>
-              </div>
-              
-              <div style="background: #fff3e0; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="color: #f57c00; margin: 0 0 15px 0; font-size: 16px;">🚀 While you wait, check out:</h3>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                  <li style="margin: 8px 0;"><a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/help" style="color: #1976d2; text-decoration: none;">📚 Help Center & FAQs</a></li>
-                  <li style="margin: 8px 0;"><a href="https://github.com/Mohamediibra7im/cf-training-tracker" style="color: #1976d2; text-decoration: none;">🐛 GitHub Issues</a></li>
-                  <li style="margin: 8px 0;"><a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/training" style="color: #1976d2; text-decoration: none;">🏋️ Start Training</a></li>
-                </ul>
-              </div>
-              
-              <p style="color: #999; font-size: 14px; margin-top: 30px;">
-                Need urgent help? Reply to this email or contact us directly at 
-                <a href="mailto:${process.env.SMTP_EMAIL}" style="color: #1976d2;">${process.env.SMTP_EMAIL}</a>
-              </p>
-            </div>
-          </div>
-        </div>
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 50px 40px; text-align: center;">
+                    <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 30px; border: 1px solid rgba(255,255,255,0.2);">
+                      <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; border: 3px solid rgba(255,255,255,0.3);">
+                        <div style="width: 40px; height: 40px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                          <span style="font-size: 24px; color: #22c55e;">✓</span>
+                        </div>
+                      </div>
+                      <h1 style="margin: 0; font-size: 32px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        Message Received!
+                      </h1>
+                      <p style="margin: 12px 0 0 0; font-size: 16px; color: rgba(255,255,255,0.95); font-weight: 400;">
+                        Thank you for reaching out to us
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Main Content -->
+                <tr>
+                  <td style="padding: 40px;">
+                    <div style="text-align: center; margin-bottom: 32px;">
+                      <h2 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 600; color: #1a1a2e;">
+                        Hi ${name}!
+                      </h2>
+                      <p style="margin: 0; color: #6b7280; font-size: 16px; line-height: 1.7; max-width: 500px; margin: 0 auto;">
+                        We have successfully received your message and will get back to you within <strong style="color: #1a1a2e;">24-48 hours</strong>.
+                      </p>
+                    </div>
+
+                    <!-- Message Summary Card -->
+                    <div style="background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); border-radius: 12px; padding: 28px; border: 2px solid #bfdbfe; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);">
+                      <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center;">
+                        <span style="display: inline-block; width: 4px; height: 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 2px; margin-right: 12px;"></span>
+                        Your Message Summary
+                      </h3>
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                          <td style="padding: 10px 0; font-weight: 600; color: #6b7280; font-size: 14px; width: 100px;">Subject:</td>
+                          <td style="padding: 10px 0; color: #1a1a2e; font-size: 15px; font-weight: 500;">${subject}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; font-weight: 600; color: #6b7280; font-size: 14px;">Category:</td>
+                          <td style="padding: 10px 0;">
+                            <span style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                              ${category.charAt(0).toUpperCase() + category.slice(1)}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <!-- Quick Links Card -->
+                    <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); border-radius: 12px; padding: 28px; border: 2px solid #fed7aa; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);">
+                      <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #1a1a2e; display: flex; align-items: center;">
+                        <span style="display: inline-block; width: 4px; height: 20px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 2px; margin-right: 12px;"></span>
+                        While You Wait, Check Out
+                      </h3>
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                          <td style="padding: 12px 0;">
+                            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://cf-training-tracker.vercel.app'}/help" style="display: block; background: #ffffff; color: #1a1a2e; text-decoration: none; padding: 14px 20px; border-radius: 8px; border: 2px solid #e5e7eb; font-weight: 500; font-size: 15px; margin-bottom: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                              📚 Help Center & FAQs
+                            </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0;">
+                            <a href="https://github.com/Mohamediibra7im/cf-training-tracker" style="display: block; background: #ffffff; color: #1a1a2e; text-decoration: none; padding: 14px 20px; border-radius: 8px; border: 2px solid #e5e7eb; font-weight: 500; font-size: 15px; margin-bottom: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                              🐛 GitHub Issues & Discussions
+                            </a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0;">
+                            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://cf-training-tracker.vercel.app'}/training" style="display: block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; text-decoration: none; padding: 14px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                              🚀 Start Training
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <!-- Support Info -->
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 24px; border: 2px solid #86efac; text-align: center; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.1);">
+                      <p style="margin: 0; font-size: 14px; color: #065f46; line-height: 1.7;">
+                        <strong>Need urgent help?</strong><br>
+                        Reply to this email or contact us directly at<br>
+                        <a href="mailto:${process.env.SMTP_EMAIL}" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 15px;">${process.env.SMTP_EMAIL}</a>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="background: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                    <p style="margin: 0 0 8px 0; font-size: 14px; color: #1a1a2e; font-weight: 600;">
+                      CF Training Tracker
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #6b7280; line-height: 1.6;">
+                      Thank you for being part of our community!<br>
+                      <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://cf-training-tracker.vercel.app'}" style="color: #667eea; text-decoration: none; font-weight: 500;">Visit Website</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
       `,
     };
 

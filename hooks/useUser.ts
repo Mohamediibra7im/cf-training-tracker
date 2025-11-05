@@ -46,6 +46,7 @@ const useUser = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ codeforcesHandle, password }),
+          credentials: "include", // Include cookies to receive refresh token
         });
         const data = await res.json();
         if (!res.ok) {
@@ -88,13 +89,24 @@ const useUser = () => {
     [login],
   );
 
-  const logout = () => {
+  const logout = useCallback(async () => {
+    // Call server-side logout to revoke refresh token
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include", // Include cookies to revoke refresh token
+      });
+    } catch (error) {
+      console.error("Logout API call failed:", error);
+      // Continue with client-side cleanup even if API call fails
+    }
+
     if (isClient) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     }
     mutate(null, false);
-  };
+  }, [isClient, mutate]);
 
   const resetPassword = async (
     oldPassword: string,

@@ -3,8 +3,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
+import RefreshToken, { generateRefreshToken, hashRefreshToken } from "@/models/RefreshToken";
 import { syncUserProfile, shouldSyncProfile } from "@/utils/syncUserProfile";
 import { loginLimiter, rateLimitRequest } from "@/lib/rateLimiter";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   if (!process.env.JWT_SECRET) {
@@ -83,11 +85,42 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const token = jwt.sign({ userId: updatedUser._id }, process.env.JWT_SECRET!, {
-      expiresIn: "14d",
+    // Generate short-lived access token (15 minutes)
+    const accessToken = jwt.sign(
+      { userId: updatedUser._id },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    // Generate refresh token
+    const refreshTokenValue = generateRefreshToken();
+    const hashedToken = hashRefreshToken(refreshTokenValue);
+    const jti = crypto.randomUUID();
+
+    // Get device info and IP for optional binding
+    const userAgent = req.headers.get("user-agent") || "unknown";
+    const deviceInfo = userAgent.substring(0, 100); // Limit length
+    const clientIp = ip;
+
+    // Calculate expiry (30 days for refresh token)
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30);
+
+    // Store refresh token in database
+    await RefreshToken.create({
+      jti,
+      userId: updatedUser._id,
+      token: hashedToken,
+      expiresAt,
+      deviceInfo,
+      ipAddress: clientIp,
+      revoked: false,
     });
 
-    return NextResponse.json({
+    // Create response with access token in body
+    const response = NextResponse.json({
       user: {
         _id: updatedUser._id,
         codeforcesHandle: updatedUser.codeforcesHandle,
@@ -100,8 +133,20 @@ export async function POST(req: NextRequest) {
         lastSyncTime: updatedUser.lastSyncTime,
         role: updatedUser.role,
       },
-      token,
+      token: accessToken,
     });
+
+    // Set refresh token as secure, httpOnly cookie
+    const isProduction = process.env.NODE_ENV === "production";
+    response.cookies.set("refreshToken", refreshTokenValue, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
     // Don't count server errors against rate limit

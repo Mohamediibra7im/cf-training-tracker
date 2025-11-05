@@ -11,6 +11,8 @@ export interface IUser extends Document {
   organization: string;
   lastSyncTime: number;
   role: "user" | "admin";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema: Schema = new Schema({
@@ -24,6 +26,8 @@ const UserSchema: Schema = new Schema({
   organization: { type: String },
   lastSyncTime: { type: Number, default: 0 },
   role: { type: String, enum: ["user", "admin"], default: "user" },
+}, {
+  timestamps: true,
 });
 
 export default models.User || model<IUser>("User", UserSchema);

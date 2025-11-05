@@ -14,6 +14,13 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -22,7 +29,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Crown, Shield, User, Star, ExternalLink, Loader2, Search } from 'lucide-react';
+import { Crown, Shield, User, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
 import getRankFromRating from '@/utils/getRankFromRating';
@@ -56,9 +63,14 @@ interface ConfirmationDialog {
   newRole: 'admin' | 'user' | null;
 }
 
+type SortField = 'createdAt' | 'name';
+type SortOrder = 'asc' | 'desc';
+
 export default function AdminUserManagement() {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<SortField>('createdAt');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [updating, setUpdating] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<ConfirmationDialog>({
     open: false,
@@ -84,12 +96,36 @@ export default function AdminUserManagement() {
 
   useEffect(() => {
     // Filter users based on search term
-    const filtered = users.filter((user: User) => {
+    let filtered = users.filter((user: User) => {
       const handle = user.codeforcesHandle || '';
       return handle.toLowerCase().includes(searchTerm.toLowerCase());
     });
+
+    // Sort users
+    filtered = [...filtered].sort((a, b) => {
+      let comparison = 0;
+
+      if (sortBy === 'createdAt') {
+        // Validate and parse dates with fallback for invalid/missing dates
+        const parseDate = (dateStr: string | undefined): number => {
+          if (!dateStr) return 0;
+          const parsed = Date.parse(dateStr);
+          return isNaN(parsed) ? 0 : parsed;
+        };
+        const dateA = parseDate(a.createdAt);
+        const dateB = parseDate(b.createdAt);
+        comparison = dateA - dateB;
+      } else if (sortBy === 'name') {
+        const nameA = (a.codeforcesHandle || '').toLowerCase();
+        const nameB = (b.codeforcesHandle || '').toLowerCase();
+        comparison = nameA.localeCompare(nameB);
+      }
+
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
     setFilteredUsers(filtered);
-  }, [users, searchTerm]);
+  }, [users, searchTerm, sortBy, sortOrder]);
 
   const handleUserRoleUpdate = async (userId: string, newRole: 'admin' | 'user') => {
     if (updating) return;
@@ -206,22 +242,56 @@ export default function AdminUserManagement() {
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Search by Codeforces handle..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 sm:pl-12 h-10 sm:h-12 bg-background border-2 focus:ring-2 transition-all duration-200"
+              />
+              {searchTerm && (
+                <Badge variant="secondary" className="absolute right-3 top-2 sm:top-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-2xl">
+                  {filteredUsers.length} found
+                </Badge>
+              )}
             </div>
-            <Input
-              type="text"
-              placeholder="Search by Codeforces handle..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 sm:pl-12 h-10 sm:h-12 bg-background border-2 focus:ring-2 transition-all duration-200"
-            />
-            {searchTerm && (
-              <Badge variant="secondary" className="absolute right-3 top-2 sm:top-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-2xl">
-                {filteredUsers.length} found
-              </Badge>
-            )}
+            <div className="flex gap-2">
+              <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortField)}>
+                <SelectTrigger className="w-[140px] sm:w-[180px] h-10 sm:h-12">
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Sort by">
+                    {sortBy === 'createdAt' ? 'Created Date' : 'Name'}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="createdAt">Created Date</SelectItem>
+                  <SelectItem value="name">Name</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as SortOrder)}>
+                <SelectTrigger className="w-[140px] sm:w-[160px] h-10 sm:h-12">
+                  <SelectValue placeholder="Order">
+                    {sortOrder === 'desc'
+                      ? (sortBy === 'createdAt' ? 'Newest First' : 'Z → A')
+                      : (sortBy === 'createdAt' ? 'Oldest First' : 'A → Z')
+                    }
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="desc">
+                    {sortBy === 'createdAt' ? 'Newest First' : 'Z → A'}
+                  </SelectItem>
+                  <SelectItem value="asc">
+                    {sortBy === 'createdAt' ? 'Oldest First' : 'A → Z'}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -275,6 +345,14 @@ export default function AdminUserManagement() {
                           <Star className="h-4 w-4 text-yellow-600" />
                         </div>
                         <span>Performance</span>
+                      </div>
+                    </TableHead>
+                    <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-1.5 rounded-xl bg-emerald-500/10">
+                          <Calendar className="h-4 w-4 text-emerald-600" />
+                        </div>
+                        <span>Created At</span>
                       </div>
                     </TableHead>
                     <TableHead className="h-14 px-6 font-bold text-foreground/90 text-sm text-center">
@@ -372,6 +450,26 @@ export default function AdminUserManagement() {
                               {getRankFromRating(user.rating)}
                             </Badge>
                           </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-5">
+                        <div className="flex flex-col space-y-1">
+                          <div className="flex items-center space-x-2">
+                            <Calendar className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                            <span className="font-medium text-sm text-foreground">
+                              {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              }) : 'N/A'}
+                            </span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {user.createdAt ? new Date(user.createdAt).toLocaleTimeString('en-US', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            }) : ''}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="px-6 py-5">
@@ -525,6 +623,20 @@ export default function AdminUserManagement() {
                         <Shield className="h-3 w-3 mr-1" />
                         {getRankFromRating(user.rating)}
                       </Badge>
+                    </div>
+
+                    {/* Created At */}
+                    <div className="flex items-center space-x-2 pt-2 border-t border-border/30">
+                      <Calendar className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-xs text-muted-foreground">
+                        Created: {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        }) : 'N/A'}
+                      </span>
                     </div>
                   </div>
                 </CardContent>

@@ -7,6 +7,13 @@ export const loginLimiter = new RateLimiterMemory({
   blockDuration: 180, // Block for 3 minutes if exceeded
 });
 
+// Rate limiter for refresh token attempts (10 attempts per 5 minutes per IP)
+export const refreshLimiter = new RateLimiterMemory({
+  points: 10, // Number of refresh attempts allowed
+  duration: 300, // Per 5 minutes
+  blockDuration: 600, // Block for 10 minutes if exceeded
+});
+
 export async function rateLimitRequest(identifier: string, limiter: RateLimiterMemory) {
   try {
     await limiter.consume(identifier);

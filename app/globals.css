@@ -218,7 +218,7 @@ body {
   /* Enhanced card with stronger effects */
   .card-premium {
     @apply bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-md border border-border/60 
-           shadow-2xl hover:shadow-3xl hover:border-primary/40 hover:from-primary/5 hover:to-accent/5
+           shadow-2xl hover:shadow-2xl hover:border-primary/40 hover:from-primary/5 hover:to-accent/5
            transition-all duration-500 ease-out;
   }
 

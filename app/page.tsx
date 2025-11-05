@@ -9,11 +9,13 @@ import {
   CheckCircle,
   RefreshCw,
   LogOut,
+  Settings as SettingsIcon,
+  Zap,
 } from "lucide-react";
 import useUser from "@/hooks/useUser";
 import Loader from "@/components/Loader";
-import Profile from "@/components/Profile";
 import Settings from "@/components/Settings";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ChangePasswordDialog from "@/components/ChangePasswordDialog";
 import useHistory from "@/hooks/useHistory";
 import useUpsolvedProblems from "@/hooks/useUpsolvedProblems";
@@ -113,165 +115,262 @@ export default function Home() {
 
   return (
     <section className="min-h-screen">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 lg:py-10">
-        <div className="grid gap-4 sm:gap-6 md:gap-8">
-          {/* Welcome Header with Enhanced Design */}
-          <div className="flex flex-col items-start gap-3 sm:gap-4 relative px-2 sm:px-0">
-            <div className="absolute -top-4 -left-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-xl"></div>
-            <div className="relative">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight gradient-text mb-2">
-                Welcome back, {user.codeforcesHandle}!
-              </h1>
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground/80 font-medium">
-                Here&apos;s your programming journey so far
-              </p>
-            </div>
-          </div>
+      {/* Animated background elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
 
-          {/* Enhanced Stats Grid */}
-          <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-            {/* Profile Card - Enhanced */}
-            <div className="sm:col-span-2 xl:col-span-1 transform hover:scale-[1.02] transition-all duration-300">
-              <Profile user={user} />
-            </div>
-
-            {/* Total Solved Card - Enhanced */}
-            <Card className="card-enhanced group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 relative z-10 px-3 sm:px-6">
-                <CardTitle className="text-base sm:text-lg font-semibold text-foreground/90">
-                  Total Solved
-                </CardTitle>
-                <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-center items-center text-center px-3 sm:px-6 py-3 sm:py-4 relative z-10">
-                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">
-                  {totalSolved}
-                </div>
-                <p className="text-xs sm:text-sm text-muted-foreground/80 leading-tight font-medium">
-                  problems conquered
-                </p>
-                <div className="w-full h-1 bg-gradient-to-r from-primary/20 via-primary to-accent/20 rounded-full mt-2 sm:mt-3 opacity-60"></div>
-              </CardContent>
-            </Card>
-
-            {/* Training Sessions Card - Enhanced */}
-            <Card className="card-enhanced group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 relative z-10 px-3 sm:px-6">
-                <CardTitle className="text-base sm:text-lg font-semibold text-foreground/90">
-                  Training Sessions
-                </CardTitle>
-                <div className="p-1.5 sm:p-2 rounded-full bg-accent/10 group-hover:bg-accent/20 transition-colors duration-300">
-                  <BarChart className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-center items-center text-center px-3 sm:px-6 py-3 sm:py-4 relative z-10">
-                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">
-                  {history?.length || 0}
-                </div>
-                <p className="text-xs sm:text-sm text-muted-foreground/80 leading-tight font-medium">
-                  sessions completed
-                </p>
-                <div className="w-full h-1 bg-gradient-to-r from-accent/20 via-accent to-primary/20 rounded-full mt-2 sm:mt-3 opacity-60"></div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Activity Heatmap with Enhanced Container */}
-          <div className="relative px-2 sm:px-0">
-            <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-primary/10 via-transparent to-accent/10 rounded-xl sm:rounded-2xl blur-xl opacity-30"></div>
-            <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-xl">
-              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 gradient-text">Activity Overview</h2>
-              <div className="overflow-x-auto">
-                <ActivityHeatmap
-                  history={history || []}
-                  upsolvedProblems={upsolvedProblems || []}
-                />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="space-y-8 sm:space-y-12">
+          {/* Unified Welcome & Stats Card */}
+          <div className="w-full">
+            <Card className="card-premium group relative overflow-hidden border-2 border-primary/20 hover:border-primary/40 transition-all duration-500 flex flex-col">
+              {/* Background decorative elements */}
+              <div className="absolute inset-0 -z-10 overflow-hidden">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/20 transition-all duration-500"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/10 rounded-full -ml-16 -mb-16 blur-2xl group-hover:bg-accent/20 transition-all duration-500"></div>
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-accent/10 to-transparent rounded-full blur-3xl"></div>
               </div>
-            </div>
-          </div>
 
-          {/* Action Cards - Enhanced */}
-          <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 lg:grid-cols-2">
-            {/* Account Actions Card */}
-            <Card className="card-enhanced group hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 px-3 sm:px-6 py-3 sm:py-6">
-                <CardTitle className="text-lg sm:text-xl font-semibold gradient-text flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                  <span className="text-base sm:text-xl">Account Management</span>
-                </CardTitle>
-                <p className="text-muted-foreground text-xs sm:text-sm">Manage your profile and settings</p>
+              {/* Welcome Section */}
+              <CardHeader className="relative z-10 pb-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-6">
+                  {/* Left side - Welcome message */}
+                  <div className="flex-1 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl"></div>
+                        <div className="relative w-3 h-3 rounded-full bg-gradient-to-br from-primary to-accent"></div>
+                      </div>
+                      <span className="text-sm sm:text-base font-semibold text-primary/80 uppercase tracking-wider">
+                        Dashboard
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
+                        <span className="text-foreground">Welcome back,</span>
+                        <br />
+                        <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                          {user.codeforcesHandle}
+                        </span>
+                        <span className="text-foreground">!</span>
+                      </h1>
+                    </div>
+
+                    <p className="text-base sm:text-lg text-muted-foreground/80">
+                      Here&apos;s your programming journey so far
+                    </p>
+                  </div>
+
+                  {/* Right side - Profile Avatar */}
+                  <div className="flex-shrink-0">
+                    <Avatar className="h-16 w-16 sm:h-20 sm:w-20 border-2 border-border">
+                      <AvatarImage src={user.avatar} alt={user.codeforcesHandle} />
+                      <AvatarFallback>
+                        {user.codeforcesHandle.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
+                </div>
+
+
+                {/* Stats Grid - 4 columns */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+                  {/* Rating */}
+                  <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/10">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Rating</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-primary mb-1">
+                      {user.rating || 0}
+                    </p>
+                    <p className="text-xs text-muted-foreground capitalize">
+                      {user.rank || "Unrated"}
+                    </p>
+                  </div>
+
+                  {/* Max Rating */}
+                  <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/10">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Max Rating</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-primary mb-1">
+                      {user.maxRating || 0}
+                    </p>
+                    <p className="text-xs text-muted-foreground capitalize">
+                      {user.maxRank || "Unrated"}
+                    </p>
+                  </div>
+
+                  {/* Total Solved */}
+                  <div className="text-center p-4 rounded-xl bg-primary/5 border border-primary/10">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <p className="text-xs font-medium text-muted-foreground">Solved</p>
+                    </div>
+                    <p className="text-3xl sm:text-4xl font-black bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent mb-1">
+                      {totalSolved}
+                    </p>
+                    <p className="text-xs text-muted-foreground">problems</p>
+                  </div>
+
+                  {/* Training Sessions */}
+                  <div className="text-center p-4 rounded-xl bg-accent/5 border border-accent/10">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <BarChart className="h-4 w-4 text-accent" />
+                      <p className="text-xs font-medium text-muted-foreground">Sessions</p>
+                    </div>
+                    <p className="text-3xl sm:text-4xl font-black bg-gradient-to-br from-accent to-primary bg-clip-text text-transparent mb-1">
+                      {history?.length || 0}
+                    </p>
+                    <p className="text-xs text-muted-foreground">completed</p>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent className="relative z-10 px-3 sm:px-6 pb-4 sm:pb-6">
-                <div className="flex flex-col gap-3 sm:gap-4">
-                  {/* Sync Profile Button */}
-                  <Button
-                    variant="outline"
-                    size="default"
-                    onClick={handleSync}
-                    disabled={isSyncing}
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm font-semibold rounded-lg btn-enhanced hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary/5 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/20 disabled:opacity-60 disabled:cursor-not-allowed group relative overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/8 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <RefreshCw
-                      className={`mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 transition-transform duration-300 ${isSyncing ? "animate-spin" : "group-hover:rotate-180"
-                      }`}
-                    />
-                    <span className="relative z-10">
-                      {isSyncing ? "Syncing Profile..." : "Sync Profile"}
-                    </span>
-                  </Button>
 
-                  {/* Change Password Dialog - Enhanced wrapper */}
-                  <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-                    <div className="relative">
-                      <ChangePasswordDialog />
+              <CardContent className="relative z-10 space-y-6 pb-6">
+                {/* Progress Bars */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Problems Solved Progress */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                        <p className="text-sm font-medium text-muted-foreground">Problems Solved</p>
+                      </div>
+                      <p className="text-sm font-semibold text-primary">{totalSolved}</p>
+                    </div>
+                    <div className="relative w-full h-2.5 bg-muted rounded-full overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-primary to-accent/30 rounded-full"></div>
+                      <div
+                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min((totalSolved / 100) * 100, 100)}%` } as React.CSSProperties}
+                      ></div>
                     </div>
                   </div>
 
-                  {/* Logout Button */}
-                  <Button
-                    variant="destructive"
-                    size="default"
-                    onClick={logout}
-                    className="w-full h-10 sm:h-12 text-xs sm:text-sm font-semibold rounded-lg btn-enhanced hover:bg-gradient-to-r hover:from-red-600 hover:to-red-500 hover:shadow-lg hover:shadow-red-500/25 group relative overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <LogOut className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-                    <span className="relative z-10">Logout</span>
-                  </Button>
+                  {/* Training Sessions Progress */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <BarChart className="h-4 w-4 text-accent" />
+                        <p className="text-sm font-medium text-muted-foreground">Training Sessions</p>
+                      </div>
+                      <p className="text-sm font-semibold text-accent">{history?.length || 0}</p>
+                    </div>
+                    <div className="relative w-full h-2.5 bg-muted rounded-full overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-accent/30 via-accent to-primary/30 rounded-full"></div>
+                      <div
+                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent to-primary rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(((history?.length || 0) / 10) * 100, 100)}%` } as React.CSSProperties}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Training Card - Enhanced */}
-            <Card className="card-enhanced group hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="relative z-10 px-3 sm:px-6 py-3 sm:py-6">
-                <CardTitle className="text-lg sm:text-xl font-semibold gradient-text flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-                  <span className="text-base sm:text-xl">Ready for a Challenge?</span>
-                </CardTitle>
-                <p className="text-muted-foreground text-xs sm:text-sm">Start your next coding adventure</p>
+          {/* Activity Heatmap - Enhanced */}
+          <div className="relative">
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 rounded-3xl blur-2xl"></div>
+            <Card className="relative border-2 border-border/50 bg-card/60 backdrop-blur-md shadow-2xl">
+              <CardHeader className="pb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                  <div>
+                    <CardTitle className="text-2xl font-bold gradient-text">Activity Overview</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">Your coding activity throughout the year</p>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent className="relative z-10 px-3 sm:px-6 pb-4 sm:pb-6">
-                <p className="text-muted-foreground/90 mb-4 sm:mb-6 text-xs sm:text-sm leading-relaxed">
+              <CardContent>
+                <div className="overflow-x-auto -mx-4 px-4">
+                  <ActivityHeatmap
+                    history={history || []}
+                    upsolvedProblems={upsolvedProblems || []}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Action Cards - Redesigned */}
+          <div className="grid gap-6 sm:gap-8 grid-cols-1 lg:grid-cols-2">
+            {/* Account Management Card */}
+            <Card className="card-premium group relative overflow-hidden border-2 border-border/50 hover:border-primary/30 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardHeader className="relative z-10 pb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                    <SettingsIcon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl font-bold text-foreground">Account Management</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">Manage your profile and settings</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="relative z-10 space-y-4">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleSync}
+                  disabled={isSyncing}
+                  className="w-full h-12 font-semibold rounded-xl border-2 border-border hover:border-primary hover:bg-primary/10 hover:text-primary hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group/btn relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/15 to-primary/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                  <RefreshCw
+                    className={`mr-2 h-5 w-5 relative z-10 transition-all duration-300 text-foreground group-hover/btn:text-primary ${isSyncing ? "animate-spin" : "group-hover/btn:rotate-180"}`}
+                  />
+                  <span className="relative z-10 text-foreground group-hover/btn:text-primary">
+                    {isSyncing ? "Syncing..." : "Sync Profile"}
+                  </span>
+                </Button>
+
+                <div className="relative">
+                  <ChangePasswordDialog />
+                </div>
+
+                <Button
+                  variant="destructive"
+                  size="lg"
+                  onClick={logout}
+                  className="w-full h-12 font-semibold rounded-xl border-2 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 group/btn relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                  <LogOut className="mr-2 h-5 w-5 relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                  <span className="relative z-10">Logout</span>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Training Card - Redesigned */}
+            <Card className="card-premium group relative overflow-hidden border-2 border-border/50 hover:border-accent/30 transition-all duration-500 bg-gradient-to-br from-accent/5 via-transparent to-transparent">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardHeader className="relative z-10 pb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-accent/10 group-hover:bg-accent/20 group-hover:scale-110 transition-all duration-300">
+                    <Zap className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl font-bold text-foreground">Ready for a Challenge?</CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">Start your next coding adventure</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="relative z-10 space-y-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Create a personalized training session tailored to your skill level and push your limits!
                 </p>
                 <Button
                   asChild
                   size="lg"
-                  className="w-full h-10 sm:h-12 relative overflow-hidden bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 shadow-lg hover:shadow-xl hover:shadow-accent/25 transition-all duration-500 group border-0"
+                  className="w-full h-14 font-bold text-base rounded-xl bg-gradient-to-r from-accent via-accent/90 to-primary hover:from-accent/90 hover:via-accent/80 hover:to-primary/90 shadow-xl hover:shadow-2xl hover:shadow-accent/30 transition-all duration-500 group/btn border-0 relative overflow-hidden"
                 >
-                  <Link href="/training" className="flex items-center justify-center gap-2 sm:gap-3 font-semibold relative z-10 text-xs sm:text-sm">
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <Link href="/training" className="flex items-center justify-center gap-3 relative z-10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                     <span className="relative z-10">Start Training</span>
-                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 relative z-10 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" />
+                    <ArrowRight className="h-5 w-5 relative z-10 transition-all duration-300 group-hover/btn:translate-x-2 group-hover/btn:scale-110" />
                   </Link>
                 </Button>
               </CardContent>

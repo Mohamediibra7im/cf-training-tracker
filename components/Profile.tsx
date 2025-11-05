@@ -6,30 +6,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Profile = ({ user }: { user: User }) => {
   return (
-    <Card className="lg:col-span-1">
-      <CardHeader>
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border">
+    <Card className="card-premium group relative overflow-hidden border-2 border-border/50 hover:border-primary/30 transition-all duration-500 h-full flex flex-col">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/20 transition-all duration-500"></div>
+      <CardHeader className="relative z-10 pb-4">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-12 w-12 border-2 border-border">
             <AvatarImage src={user.avatar} alt={user.codeforcesHandle} />
             <AvatarFallback>
               {user.codeforcesHandle.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <CardTitle className="text-xl font-bold">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-lg font-bold text-foreground truncate">
               {user.codeforcesHandle}
             </CardTitle>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground truncate">
               {user.organization || "No organization"}
             </p>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative z-10 space-y-4 flex-1 flex flex-col justify-end">
         <div className="grid grid-cols-2 gap-4 text-center">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Rating</p>
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-xs font-medium text-muted-foreground">Rating</p>
+            <p className="text-2xl sm:text-3xl font-bold text-primary">
               {user.rating || 0}
             </p>
             <p className="text-xs text-muted-foreground">
@@ -37,10 +38,10 @@ const Profile = ({ user }: { user: User }) => {
             </p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">
+            <p className="text-xs font-medium text-muted-foreground">
               Max Rating
             </p>
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-2xl sm:text-3xl font-bold text-primary">
               {user.maxRating || 0}
             </p>
             <p className="text-xs text-muted-foreground">

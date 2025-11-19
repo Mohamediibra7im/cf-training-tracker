@@ -1,8 +1,24 @@
 import useSWR from "swr";
-import { swrFetcher } from "@/lib/apiClient";
+import { apiFetcher } from "@/lib/apiClient";
+
+export interface AdminStats {
+  activeNotifications: number;
+  totalNotifications: number;
+  totalUsers: number;
+  adminUsers: number;
+}
+
+const defaultStats: AdminStats = {
+  activeNotifications: 0,
+  totalNotifications: 0,
+  totalUsers: 0,
+  adminUsers: 0,
+};
+
+const fetcher = (url: string) => apiFetcher<AdminStats>(url);
 
 export function useAdminStats() {
-  const { data, error, mutate } = useSWR("/api/admin/stats", swrFetcher, {
+  const { data, error, mutate } = useSWR<AdminStats>("/api/admin/stats", fetcher, {
     // Optimize for dashboard
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
@@ -11,12 +27,7 @@ export function useAdminStats() {
   });
 
   return {
-    stats: data || {
-      activeNotifications: 0,
-      totalNotifications: 0,
-      totalUsers: 0,
-      adminUsers: 0,
-    },
+    stats: data || defaultStats,
     isLoading: !error && !data,
     isError: error,
     mutate,

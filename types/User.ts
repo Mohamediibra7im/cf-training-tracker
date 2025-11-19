@@ -9,4 +9,5 @@ export interface User {
   organization?: string;
   lastSyncTime?: number;
   role: "user" | "admin";
+  createdAt?: string;
 }

@@ -29,11 +29,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Crown, Shield, User, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar, BarChart, TrendingUp, Target, CheckCircle } from 'lucide-react';
+import { Crown, Shield, User as UserIcon, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar, BarChart, TrendingUp, Target, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
 import { apiFetcher } from '@/lib/apiClient';
 import getRankFromRating from '@/utils/getRankFromRating';
+import { User } from '@/types/User';
 
 const getRankColor = (rating: number): string => {
   if (rating === 0) return 'text-gray-500';
@@ -48,16 +49,6 @@ const getRankColor = (rating: number): string => {
   if (rating < 3000) return 'text-red-700';
   return 'text-red-800';
 };
-
-interface User {
-  _id: string;
-  codeforcesHandle: string;
-  role: 'admin' | 'user';
-  rating: number;
-  rank: string;
-  avatar?: string;
-  createdAt: string;
-}
 
 interface ConfirmationDialog {
   open: boolean;
@@ -273,7 +264,7 @@ export default function AdminUserManagement() {
           {/* Stats Cards */}
           <div className="flex flex-row sm:flex-row lg:flex-col xl:flex-row items-center gap-3 sm:gap-4">
             <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-3 sm:px-4 py-2 rounded-2xl">
-              <User className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <UserIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <span className="font-semibold text-sm sm:text-base">{users.length}</span>
               <span className="ml-1 text-xs sm:text-sm">total users</span>
             </Badge>
@@ -384,7 +375,7 @@ export default function AdminUserManagement() {
                     <TableHead className="h-14 px-3 xl:px-4 font-bold text-foreground/90 text-xs xl:text-sm whitespace-nowrap">
                       <div className="flex items-center space-x-2">
                         <div className="p-1 rounded-xl bg-primary/10">
-                          <User className="h-3 w-3 xl:h-4 xl:w-4 text-primary" />
+                          <UserIcon className="h-3 w-3 xl:h-4 xl:w-4 text-primary" />
                         </div>
                         <span>User</span>
                       </div>
@@ -482,7 +473,7 @@ export default function AdminUserManagement() {
                             {user.role === 'admin' ? (
                               <Crown className="h-3 w-3 xl:h-4 xl:w-4 mr-1 xl:mr-1.5" />
                             ) : (
-                              <User className="h-3 w-3 xl:h-4 xl:w-4 mr-1 xl:mr-1.5" />
+                              <UserIcon className="h-3 w-3 xl:h-4 xl:w-4 mr-1 xl:mr-1.5" />
                             )}
                             <span className="uppercase tracking-wide">
                               {user.role}
@@ -590,7 +581,7 @@ export default function AdminUserManagement() {
                                 </>
                               ) : (
                                 <>
-                                  <User className="h-3 w-3 xl:h-4 xl:w-4 xl:mr-2" />
+                                  <UserIcon className="h-3 w-3 xl:h-4 xl:w-4 xl:mr-2" />
                                   <span className="hidden xl:inline">Demote</span>
                                 </>
                               )}
@@ -685,7 +676,7 @@ export default function AdminUserManagement() {
                               <Loader2 className="h-3 w-3 animate-spin" />
                             ) : (
                               <>
-                                <User className="h-3 w-3 mr-1" />
+                                <UserIcon className="h-3 w-3 mr-1" />
                                 <span className="hidden sm:inline">Make User</span>
                                 <span className="sm:hidden">User</span>
                               </>
@@ -707,7 +698,7 @@ export default function AdminUserManagement() {
                         {user.role === 'admin' ? (
                           <Crown className="h-3 w-3 mr-1" />
                         ) : (
-                          <User className="h-3 w-3 mr-1" />
+                          <UserIcon className="h-3 w-3 mr-1" />
                         )}
                         {user.role}
                       </Badge>
@@ -749,7 +740,7 @@ export default function AdminUserManagement() {
                 <div className="absolute inset-0 bg-gradient-to-r from-muted/20 to-muted/20 rounded-2xl opacity-50"></div>
                 <div className="relative p-6 sm:p-8">
                   <div className="p-3 sm:p-4 rounded-full bg-gradient-to-r from-muted-foreground/20 to-muted-foreground/30 w-fit mx-auto mb-4 sm:mb-6">
-                    <User className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground" />
+                    <UserIcon className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3">
                     {searchTerm ? 'No users found matching your search.' : 'No users found.'}
@@ -783,7 +774,7 @@ export default function AdminUserManagement() {
                 {confirmDialog.newRole === 'admin' ? (
                   <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 dark:text-purple-400" />
                 ) : (
-                  <User className="h-6 w-6 sm:h-8 sm:w-8 text-gray-600 dark:text-gray-400" />
+                  <UserIcon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-600 dark:text-gray-400" />
                 )}
               </div>
             </div>
@@ -869,7 +860,7 @@ export default function AdminUserManagement() {
                   {confirmDialog.newRole === 'admin' ? (
                     <Crown className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   ) : (
-                    <User className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                    <UserIcon className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   )}
                   <span className="text-sm sm:text-base">
                     {confirmDialog.newRole === 'admin' ? 'Promote User' : 'Demote User'}

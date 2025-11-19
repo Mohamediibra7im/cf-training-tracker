@@ -155,9 +155,6 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    // Log successful refresh (for security monitoring)
-    console.log(`Token refreshed successfully for user: ${user.codeforcesHandle} (jti: ${newJti})`);
-
     // Create response with new access token
     const response = NextResponse.json({
       user: {

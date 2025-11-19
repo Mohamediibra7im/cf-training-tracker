@@ -1,25 +1,31 @@
 import useSWR from "swr";
+import { apiFetcher } from "@/lib/apiClient";
 
-const fetcher = async (url: string) => {
-  if (typeof window === 'undefined') return null;
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("No token found");
+interface Notification {
+  _id: string;
+  title: string;
+  message: string;
+  type: "announcement" | "new_feature" | "maintenance" | "update" | "alert";
+  isActive: boolean;
+  priority: "low" | "medium" | "high";
+  targetAudience: "all" | "admins" | "users";
+  createdBy: {
+    _id: string;
+    codeforcesHandle: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  expiresAt?: string;
+}
 
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+interface AdminNotificationsResponse {
+  notifications: Notification[];
+}
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch admin notifications");
-  }
-
-  return res.json();
-};
+const fetcher = (url: string) => apiFetcher<AdminNotificationsResponse>(url);
 
 export function useAdminNotifications() {
-  const { data, error, mutate } = useSWR("/api/admin/notifications", fetcher, {
+  const { data, error, mutate } = useSWR<AdminNotificationsResponse>("/api/admin/notifications", fetcher, {
     // Optimize for fast loading and better UX
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
@@ -32,7 +38,7 @@ export function useAdminNotifications() {
   return {
     notifications: data?.notifications || [],
     totalNotifications: data?.notifications?.length || 0,
-    activeNotifications: data?.notifications?.filter((n: { isActive: boolean }) => n.isActive).length || 0,
+    activeNotifications: data?.notifications?.filter((n) => n.isActive).length || 0,
     isLoading: !error && !data,
     isError: error,
     mutate,
@@ -47,24 +53,13 @@ export async function createNotification(notificationData: {
   targetAudience?: "all" | "admins" | "users";
   expiresAt?: string;
 }) {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("No token found");
-
-  const res = await fetch("/api/admin/notifications", {
+  return apiFetcher("/api/admin/notifications", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(notificationData),
   });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Failed to create notification");
-  }
-
-  return res.json();
 }
 
 export async function updateNotification(
@@ -79,43 +74,21 @@ export async function updateNotification(
     expiresAt: string;
   }>
 ) {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("No token found");
-
-  const res = await fetch("/api/admin/notifications", {
+  return apiFetcher("/api/admin/notifications", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ id, ...notificationData }),
   });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Failed to update notification");
-  }
-
-  return res.json();
 }
 
 export async function deleteNotification(id: string) {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("No token found");
-
-  const res = await fetch("/api/admin/notifications", {
+  return apiFetcher("/api/admin/notifications", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ id }),
   });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Failed to delete notification");
-  }
-
-  return res.json();
 }

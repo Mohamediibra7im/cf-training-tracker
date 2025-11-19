@@ -32,6 +32,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Crown, Shield, User, Star, ExternalLink, Loader2, Search, ArrowUpDown, Calendar, BarChart, TrendingUp, Target, CheckCircle } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import { useAdminUsers, updateUserRole } from '@/hooks/useAdminUsers';
+import { apiFetcher } from '@/lib/apiClient';
 import getRankFromRating from '@/utils/getRankFromRating';
 
 const getRankColor = (rating: number): string => {
@@ -169,18 +170,7 @@ export default function AdminUserManagement() {
   const fetchUserStats = async (userId: string) => {
     setLoadingStats(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/admin/users/${userId}/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch user statistics');
-      }
-
-      const data = await response.json();
+      const data = await apiFetcher<UserStats>(`/api/admin/users/${userId}/stats`);
       setUserStats(data);
       setStatsDialog({ open: true, userId });
     } catch (_error) {

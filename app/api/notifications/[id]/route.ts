@@ -28,10 +28,6 @@ export async function DELETE(
     const url = new URL(request.url);
     const globalDelete = url.searchParams.get("global") === "true";
 
-    console.log("Attempting to delete notification:", notificationId);
-    console.log("User ID:", decoded.userId);
-    console.log("Global delete:", globalDelete);
-
     // Validate ObjectId format
     if (!notificationId || typeof notificationId !== 'string' || notificationId.length !== 24) {
       return NextResponse.json(
@@ -77,8 +73,6 @@ export async function DELETE(
         notification: notificationId,
       });
 
-      console.log("Notification globally deleted by admin:", user.codeforcesHandle, "notification:", notificationId);
-
       return NextResponse.json({
         message: "Notification permanently deleted from system",
       });
@@ -96,8 +90,6 @@ export async function DELETE(
         readAt: new Date(),
         isHidden: true,
       });
-
-      console.log("Notification permanently removed for user:", decoded.userId, "notification:", notificationId);
 
       return NextResponse.json({
         message: "Notification deleted successfully",

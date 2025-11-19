@@ -8,7 +8,12 @@ import ThemeProvider from "@/components/ThemeProvider";
 import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/next";
 
-const nunito = Nunito({ subsets: ["latin"] });
+const nunito = Nunito({
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Arial", "Helvetica", "sans-serif"],
+  adjustFontFallback: true,
+});
 
 export const metadata: Metadata = {
   title: "CF-Training Tracker - Codeforces Virtual Contest Practice Platform",

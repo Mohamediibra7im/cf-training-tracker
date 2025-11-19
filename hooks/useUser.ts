@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { User } from "@/types/User";
 import { SuccessResponse, ErrorResponse, Response } from "@/types/Response";
+import { setRefreshCallback, clearRefreshCallback, setLogoutCallback, clearLogoutCallback } from "@/lib/apiClient";
 
 const USER_CACHE_KEY = "codeforces-user";
 
@@ -38,6 +39,34 @@ const useUser = () => {
       mutate(null, false);
     }
   }, [mutate, isClient]);
+
+  // Register refresh callback to update SWR cache when token is refreshed
+  useEffect(() => {
+    if (!isClient) return;
+
+    // Callback to update user data when token is refreshed
+    const handleRefresh = (updatedUser: User) => {
+      // Update localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // Update SWR cache
+      mutate(updatedUser, false);
+    };
+
+    // Callback to clear user data on logout
+    const handleLogout = () => {
+      mutate(null, false);
+    };
+
+    // Register callbacks
+    setRefreshCallback(handleRefresh);
+    setLogoutCallback(handleLogout);
+
+    // Cleanup on unmount
+    return () => {
+      clearRefreshCallback();
+      clearLogoutCallback();
+    };
+  }, [isClient, mutate]);
 
   const login = useCallback(
     async (codeforcesHandle: string, password: string): Promise<Response<User>> => {

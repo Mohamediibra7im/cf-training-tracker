@@ -9,33 +9,22 @@ export const revalidate = 0;
 // Get all users (Admin only)
 export async function GET(request: NextRequest) {
   try {
-    console.log('🔍 Admin users API called');
-
     const token = request.headers.get('authorization')?.replace('Bearer ', '');
-    console.log('Token exists:', !!token);
 
     if (!token) {
-      console.log('❌ No token provided');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const decoded = await verifyAuth(token);
-    console.log('Token decoded:', !!decoded, decoded?.userId);
 
     if (!decoded) {
-      console.log('❌ Invalid token');
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    console.log('Connecting to database...');
     await dbConnect();
-    console.log('✅ Database connected');
-
     const currentUser = await User.findById(decoded.userId);
-    console.log('Current user:', currentUser?.codeforcesHandle, 'Role:', currentUser?.role);
 
     if (!currentUser || currentUser.role !== 'admin') {
-      console.log('❌ User is not admin');
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
@@ -44,7 +33,6 @@ export async function GET(request: NextRequest) {
       .select('codeforcesHandle role rating rank avatar createdAt')
       .sort({ createdAt: -1 });
 
-    console.log(`✅ Successfully fetched ${users.length} users`);
     return NextResponse.json({ users }, { status: 200 });
 
   } catch (error) {

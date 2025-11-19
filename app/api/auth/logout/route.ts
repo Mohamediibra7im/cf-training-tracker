@@ -42,8 +42,6 @@ export async function POST(request: NextRequest) {
           revoked: true,
           revokedAt: new Date(),
         });
-
-        console.log(`Refresh token revoked on logout (jti: ${refreshTokenDoc.jti})`);
       }
     }
 
